@@ -1,0 +1,10 @@
+// Inital Setup has been done for starting the development
+
+Goals for starting and managing the file structure
+1. Seperate the backend folder and frontend folder.
+2. Create the backend folder for another consistency.
+3. Format the Prettier with the backend folder for maintaining consistency.
+4. Create the initial Model of the user and creator
+5. Login TOken Generation 
+6. Acccess Token in the Schema and refresh token update generation 
+7. Admin, user and creator authorization and authentication.

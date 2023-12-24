@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Account Activation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .activation-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+      padding: 10px;
+      background-color: #0056b3;
+    }
+    .activation-code {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .info {
+      color: #666;
+    }
+    .btn {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    h2{
+      color: #223d5b;
+      font-size: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="activation-container">
+    <h1>Welcome to Creators Club</h1>
+    <p>Hello <%=user.name%>,</p>
+    <p>Thank you for registering with the Creators Club. Please use the below code:</p>
+    <p class="activation-code">To activate your account:</p>
+    <h2 class="activation-code"><%= activationCode %></h2>
+    <p class="info">This code is valid only for next 5 minutes</p>
+    <p></p>
+    <br>
+    <p>if you have any questions, Contact support@creatorsclub.com</p>
+  </div>
+</body>
+</html>
