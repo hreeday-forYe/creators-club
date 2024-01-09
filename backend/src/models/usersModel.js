@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
+      enum: ['user', 'creator', 'admin'],
       default: 'user',
     },
 
@@ -36,12 +37,6 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
-    subscriptions: [
-      {
-        creatorId: String,
-      },
-    ],
 
     paymentMethod: {
       type: String,
@@ -58,6 +53,10 @@ const userSchema = new mongoose.Schema(
     avatar: {
       public_id: String,
       url: String,
+    },
+    bio: {
+      type: String,
+      default: '',
     },
   },
 

@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import userRouter from './routes/userRoutes.js';
+import ErrorHandler from './utils/ErrorHandler.js';
 const app = express();
 
 // configure CORS
@@ -28,6 +29,9 @@ app.use(express.static('public'));
 
 // Configuring the cookies for CRUD WITH THE USER COOKIE
 app.use(cookieParser());
+
+// ERROR HANDLING MIDDLEWARE
+// app.use(ErrorHandler);
 
 /* -------------------------------------------------------------------------------------------
   User Routes- ROUTES FOR ADMIN, USER AND CREATORS (REGISTER, ACTIVATION LOGIN, LOGOUT, UPDATE)

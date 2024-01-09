@@ -1,5 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const creatorSchema = new mongoose.Schema({}, { timestamps: true });
 
-export const Creator = mongoose.model('Creator', creatorSchema);
+const creatorSchema = new mongoose.Schema({
+  
+},{timestamps:true})
