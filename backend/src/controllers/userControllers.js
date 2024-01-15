@@ -287,7 +287,6 @@ const updateUserInfo = asyncHandler(async (req, res, next) => {
 });
 
 // UPDATE USER PASSWORD - FUNCTION CHECKS THE OLD PASSWORD AND NEW ENTERED PASSWORD AND UPDATES THE PASSWORD FIELD
-
 const updateUserPassword = asyncHandler(async (req, res, next) => {
   try {
     const { oldPassword, newPassword } = req.body;
@@ -325,7 +324,6 @@ const updateUserPassword = asyncHandler(async (req, res, next) => {
 
 
 // UPDATE THE USER AVATAR- FUNCTION WHICH CHECKS IF THE USER AVATAR EXITS IF EXITS IT DESTROYS IT AND SAVES THE NEW ONE
-
 const updateProfilePicture = asyncHandler(async (req, res, next) => {
   try {
     const { avatar } = req.body;

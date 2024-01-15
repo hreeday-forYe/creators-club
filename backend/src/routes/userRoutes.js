@@ -15,6 +15,8 @@ import { isAuthenticated } from '../middlewares/auth.js';
 
 const userRouter = express.Router();
 
+console.log(userRouter);
+
 userRouter.post('/registration', registrationUser);
 userRouter.post('/activate-user', activateUser);
 userRouter.post('/login', loginUser);
