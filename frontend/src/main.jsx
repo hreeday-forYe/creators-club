@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
+import App from './App';
 import HomeScreen from './screens/HomeScreen.jsx';
+import LoginScreen from './screens/auth/LoginScreen.jsx';
+import RegisterScreen from './screens/auth/RegisterScreen.jsx';
 import './index.css';
 import {
   createBrowserRouter,
@@ -16,6 +18,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomeScreen />}></Route>
+      <Route  path="/login" element={<LoginScreen />}></Route>
+      <Route  path="/sign-up" element={<RegisterScreen />}></Route>
     </Route>
   )
 );
@@ -25,7 +29,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <RouterProvider router={router} />
   </React.StrictMode>
 );
-
 
 //  To run the prettier over all files in the project just run the below command
 // npx prettier --write .

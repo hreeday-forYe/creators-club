@@ -19,7 +19,7 @@ console.log(userRouter);
 
 userRouter.post('/registration', registrationUser);
 userRouter.post('/activate-user', activateUser);
-userRouter.post('/login', loginUser);
+userRouter.post('/login-user', loginUser);
 userRouter.get('/logout', isAuthenticated, logoutUser);
 userRouter.get('/refresh', updateAccessToken);
 userRouter.get('/me', isAuthenticated, getUserInfo);

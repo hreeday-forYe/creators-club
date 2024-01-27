@@ -54,10 +54,6 @@ const userSchema = new mongoose.Schema(
       public_id: String,
       url: String,
     },
-    bio: {
-      type: String,
-      default: '',
-    },
   },
 
   { timestamps: true }
