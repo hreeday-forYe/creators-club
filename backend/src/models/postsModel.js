@@ -34,16 +34,22 @@ const postSchema = new mongoose.Schema(
     },
     photo: {
       type: [String],
-      default: [''],
+      default: [],
     },
     video: {
       type: [videoSchema],
-      default: [''],
+      default: [],
     },
     likes: {
       type: [String],
       default: [],
     },
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comments"  
+      }
+    ],
     status: {
       type: String,
       enum: ['PUBLIC', 'SUBSCRIBERS'],

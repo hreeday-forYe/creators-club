@@ -7,13 +7,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import sendMail from '../utils/sendMail.js';
 import dotenv from 'dotenv';
-import {
-  accessTokenOptions,
-  refreshTokenOptions,
-  sendToken,
-} from '../utils/jwt.js';
-import { redis } from '../config/redis.js';
+import { sendToken } from '../utils/jwt.js';
 import { getUserById } from '../services/userServices.js';
+import createActivationToken from '../utils/activation.js';
 dotenv.config();
 
 /*
@@ -21,7 +17,7 @@ dotenv.config();
  * CONTROLS THE USER REGISTRATION PROCESS
  */
 
-const registrationUser = asyncHandler(async (req, res, next) => {
+const registerUser = asyncHandler(async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const isEmailExist = await User.findOne({ email });
@@ -74,21 +70,21 @@ const registrationUser = asyncHandler(async (req, res, next) => {
  * ACTIVATION TOKEN AND CODE CREATION FUNCTION
  */
 
-const createActivationToken = (user) => {
-  const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
-  const token = jwt.sign(
-    {
-      user,
-      activationCode,
-    },
-    process.env.ACTIVATION_SECRET,
-    {
-      expiresIn: '5m',
-    }
-  );
+// const createActivationToken = (user) => {
+//   const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
+//   const token = jwt.sign(
+//     {
+//       user,
+//       activationCode,
+//     },
+//     process.env.ACTIVATION_SECRET,
+//     {
+//       expiresIn: '5m',
+//     }
+//   );
 
-  return { token, activationCode };
-};
+//   return { token, activationCode };
+// };
 
 /*
  * FUNCTION WHICH ACTUALLY VERIFIES THE USER WITH TOKEN AND CODE AND STORES HIS DETAILS IN DATABASE
@@ -114,7 +110,7 @@ const activateUser = asyncHandler(async (req, res, next) => {
       return next(new ErrorHandler('Email already exits', 400));
     }
 
-    const user = await User.create({
+    await User.create({
       name,
       email,
       password,
@@ -152,7 +148,16 @@ const loginUser = asyncHandler(async (req, res, next) => {
       return next(new ErrorHandler('Invalid Email or Password', 400));
     }
 
-    sendToken(user, 200, res);
+    sendToken(user._id, res);
+
+    delete user._doc.password;
+
+    // response to the frontend
+    res.status(201).json({
+      success: true,
+      message: 'User is successfully logged in',
+      user,
+    });
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
@@ -164,11 +169,10 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
 const logoutUser = asyncHandler(async (req, res, next) => {
   try {
-    res.cookie('access_token', '', { maxAge: 1 });
-    res.cookie('refresh_token', '', { maxAge: 1 });
-    const userId = req.user?._id || '';
-    console.log(req.user);
-    redis.del(userId);
+    res.cookie('jwt', '', {
+      httpOnly: true,
+      expires: new Date(0),
+    });
     res.status(200).json({
       success: true,
       message: 'User logged out successfully',
@@ -178,53 +182,8 @@ const logoutUser = asyncHandler(async (req, res, next) => {
   }
 });
 
-/*
- * UPDATE ACCESS TOKEN - OUR ACCESS TOKEN EXPIRES EVERY 5 MINUTES SO WE USE THIS FUNCTION TO UPDATE IT
- */
-
-const updateAccessToken = asyncHandler(async (req, res, next) => {
-  try {
-    const refresh_token = req.cookies.refresh_token;
-    const decoded = jwt.verify(refresh_token, process.env.REFRESH_TOKEN);
-
-    const message = 'cloud not refresh token';
-    if (!decoded) {
-      return next(new ErrorHandler(message, 400));
-    }
-    // #TODO: REDIS CONNECT
-    const session = await redis.get(decoded.id);
-
-    if (!session) {
-      return next(new ErrorHandler(message, 400));
-    }
-
-    const user = JSON.parse(session);
-
-    const accessToken = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN, {
-      expiresIn: '5m',
-    });
-
-    const refreshToken = jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN, {
-      expiresIn: '7d',
-    });
-
-    // Now update the user token as well
-    req.user = user;
-
-    res.cookie('access_token', accessToken, accessTokenOptions);
-    res.cookie('refresh_token', refreshToken, refreshTokenOptions);
-
-    res.status(200).json({
-      staus: 'Success',
-      accessToken,
-    });
-  } catch (error) {
-    return next(new ErrorHandler(error.message, 400));
-  }
-});
-
-// GET USER INFO -- FUNCTION HELPS USE TO GET THE USER INFO ON THE BASIS OF HIS ID
-const getUserInfo = asyncHandler(async (req, res, next) => {
+// GET USER profile -- FUNCTION HELPS USE TO GET THE USER INFO ON THE BASIS OF HIS ID
+const getUserProfile = asyncHandler(async (req, res, next) => {
   try {
     const userId = req.user?._id;
     getUserById(userId, res);
@@ -240,9 +199,19 @@ const socialAuth = asyncHandler(async (req, res, next) => {
     const user = await User.findOne({ email });
     if (!user) {
       const newUser = await User.create({ email, name, avatar });
-      sendToken(newUser, 200, res);
+      sendToken(newUser, res);
+      res.status(201).json({
+        success: true,
+        message: 'New User validated successfully',
+        newUser,
+      });
     } else {
-      sendToken(user, 200, res);
+      sendToken(user, res);
+      res.status(201).json({
+        success: true,
+        message: 'User validated successfully',
+        user,
+      });
     }
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
@@ -322,7 +291,6 @@ const updateUserPassword = asyncHandler(async (req, res, next) => {
   }
 });
 
-
 // UPDATE THE USER AVATAR- FUNCTION WHICH CHECKS IF THE USER AVATAR EXITS IF EXITS IT DESTROYS IT AND SAVES THE NEW ONE
 const updateProfilePicture = asyncHandler(async (req, res, next) => {
   try {
@@ -372,16 +340,13 @@ const updateProfilePicture = asyncHandler(async (req, res, next) => {
 });
 
 export {
-  registrationUser,
+  registerUser,
   activateUser,
   loginUser,
   logoutUser,
-  getUserInfo,
-  updateAccessToken,
+  getUserProfile,
   socialAuth,
   updateUserInfo,
   updateUserPassword,
   updateProfilePicture,
 };
-
-

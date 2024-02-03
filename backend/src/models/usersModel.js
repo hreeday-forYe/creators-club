@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'Please enter your name'],
-      index: true,
     },
 
     email: {
@@ -29,7 +28,7 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ['user', 'creator', 'admin'],
+      enum: ['user', 'admin'],
       default: 'user',
     },
 
@@ -40,8 +39,6 @@ const userSchema = new mongoose.Schema(
 
     paymentMethod: {
       type: String,
-      required: true,
-      default: 'stripe',
     },
 
     password: {
@@ -54,8 +51,12 @@ const userSchema = new mongoose.Schema(
       public_id: String,
       url: String,
     },
-  },
 
+    subscriptions: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'Subscription',
+    },
+  },
   { timestamps: true }
 );
 
@@ -68,17 +69,10 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// SIGN ACCESS TOKEN
-userSchema.methods.SignAccessToken = function () {
-  return jwt.sign({ id: this._id }, process.env.ACCESS_TOKEN || '', {
-    expiresIn: '5m',
-  });
-};
-
-// SIGN REFRESH TOKEN
-userSchema.methods.SignRefreshToken = function () {
-  return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN || '', {
-    expiresIn: '7d',
+// jwt token for each users
+userSchema.methods.getJwtToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_ExPIRES,
   });
 };
 

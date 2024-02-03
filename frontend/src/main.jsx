@@ -1,25 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import HomeScreen from './screens/HomeScreen.jsx';
-import LoginScreen from './screens/auth/LoginScreen.jsx';
-import RegisterScreen from './screens/auth/RegisterScreen.jsx';
 import './index.css';
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
+  Router,
   RouterProvider,
 } from 'react-router-dom';
+import HomeScreen from './screens/HomeScreen';
+import LoginScreen from './screens/auth/LoginScreen';
+import RegisterScreen from './screens/auth/RegisterScreen';
+import CreatePageScreen from './screens/auth/CreatePageScreen';
+import VerificationScreen from './screens/auth/VerificationScreen';
 
-import { Provider } from 'react-redux';
+// import { Provider } from 'react-redux';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomeScreen />}></Route>
-      <Route  path="/login" element={<LoginScreen />}></Route>
-      <Route  path="/sign-up" element={<RegisterScreen />}></Route>
+      <Route path="/register" element={<RegisterScreen />}></Route>
+      <Route path="/create-page" element={<CreatePageScreen />}></Route>
+      <Route path="/verification" element={<VerificationScreen />}></Route>
+      <Route path="/login" element={<LoginScreen />}></Route>
     </Route>
   )
 );

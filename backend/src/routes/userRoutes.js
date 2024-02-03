@@ -1,12 +1,11 @@
 import express from 'express';
 import {
   activateUser,
-  getUserInfo,
+  getUserProfile,
   loginUser,
   logoutUser,
-  registrationUser,
+  registerUser,
   socialAuth,
-  updateAccessToken,
   updateProfilePicture,
   updateUserInfo,
   updateUserPassword,
@@ -15,14 +14,11 @@ import { isAuthenticated } from '../middlewares/auth.js';
 
 const userRouter = express.Router();
 
-console.log(userRouter);
-
-userRouter.post('/registration', registrationUser);
+userRouter.post('/register-user', registerUser);
 userRouter.post('/activate-user', activateUser);
 userRouter.post('/login-user', loginUser);
 userRouter.get('/logout', isAuthenticated, logoutUser);
-userRouter.get('/refresh', updateAccessToken);
-userRouter.get('/me', isAuthenticated, getUserInfo);
+userRouter.get('/profile', isAuthenticated, getUserProfile);
 userRouter.post('/social-auth', socialAuth);
 userRouter.put('/update-user-info', isAuthenticated, updateUserInfo);
 userRouter.put('/update-password', isAuthenticated, updateUserPassword);
