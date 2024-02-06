@@ -1,9 +1,15 @@
-import React from 'react'
-
+import React from 'react';
+import Register from '../../components/auth/Register';
 const RegisterScreen = () => {
+  const userInfo = localStorage.getItem('userInfo')
+  if(userInfo){
+    
+  }
   return (
-    <div>RegisterScreen</div>
-  )
-}
+    <>
+      <Register />
+    </>
+  );
+};
 
-export default RegisterScreen
+export default RegisterScreen;

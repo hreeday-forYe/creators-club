@@ -56,6 +56,11 @@ const userSchema = new mongoose.Schema(
       type: [mongoose.Schema.Types.ObjectId],
       ref: 'Subscription',
     },
+
+    following: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Page"
+    }
   },
   { timestamps: true }
 );

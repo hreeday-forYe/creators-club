@@ -1,8 +1,9 @@
-const createActivationToken = (verifi) => {
+import jwt from 'jsonwebtoken';
+const createActivationToken = (userdata) => {
   const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
   const token = jwt.sign(
     {
-      user,
+      userdata,
       activationCode,
     },
     process.env.ACTIVATION_SECRET,

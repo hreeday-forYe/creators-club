@@ -102,7 +102,7 @@ const activateUser = asyncHandler(async (req, res, next) => {
       return next(new ErrorHandler('Invalid activation Code', 400));
     }
 
-    const { name, email, password } = newUser.user;
+    const { name, email, password } = newUser?.userdata;
 
     const existUser = await User.findOne({ email });
 
@@ -244,7 +244,6 @@ const updateUserInfo = asyncHandler(async (req, res, next) => {
 
     // Saving the updates to the redis and database
     await user?.save();
-    await redis.set(userId, JSON.stringify(user));
 
     res.status(200).json({
       success: true,
@@ -280,7 +279,6 @@ const updateUserPassword = asyncHandler(async (req, res, next) => {
 
     user.password = newPassword;
     await user.save();
-    await redis.set(req.user?.id, JSON.stringify(user));
 
     res.status(201).json({
       success: true,

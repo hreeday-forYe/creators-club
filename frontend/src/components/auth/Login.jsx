@@ -11,52 +11,45 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState('subscriber');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (selectedOption === 'creator') {
-      await axios
-        .post(
+      try {
+        const response = await axios.post(
           `${page_url}/login-page`,
-          {
-            email,
-            password,
-          },
+          { email, password },
           { withCredentials: true }
-        )
-        .then((res) => {
-          toast.success('Login Success!');
-          navigate('/dashboard');
-          window.location.reload(true);
-        })
-        .catch((err) => {
-          toast.error(err.response.data.message);
-        });
-    }
-
-    await axios
-      .post(
-        `${user_url}/login-user`,
-        {
-          email,
-          password,
-        },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        toast.success('Login Success!');
+        );
+        console.log(response.data.creator);
+        localStorage.setItem(
+          'pageInfo',
+          JSON.stringify(response.data?.creator)
+        );
+        navigate('/page-dashboard');
+      } catch (error) {
+        toast.error(error.response.data.message);
+      }
+    } else if (selectedOption === 'subscriber') {
+      try {
+        const response = await axios.post(
+          `${user_url}/login-user`,
+          { email, password },
+          { withCredentials: true }
+        );
+        console.log(response.data.user);
+        localStorage.clear();
+        localStorage.setItem('userInfo', JSON.stringify(response.data?.user));
         navigate('/feed');
-        window.location.reload(true);
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+      } catch (error) {
+        toast.error(error.response.data.message);
+      }
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col border border-blue-700 justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md ">
         <h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900">
           Login to your Page or Account
@@ -118,35 +111,41 @@ const Login = () => {
               </div>
             </div>
             <div>
-              <div className="flex items-center mb-4">
+              <span className="text-sm font-medium text-gray-700 mb-4">
+                Choose your Account type
+              </span>
+              <div className="flex items-center ps-4 border mt-4 rounded cursor-pointer">
                 <input
-                  id="default-radio-1"
+                  id="bordered-radio-1"
                   type="radio"
-                  defaultValue
-                  name="default-radio"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
+                  name="account-type"
+                  value="subscriber"
+                  checked={selectedOption === 'subscriber'}
+                  onChange={() => setSelectedOption('subscriber')}
+                  className="w-4 h-4 text-blue-600 bg-gray-100 cursor-pointer "
                 />
                 <label
-                  htmlFor="default-radio-1"
-                  className="ms-2 text-sm font-medium text-gray-600"
+                  htmlFor="bordered-radio-1"
+                  className="w-full py-4 ms-2 text-sm font-normal text-gray-600 "
                 >
-                  Subscriber
+                  I'm a Subscriber
                 </label>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center ps-4 mt-2 border border-gray-200 cursor-pointer rounded">
                 <input
-                  defaultChecked
-                  id="default-radio-2"
+                  id="bordered-radio-2"
                   type="radio"
-                  defaultValue
-                  name="default-radio"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
+                  name="account-type"
+                  value="creator"
+                  checked={selectedOption === 'creator'}
+                  onChange={() => setSelectedOption('creator')}
+                  className="w-4 h-4 text-blue-600 bg-gray-100 cursor-pointer "
                 />
                 <label
-                  htmlFor="default-radio-2"
-                  className="ms-2 text-sm font-medium text-gray-600"
+                  htmlFor="bordered-radio-2"
+                  className="w-full py-4 ms-2 text-sm font-normal text-gray-600 "
                 >
-                  Creator
+                  I'm a Creator
                 </label>
               </div>
             </div>
@@ -184,8 +183,8 @@ const Login = () => {
               </button>
             </div>
             <div className={`${styles.noramlFlex} w-full`}>
-              <h4>Not have any account?</h4>
-              <Link to="/sign-up" className="text-blue-600 pl-2">
+              <h4>Don't have any account?</h4>
+              <Link to="/register" className="text-blue-600 pl-2">
                 Sign Up
               </Link>
             </div>

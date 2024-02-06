@@ -1,9 +1,21 @@
-import React from 'react'
-
+import React from 'react';
+import CreatePage from '../../components/auth/CreatePage';
+import { useNavigate } from 'react-router-dom';
 const CreatePageScreen = () => {
-  return (
-    <div>CreatePageScreen</div>
-  )
-}
+  const userInfo = localStorage.getItem('userInfo');
+  const pageInfo = localStorage.getItem('pageInfo');
+  const navigate = useNavigate();
 
-export default CreatePageScreen
+  if (userInfo) {
+    navigate('/feed');
+  } else if (pageInfo) {
+    navigate('/page-dashbaord');
+  }
+  return (
+    <div>
+      <CreatePage />
+    </div>
+  );
+};
+
+export default CreatePageScreen;

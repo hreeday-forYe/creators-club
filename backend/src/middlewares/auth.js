@@ -2,11 +2,12 @@ import { asyncHandler } from './asyncHandler.js';
 import jwt from 'jsonwebtoken';
 import ErrorHandler from '../utils/ErrorHandler.js';
 import User from '../models/usersModel.js';
-
+import Page from '../models/pagesModel.js';
 // Authenticate the user if he is actually logged in or not
 const isAuthenticated = asyncHandler(async (req, res, next) => {
   let token = req.cookies.jwt;
 
+  console.log(token);
   if (!token) {
     return next(new ErrorHandler('Please login to access this resource', 400));
   }
@@ -30,7 +31,7 @@ const isAuthenticated = asyncHandler(async (req, res, next) => {
 
 // Authenticate if the page creator is logged in or not
 const isCreator = asyncHandler(async (req, res, next) => {
-  const creator_token = req.cookies.jwt;
+  const creator_token = req.cookies.creator_jwt;
 
   if (!creator_token) {
     return next(new ErrorHandler('Please login to access this resource', 401));
@@ -41,11 +42,11 @@ const isCreator = asyncHandler(async (req, res, next) => {
   const creator = await Page.findById(decoded.creatorId).select('-password');
 
   // checking if the creator page exits or not
-  if(!creator){
-    return  next(new ErrorHandler("Creator Not Found",400));
+  if (!creator) {
+    return next(new ErrorHandler('Creator Not Found', 400));
   }
-  req.creator = creator
-  next()
+  req.creator = creator;
+  next();
 });
 
 // validate the user role

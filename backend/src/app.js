@@ -20,7 +20,7 @@ app.use(
 // configure CORS
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: ['http://localhost:3000'],
     credentials: true,
   })
 );
@@ -37,8 +37,6 @@ app.use(cookieParser());
 */
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/page', pageRouter);
-
-
 
 // TEST ROUTES
 app.get('/test', (req, res, next) => {

@@ -18,24 +18,30 @@ const videoSchema = new mongoose.Schema({
 
 const postSchema = new mongoose.Schema(
   {
-    user: {
+    creator: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Page',
       required: true,
     },
     title: {
       type: String,
       required: true,
-      min: 4,
+      minlength: 4,
+      maxlength: 225,
     },
     description: {
       type: String,
-      min: 8,
+      minlength: 8,
     },
-    photo: {
-      type: [String],
-      default: [],
-    },
+    photo: [
+      {
+        public_id: {
+          type: string,
+          required: true,
+        },
+        url: { type: string, required: true },
+      },
+    ],
     video: {
       type: [videoSchema],
       default: [],
@@ -47,16 +53,22 @@ const postSchema = new mongoose.Schema(
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Comments"  
-      }
+        ref: 'Comments',
+      },
     ],
     status: {
       type: String,
       enum: ['PUBLIC', 'SUBSCRIBERS'],
       default: 'PUBLIC',
     },
+    category: {
+      type: String,
+      enum: [''],
+      default: '',
+    },
   },
   { timestamps: true }
 );
 
-export const Post = mongoose.model('Post', postSchema);
+const Post = mongoose.model('Post', postSchema);
+export default Post;

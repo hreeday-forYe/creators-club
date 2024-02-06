@@ -12,7 +12,7 @@ import { sendCreatorToken } from '../utils/jwt.js';
 import Page from '../models/pagesModel.js';
 import createActivationToken from '../utils/activation.js';
 import { getProfile, getPageById } from '../services/pageServices.js';
-
+import Post from '../models/postsModel.js';
 // Create Page Route - Anyone
 const createPage = asyncHandler(async (req, res, next) => {
   try {
@@ -61,20 +61,22 @@ const createPage = asyncHandler(async (req, res, next) => {
     // Send Mail Function call
     try {
       await sendMail({
-        email: user.email,
+        email: creator.email,
         subject: 'Activate your Page',
         template: 'activationMail.ejs',
         data,
       });
       res.status(201).json({
         success: true,
-        message: `Please check your email:${user.email} to activate your Page.`,
+        message: `Please check your email:${creator.email} to activate your Page.`,
         activationToken: activationToken.token,
       });
     } catch (err) {
+      console.log(err);
       return next(new ErrorHandler(err.message, 400));
     }
   } catch (err) {
+    console.log(err);
     return next(new ErrorHandler(err.message, 400));
   }
 });
@@ -94,10 +96,10 @@ const activatePage = asyncHandler(async (req, res, next) => {
       return next(new ErrorHandler('Invalid activation Code', 400));
     }
 
-    console.log(newCreator.hasOwnProperty('user'));
+    console.log(newCreator.hasOwnProperty('creator'));
 
     const { name, email, password, avatar, address, phoneNumber } =
-      newCreator.user;
+      newCreator.userdata;
 
     let creator = await Page.findOne({ email });
 
@@ -125,6 +127,7 @@ const activatePage = asyncHandler(async (req, res, next) => {
 
 // Login Creator Function: which logins the creator to the site
 const loginCreator = asyncHandler(async (req, res, next) => {
+  console.log('loginPage');
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -179,6 +182,7 @@ const logoutCreator = asyncHandler(async (req, res, next) => {
       message: 'Creator logged out Successfully',
     });
   } catch (error) {
+    console.log(error);
     return next(new ErrorHandler(error.message, 400));
   }
 });
@@ -220,7 +224,7 @@ const pageSocialAuth = asyncHandler(async (req, res, next) => {
   }
 });
 
-// Get Page info -- For others and users and even admin
+// Get Page info -- For others and users without subscription
 // Route: get-page/:id
 const getPageInfo = asyncHandler(async (req, res, next) => {
   try {
@@ -231,13 +235,28 @@ const getPageInfo = asyncHandler(async (req, res, next) => {
   }
 });
 
+// get page posts for users without subscription
+
+const getPagePosts = asyncHandler(async(req,res,next)=>{
+  try {
+    const pageId = req.params.id;
+    const posts= await Post.find({creator:pageId})
+
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+}});
+
+// Get page info -- for Users with subscription and admin
+
+// Get All the pages for admin and users-- Hidden
+
 // Update Page Info for creators only- PUT REQUEST
 const updatePageInfo = asyncHandler(async (req, res, next) => {
   try {
     const { name, description, phoneNumber, address, subscriptionCharge } =
       req.body;
 
-    const creator = await Shop.findOne(req.creator?._id);
+    const creator = await Page.findOne(req.creator?._id);
 
     if (!creator) {
       return next(new ErrorHandler('Creator not found', 400));
@@ -250,6 +269,7 @@ const updatePageInfo = asyncHandler(async (req, res, next) => {
     creator.subscriptionCharge = subscriptionCharge;
 
     // Creator update save
+    await creator.save();
     res.status(201).json({
       success: true,
       creator,
@@ -327,12 +347,7 @@ const updateCoverImage = asyncHandler(async (req, res, next) => {
   }
 });
 
-
-
 /* TODO: Creator WithDraw method and update withdraw method function */
-
-
-
 
 // Get all Pages/Creators for admin
 const getAllPages = asyncHandler(async (req, res, next) => {
@@ -350,34 +365,27 @@ const getAllPages = asyncHandler(async (req, res, next) => {
   }
 });
 
-
-
-
 // Delete Creator Page for admin
-const deletePageById = asyncHandler(async(req,res,next) =>{
+const deletePageById = asyncHandler(async (req, res, next) => {
   try {
     const page = await Page.findById(req.params.id);
 
-    if(!page){
-      return next(
-        new ErrorHandler("Page is not available with this id", 400)
-      )
+    if (!page) {
+      return next(new ErrorHandler('Page is not available with this id', 400));
     }
 
-    // delete the page 
+    // delete the page
     await Page.findByIdAndDelete(req.params.id);
 
     // message to the frontend
     res.status(201).json({
       success: true,
-      message: "Seller deleted Successfully"
-    });    
+      message: 'Seller deleted Successfully',
+    });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
-})
-
-
+});
 
 export {
   createPage,
@@ -391,8 +399,7 @@ export {
   updateCoverImage,
   pageSocialAuth,
 
-
   // for admin
   getAllPages,
-  deletePageById
-}
+  deletePageById,
+};

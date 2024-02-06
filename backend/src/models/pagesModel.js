@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 dotenv.config();
 // import jwt from 'jsonwebtoken';
 const pageSchema = new mongoose.Schema(
@@ -88,6 +89,10 @@ const pageSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    followers: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'User',
+    },
   },
   { timestamps: true }
 );
@@ -97,7 +102,7 @@ pageSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
   }
-  this.password = await bcrypt.has(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 10);
 });
 
 // compare Password

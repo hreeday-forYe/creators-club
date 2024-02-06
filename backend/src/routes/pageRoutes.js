@@ -25,7 +25,7 @@ const pageRouter = express.Router();
 pageRouter.post('/create-page', createPage);
 pageRouter.post('/activate-page', activatePage);
 pageRouter.post('/login-page', loginCreator);
-pageRouter.get('/logout-page', isCreator, logoutCreator);
+pageRouter.post('/logout-page', isCreator, logoutCreator);
 pageRouter.get('/page-profile', isCreator, getPageProfile);
 pageRouter.get('get-page-info/:id', getPageInfo);
 pageRouter.put('/update-page-avatar', isCreator, updatePageAvatar);

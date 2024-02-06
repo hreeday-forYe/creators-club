@@ -1,6 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import { InputLabel, Input, FormHelperText } from '@mui/material';
 const Hero = () => {
+  const notify = () => toast.success('Here is your toast.');
   return (
     <div>
       <h1 className="py-3">Hello From the HERO</h1>
@@ -32,6 +37,19 @@ const Hero = () => {
       >
         VERIFICATION
       </Link>
+
+      <Link to={'/feed'}>
+        <Button variant="contained">Hello World</Button>
+      </Link>
+      <button onClick={notify}>Make me a toast</button>
+
+      <FormControl>
+        <InputLabel htmlFor="my-input">Email address</InputLabel>
+        <Input id="my-input" aria-describedby="my-helper-text" />
+        <FormHelperText id="my-helper-text">
+          We'll never share your email.
+        </FormHelperText>
+      </FormControl>
     </div>
     // <div className="bg-white pb-6 sm:pb-8 lg:pb-12">
     //   <div className="mx-auto max-w-screen-2xl px-4 md:px-8">

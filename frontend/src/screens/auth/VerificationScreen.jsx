@@ -1,9 +1,11 @@
-import React from 'react'
-
+import React from 'react';
+import Verify from '../../components/auth/Verify';
 const VerificationScreen = () => {
   return (
-    <div>Verification Screen</div>
-  )
-}
+    <>
+      <Verify />
+    </>
+  );
+};
 
-export default VerificationScreen
+export default VerificationScreen;
