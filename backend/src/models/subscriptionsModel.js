@@ -11,18 +11,15 @@ const subscriptionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId, // Person to whom the "Subscriber is subscribing"
       ref: 'Page',
     },
+    expiryDate:{
+      type: String,
+      required: true
+    }
   },
   { timestamps: true }
 );
 
-const bookingSchema = new mongoose.Schema({
-  booker:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
-  },
-  vehicle:{
 
-  }
-})
+// subscriptionSchema.pre
 
 export const Subscription = mongoose.model('Subscription', subscriptionSchema);

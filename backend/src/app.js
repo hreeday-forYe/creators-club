@@ -7,13 +7,13 @@ import { ErrorMiddleware } from './middlewares/Error.js';
 const app = express();
 
 // Configuring accepting the json
-app.use(express.json({ limit: '16kb' }));
+app.use(express.json({ limit: '50mb' }));
 
 // Configuring the URL params and form data
 app.use(
   express.urlencoded({
     extended: true,
-    limit: '16kb',
+    limit: '50mb',
   })
 );
 

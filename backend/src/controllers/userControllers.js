@@ -66,30 +66,8 @@ const registerUser = asyncHandler(async (req, res, next) => {
   }
 });
 
-/*
- * ACTIVATION TOKEN AND CODE CREATION FUNCTION
- */
 
-// const createActivationToken = (user) => {
-//   const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
-//   const token = jwt.sign(
-//     {
-//       user,
-//       activationCode,
-//     },
-//     process.env.ACTIVATION_SECRET,
-//     {
-//       expiresIn: '5m',
-//     }
-//   );
-
-//   return { token, activationCode };
-// };
-
-/*
- * FUNCTION WHICH ACTUALLY VERIFIES THE USER WITH TOKEN AND CODE AND STORES HIS DETAILS IN DATABASE
- */
-
+// Activate User function for storing the data of the user to the database
 const activateUser = asyncHandler(async (req, res, next) => {
   try {
     const { activation_code, activation_token } = req.body;

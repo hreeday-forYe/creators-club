@@ -33,13 +33,13 @@ const postSchema = new mongoose.Schema(
       type: String,
       minlength: 8,
     },
-    photo: [
+    photos: [
       {
         public_id: {
-          type: string,
+          type: String,
           required: true,
         },
-        url: { type: string, required: true },
+        url: { type: String, required: true },
       },
     ],
     video: {
@@ -58,8 +58,9 @@ const postSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
-      enum: ['PUBLIC', 'SUBSCRIBERS'],
-      default: 'PUBLIC',
+      enum: ['public', 'subscribers'],
+      default: 'public',
+      required: true
     },
     category: {
       type: String,

@@ -55,6 +55,9 @@ const pageSchema = new mongoose.Schema(
         type: String,
       },
     },
+    posts: [{ 
+      type: mongoose.Schema.Types.ObjectId, ref: 'Post' 
+    }],
     withdrawMethod: {
       type: Object,
     },

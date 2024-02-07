@@ -24,7 +24,7 @@ const Register = () => {
         setEmail('');
         setPassword('');
         navigate('/verification', {
-          state: { activationToken: res.data.activationToken },
+          state: { activationToken: res.data.activationToken , registerType: 'user', },
         });
       })
       .catch((error) => {

@@ -18,13 +18,12 @@ const LoginScreen = () => {
   useEffect(() => {
     if (userInfo) {
       navigate('/feed');
-      
     } else if (pageInfo) {
       navigate('/page-dashboard');
     } else {
       navigate('/login');
     }
-  });
+  }, [userInfo, pageInfo]);
   return (
     <div>
       <Header />

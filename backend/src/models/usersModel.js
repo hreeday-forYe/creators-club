@@ -54,7 +54,7 @@ const userSchema = new mongoose.Schema(
 
     subscriptions: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: 'Subscription',
+      ref: 'Page',
     },
 
     following: {
