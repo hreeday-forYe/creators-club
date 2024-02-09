@@ -34,7 +34,7 @@ const SuggestedPages = () => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" className="hover:shadow-md">
           View More
         </Button>
       </CardActions>

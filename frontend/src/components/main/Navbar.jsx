@@ -44,7 +44,10 @@ const UserBox = styled(Box)(({ theme }) => ({
 
 export const logoutHandler = async () => {
   try {
-    const response = await axios.post(`${user_url}/logout`);
+    const response = await axios.post(`${user_url}/logout`, {
+      withCredentials: true,
+    });
+    localStorage.clear();
     console.log(response);
     toast.success(response.data.message);
   } catch (error) {
@@ -57,11 +60,19 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const pageInfo = JSON.parse(localStorage.getItem('pageInfo'));
+
   console.log(userInfo);
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" sx={{ backgroundColor: 'black' }}>
       <StyledToolbar>
-        <Typography variant="h6" sx={{ display: { xs: 'none', sm: 'block' } }}>
+        <Typography
+          variant="h6"
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+            fontFamily: 'ui-sans-serif',
+          }}
+        >
           Creators Club
         </Typography>
         {/* TODO: Here we can use our own logo and give the sx property */}
@@ -82,7 +93,9 @@ const Navbar = () => {
         </Icons>
         <UserBox onClick={(e) => setOpen(true)}>
           <Avatar sx={{ width: 30, height: 30 }} />
-          <Typography className="-pl-2">{userInfo.name}</Typography>
+          <Typography className="-pl-2">
+            {userInfo ? userInfo.name : pageInfo.name}
+          </Typography>
         </UserBox>
       </StyledToolbar>
       <Menu

@@ -14,8 +14,9 @@ import LoginScreen from './screens/auth/LoginScreen';
 import RegisterScreen from './screens/auth/RegisterScreen';
 import CreatePageScreen from './screens/auth/CreatePageScreen';
 import VerificationScreen from './screens/auth/VerificationScreen';
-import PageDashboard from './screens/page/PageDashboard';
+import PageDashboardScreen from './screens/page/PageDashboardScreen';
 import UserFeedScreen from './screens/users/UserFeedScreen';
+
 // import { Provider } from 'react-redux';
 
 const router = createBrowserRouter(
@@ -26,8 +27,9 @@ const router = createBrowserRouter(
       <Route path="/create-page" element={<CreatePageScreen />}></Route>
       <Route path="/verification" element={<VerificationScreen />}></Route>
       <Route path="/login" element={<LoginScreen />}></Route>
-      <Route path="/page-dashboard" element={<PageDashboard />}></Route>
+      <Route path="/page-dashboard" element={<PageDashboardScreen />}></Route>
       <Route path="/feed" element={<UserFeedScreen />}></Route>
+      {/* <Route path="/page-create-post" element={<PageCreatePost />}></Route> */}
     </Route>
   )
 );

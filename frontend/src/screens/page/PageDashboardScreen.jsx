@@ -1,7 +1,9 @@
 import React from 'react';
 import { Avatar, Button } from '@mui/material';
-
-const PageDashboard = () => {
+import DashboardHeader from '../../components/Page/Layout/DashboardHeader'
+import DashboardSideBar from '../../components/Page/Layout/DashboardSidebar';
+import DashboardHero from '../../components/Page/Layout/DashboardHero'
+const PageDashboardScreen = () => {
   return (
     <div>
       <DashboardHeader />
@@ -15,4 +17,4 @@ const PageDashboard = () => {
   );
 };
 
-export default PageDashboard;
+export default PageDashboardScreen;
