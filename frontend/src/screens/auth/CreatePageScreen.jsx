@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CreatePage from '../../components/auth/CreatePage';
 import { useNavigate } from 'react-router-dom';
 const CreatePageScreen = () => {
@@ -6,11 +6,13 @@ const CreatePageScreen = () => {
   const pageInfo = localStorage.getItem('pageInfo');
   const navigate = useNavigate();
 
-  if (userInfo) {
-    navigate('/feed');
-  } else if (pageInfo) {
-    navigate('/page-dashbaord');
-  }
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/feed');
+    } else if (pageInfo) {
+      navigate('/page-dashbaord');
+    }
+  }, [userInfo, pageInfo]);
   return (
     <div>
       <CreatePage />

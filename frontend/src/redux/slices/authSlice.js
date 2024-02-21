@@ -19,10 +19,10 @@ const authSlice = createSlice({
       if (userType === 'user') {
         state.userInfo = action.payload;
         state.token = action.payload.token;
-        localStorage.setItem('userInfo', JSON.stringify(action.payload));
+        localStorage.setItem('userInfo', JSON.stringify(data));
       } else if (userType === 'page') {
         state.pageInfo = action.payload;
-        localStorage.setItem('pageInfo', JSON.stringify(action.payload));
+        localStorage.setItem('pageInfo', JSON.stringify(data));
       }
     },
     logout: (state, action) => {

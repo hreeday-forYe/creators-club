@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ['user', 'admin'],
+      enum: ['user', 'creator', 'admin'],
       default: 'user',
     },
 
@@ -52,15 +52,19 @@ const userSchema = new mongoose.Schema(
       url: String,
     },
 
-    subscriptions: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: 'Page',
-    },
+    subscriptions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Page',
+      },
+    ],
 
-    following: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "Page"
-    }
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Page',
+      },
+    ],
   },
   { timestamps: true }
 );

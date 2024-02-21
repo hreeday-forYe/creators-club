@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { InputBase, Menu, MenuItem } from '@mui/material';
 import { IoSearchOutline } from 'react-icons/io5';
 import { CgProfile } from 'react-icons/cg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import { user_url } from '../../constants';
 import toast from 'react-hot-toast';
@@ -42,26 +42,28 @@ const UserBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { display: 'none' },
 }));
 
-export const logoutHandler = async () => {
-  try {
-    const response = await axios.post(`${user_url}/logout`, {
-      withCredentials: true,
-    });
-    localStorage.clear();
-    console.log(response);
-    toast.success(response.data.message);
-  } catch (error) {
-    console.log(error.message);
-    toast.error(error.message);
-  }
-};
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-
+  const navigate = useNavigate();
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   const pageInfo = JSON.parse(localStorage.getItem('pageInfo'));
-
+  const logoutHandler = async () => {
+    try {
+      axios.defaults.withCredentials = true;
+      const response = await axios(`${user_url}/logout`, {
+        method: 'POST',
+        withCredentials: true,
+      });
+      localStorage.clear();
+      toast.success(response.data.message);
+      navigate('/login');
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message);
+    }
+  };
+  
   console.log(userInfo);
   return (
     <AppBar position="sticky" sx={{ backgroundColor: 'black' }}>
@@ -94,7 +96,8 @@ const Navbar = () => {
         <UserBox onClick={(e) => setOpen(true)}>
           <Avatar sx={{ width: 30, height: 30 }} />
           <Typography className="-pl-2">
-            {userInfo ? userInfo.name : pageInfo.name}
+            noneman
+            {/* {userInfo ? userInfo.name : pageInfo.name} */}
           </Typography>
         </UserBox>
       </StyledToolbar>

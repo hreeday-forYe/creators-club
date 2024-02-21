@@ -10,6 +10,7 @@ import dotenv from 'dotenv';
 import { sendToken } from '../utils/jwt.js';
 import { getUserById } from '../services/userServices.js';
 import createActivationToken from '../utils/activation.js';
+import Page from '../models/pagesModel.js';
 dotenv.config();
 
 /*
@@ -20,6 +21,17 @@ dotenv.config();
 const registerUser = asyncHandler(async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
+
+    if (!name) {
+      return next(new ErrorHandler('Name cannot be empty', 400));
+    }
+
+    if (!email) {
+      return next(new ErrorHandler('Email cannot be empty', 400));
+    }
+    if (!password) {
+      return next(new ErrorHandler('Name cannot be empty', 400));
+    }
     const isEmailExist = await User.findOne({ email });
 
     if (isEmailExist) {
@@ -65,7 +77,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler(err.message, 400));
   }
 });
-
 
 // Activate User function for storing the data of the user to the database
 const activateUser = asyncHandler(async (req, res, next) => {
@@ -310,6 +321,47 @@ const updateProfilePicture = asyncHandler(async (req, res, next) => {
       success: true,
       user,
     });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+
+// Follow Page User
+
+export const followUnfollowPage = asyncHandler(async (req, res, next) => {
+  try {
+    const pageToFollow = await Page.findById(req.params.id);
+    const user = await User.findById(req.user._id);
+
+    if (!pageToFollow) {
+      return next(new ErrorHandler('Page not found', 400));
+    }
+
+    // removing the following if the user already follows the page
+    if (user.following.includes(pageToFollow._id)) {
+      const indexfollowing = user.following.indexOf(pageToFollow._id);
+      const indexfollowers = pageToFollow.followers.indexOf(user._id);
+
+      user.following.splice(indexfollowing, 1);
+      pageToFollow.followers.splice(indexfollowers, 1);
+
+      await user.save();
+      await pageToFollow.save();
+      res.status(201).json({
+        success: true,
+        message: 'Page Unfollowed Successfully',
+      });
+    } else {
+      user.following.push(pageToFollow._id);
+      pageToFollow.followers.push(user._id);
+      await user.save();
+      await pageToFollow.save();
+
+      res.status(201).json({
+        success: true,
+        message: 'Page followed Successfully',
+      });
+    }
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }

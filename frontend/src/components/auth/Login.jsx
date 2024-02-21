@@ -27,6 +27,7 @@ const Login = () => {
           'pageInfo',
           JSON.stringify(response.data?.creator)
         );
+        toast.success(response.data.message);
         navigate('/page-dashboard');
       } catch (error) {
         toast.error(error.response.data.message);

@@ -16,7 +16,7 @@ import CreatePageScreen from './screens/auth/CreatePageScreen';
 import VerificationScreen from './screens/auth/VerificationScreen';
 import PageDashboardScreen from './screens/page/PageDashboardScreen';
 import UserFeedScreen from './screens/users/UserFeedScreen';
-
+import CreatePost from './components/main/CreatePost';
 // import { Provider } from 'react-redux';
 
 const router = createBrowserRouter(
@@ -29,7 +29,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />}></Route>
       <Route path="/page-dashboard" element={<PageDashboardScreen />}></Route>
       <Route path="/feed" element={<UserFeedScreen />}></Route>
-      {/* <Route path="/page-create-post" element={<PageCreatePost />}></Route> */}
+      <Route path="/create-post" element={<CreatePost />}></Route>
     </Route>
   )
 );

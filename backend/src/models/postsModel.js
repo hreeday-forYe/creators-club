@@ -1,21 +1,5 @@
 import mongoose from 'mongoose';
 
-// video mini Schema
-const videoSchema = new mongoose.Schema({
-  thumbnail: {
-    type: String,
-    required: true,
-  },
-  duration: {
-    type: Number,
-    required: true,
-  },
-  views: {
-    type: Number,
-    default: 0,
-  },
-});
-
 const postSchema = new mongoose.Schema(
   {
     creator: {
@@ -37,19 +21,24 @@ const postSchema = new mongoose.Schema(
       {
         public_id: {
           type: String,
-          required: true,
+          // required: true,
         },
-        url: { type: String, required: true },
+        url: {
+          type: String,
+          // required: true
+        },
       },
     ],
     video: {
-      type: [videoSchema],
-      default: [],
+      type: String,
     },
-    likes: {
-      type: [String],
-      default: [],
-    },
+
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -58,14 +47,9 @@ const postSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
-      enum: ['public', 'subscribers'],
+      enum: ['public', 'private'],
       default: 'public',
-      required: true
-    },
-    category: {
-      type: String,
-      enum: [''],
-      default: '',
+      required: true,
     },
   },
   { timestamps: true }

@@ -235,21 +235,6 @@ const getPageInfo = asyncHandler(async (req, res, next) => {
   }
 });
 
-// get page posts for users without subscription
-
-const getPagePosts = asyncHandler(async(req,res,next)=>{
-  try {
-    const pageId = req.params.id;
-    const posts= await Post.find({creator:pageId})
-
-  } catch (error) {
-    return next(new ErrorHandler(error.message, 400));
-}});
-
-// Get page info -- for Users with subscription and admin
-
-// Get All the pages for admin and users-- Hidden
-
 // Update Page Info for creators only- PUT REQUEST
 const updatePageInfo = asyncHandler(async (req, res, next) => {
   try {
@@ -262,11 +247,13 @@ const updatePageInfo = asyncHandler(async (req, res, next) => {
       return next(new ErrorHandler('Creator not found', 400));
     }
 
-    creator.name = name;
-    creator.description = description;
-    creator.phoneNumber = phoneNumber;
-    creator.address = address;
-    creator.subscriptionCharge = subscriptionCharge;
+    creator.name = name ? name : creator.name;
+    creator.description = description ? description : creator.description;
+    creator.phoneNumber = phoneNumber ? phoneNumber : creator.phoneNumber;
+    creator.address = address ? address : creator.address;
+    creator.subscriptionCharge = subscriptionCharge
+      ? subscriptionCharge
+      : creator.subscriptionCharge;
 
     // Creator update save
     await creator.save();

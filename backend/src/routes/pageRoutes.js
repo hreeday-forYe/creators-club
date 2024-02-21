@@ -27,7 +27,7 @@ pageRouter.post('/activate-page', activatePage);
 pageRouter.post('/login-page', loginCreator);
 pageRouter.post('/logout-page', isCreator, logoutCreator);
 pageRouter.get('/page-profile', isCreator, getPageProfile);
-pageRouter.get('get-page-info/:id', getPageInfo);
+pageRouter.get('/get-page-info/:id', getPageInfo);
 pageRouter.put('/update-page-avatar', isCreator, updatePageAvatar);
 pageRouter.put('/update-page-info', isCreator, updatePageInfo);
 pageRouter.put('/update-cover-image', isCreator, updateCoverImage);

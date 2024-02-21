@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import userRouter from './routes/userRoutes.js';
 import pageRouter from './routes/pageRoutes.js';
 import { ErrorMiddleware } from './middlewares/Error.js';
+import postRouter from './routes/postRoutes.js';
 const app = express();
 
 // Configuring accepting the json
@@ -37,6 +38,7 @@ app.use(cookieParser());
 */
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/page', pageRouter);
+app.use('/api/v1/post', postRouter);
 
 // TEST ROUTES
 app.get('/test', (req, res, next) => {

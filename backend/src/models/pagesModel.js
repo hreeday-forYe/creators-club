@@ -55,9 +55,12 @@ const pageSchema = new mongoose.Schema(
         type: String,
       },
     },
-    posts: [{ 
-      type: mongoose.Schema.Types.ObjectId, ref: 'Post' 
-    }],
+    posts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+      },
+    ],
     withdrawMethod: {
       type: Object,
     },
@@ -88,14 +91,18 @@ const pageSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    subscribers: {
-      type: Number,
-      default: 0,
-    },
-    followers: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: 'User',
-    },
+    subscribers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   { timestamps: true }
 );

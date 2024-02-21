@@ -19,34 +19,33 @@ const CreatePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    await axios
-      .post(`${page_url}/create-page`, {
+    try {
+      const response = await axios.post(`${page_url}/create-page`, {
         name,
         email,
         password,
         avatar,
         address,
         phoneNumber,
-      })
-      .then((res) => {
-        toast.success(res.data.message);
-        setName('');
-        setEmail('');
-        setPassword('');
-        setAvatar();
-        setAddress('');
-        setPhoneNumber();
-        navigate('/verification', {
-          state: {
-            activationToken: res.data.activationToken,
-            registerType: 'page',
-          },
-        });
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
       });
+      console.log(avatar);
+      toast.success(response.data.message);
+      // alert('register successfull');
+      setName('');
+      setEmail('');
+      setPassword('');
+      setPhoneNumber('');
+      setAddress('');
+      setAvatar('');
+      navigate('/verification', {
+        state: {
+          activationToken: response.data.activationToken,
+          registerType: 'page',
+        },
+      });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
 
   const handleFileInputChange = (e) => {
