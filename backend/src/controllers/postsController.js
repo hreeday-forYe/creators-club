@@ -161,8 +161,16 @@ export const likeUnlikePost = asyncHandler(async (req, res, next) => {
     if (!post) {
       return next(new ErrorHandler('post not found', 400));
     }
-    if (post.likes.includes(req.user._id || req.creator._id)) {
-      const index = post.likes.indexOf(req.user._id || req.creator._id);
+
+    // checking if the user or creator is making request
+    let validId;
+    if (req.user._id) {
+      validId = req.user._id;
+    } else {
+      validId = req.creator._id;
+    }
+    if (post.likes.includes(validId)) {
+      const index = post.likes.indexOf(validId);
       post.likes.splice(index, 1);
       await post.save();
 
@@ -171,13 +179,129 @@ export const likeUnlikePost = asyncHandler(async (req, res, next) => {
         message: 'Post Unliked Successfully',
       });
     } else {
-      post.likes.push(req.user._id || req.creator._id);
+      post.likes.push(validId);
       await post.save();
       return res.status(201).json({
         success: true,
         message: 'Post liked Successfully',
       });
     }
+  } catch (error) {
+    return next(new ErrorHandler(error, 400));
+  }
+});
+
+export const commentOnPost = asyncHandler(async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return next(new ErrorHandler('Post not found', 400));
+    }
+
+    // Checking if comment already exists
+    let commentIndex = -1;
+    post.comments.forEach((item, index) => {
+      if (item.user.toString() === req.user._id.toString()) {
+        commentIndex = index;
+      }
+    });
+    // Updating the comment from the body
+    if (commentIndex !== -1) {
+      post.comments[commentIndex].comment = req.body.comment;
+      await post.save();
+      res.status(201).json({
+        success: true,
+        messsage: 'Comment Updated',
+      });
+    } else {
+      post.comments.push({
+        user: req.user._id,
+        comment: req.body.comment,
+      });
+      await post.save();
+      res.status(201).json({
+        success: true,
+        messsage: 'Comment Added',
+      });
+    }
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+
+export const deleteComment = asyncHandler(async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+    // Checking if it is user or creator
+    // console.log(req.user._id, req.creator._id);
+    let validId;
+    if (req.user && req.user._id) {
+      validId = req.user._id;
+    } else if (req.creator && req.creator._id) {
+      validId = req.creator._id;
+    } else {
+      return next(new ErrorHandler('validation error in line 245', 400));
+    }
+
+    if (validId) {
+      console.log(validId);
+    }
+
+    // if else for post owner and comment owner
+    if (post.creator.toString() === validId.toString()) {
+      // function to delete any comment the post owner wants
+      if (req.body.commentId === undefined) {
+        return next(new ErrorHandler('Comment Id is required', 400));
+      }
+      post.comments.forEach((item, index) => {
+        if (item._id.toString() === req.body.commentId.toString()) {
+          return post.comments.splice(index, 1);
+        }
+      });
+      await post.save();
+      res.status(201).json({
+        success: true,
+        message: 'Selected Comment has deleted',
+      });
+    } else {
+      post.comments.forEach((item, index) => {
+        if (item.user.toString() === validId.toString()) {
+          return post.comments.splice(index, 1);
+        }
+      });
+      await post.save();
+      res.status(200).json({
+        success: true,
+        messasge: 'Your comment has deleted',
+      });
+    }
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+
+// Update the posts for the owner of the posts
+export const updatePost = asyncHandler(async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return next(new ErrorHandler('Post not found', 400));
+    }
+    // Checking if the post owner is the one who wants to change the post info
+    if (post.creator.toString() !== req.creator._id.toString()) {
+      return next(new ErrorHandler('Un authorized post creator', 400));
+    }
+
+    // Updating the post title
+    post.title = req.body.title;
+    await post.save();
+    res.status(201).json({
+      success: true,
+      message: 'Success True',
+    });
   } catch (error) {
     return next(new ErrorHandler(error, 400));
   }

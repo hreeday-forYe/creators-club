@@ -21,13 +21,13 @@ const DashboardHeader = () => {
           </Link>
 
           {/* Space for avatar */}
-          {/* <Link to={`/shop/${seller._id}`}>
+          <Link to={`/page/${creator._id}`}>
             <img
-              src={`${seller.avatar?.url}`}
+              src={`${creator.avatar?.url}`}
               alt=""
               className="w-[50px] h-[50px] rounded-full object-cover"
             />
-          </Link> */}
+          </Link>
         </div>
       </div>
     </div>

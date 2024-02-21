@@ -13,6 +13,7 @@ import Page from '../models/pagesModel.js';
 import createActivationToken from '../utils/activation.js';
 import { getProfile, getPageById } from '../services/pageServices.js';
 import Post from '../models/postsModel.js';
+import User from '../models/usersModel.js';
 // Create Page Route - Anyone
 const createPage = asyncHandler(async (req, res, next) => {
   try {
@@ -334,6 +335,35 @@ const updateCoverImage = asyncHandler(async (req, res, next) => {
   }
 });
 
+// delete your page --DELETE Request
+const deleteMyPage = asyncHandler(async (req, res, next) => {
+  const page = Page.findById(req.creator._id);
+  // get posts of the page
+  const pagePosts = page.posts;
+  const followers = page.followers;
+  await page.remove();
+
+  // after deleting the page logout the creator
+  res.cookie('creator_jwt', '', {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  //  TODO: removing Page from  all users following lists
+  for (let i = 0; i < followers.length; i++) {
+    const follower = await User.findById(followers[i]);
+  }
+
+  // Removing the associated posts form the post schema
+  for (let i = 0; i < pagePosts.length; i++) {
+    await Post.findByIdAndDelete(pagePosts[i]);
+  }
+  res.status(201).json({
+    success: true,
+    message: 'Page deleted Successfully',
+  });
+});
+
 /* TODO: Creator WithDraw method and update withdraw method function */
 
 // Get all Pages/Creators for admin
@@ -367,7 +397,7 @@ const deletePageById = asyncHandler(async (req, res, next) => {
     // message to the frontend
     res.status(201).json({
       success: true,
-      message: 'Seller deleted Successfully',
+      message: 'Page deleted Successfully',
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
@@ -385,6 +415,7 @@ export {
   updatePageAvatar,
   updateCoverImage,
   pageSocialAuth,
+  deleteMyPage,
 
   // for admin
   getAllPages,
