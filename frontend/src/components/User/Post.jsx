@@ -13,6 +13,9 @@ import {
 import { MdOutlineFavorite } from 'react-icons/md';
 import { LiaCommentSolid } from 'react-icons/lia';
 const Post = () => {
+  const likeUnlikeHandler = () => {
+    console.log('liked');
+  };
   return (
     <Card className="shadow-lg mb-12">
       <CardHeader
@@ -46,11 +49,11 @@ const Post = () => {
       <CardActions disableSpacing>
         <Checkbox
           icon={<MdOutlineFavorite size={30} className="text-red-300" />}
-          checkedIcon={<MdOutlineFavorite size={30} className="text-red-600" />}
+          checkedIcon={
+            <MdOutlineFavorite size={30} className="text-red-600 border" />
+          }
+          onChange={likeUnlikeHandler}
         />
-        {/* <IconButton aria-label="Like">
-            <MdOutlineFavorite  />
-          </IconButton> */}
         <IconButton aria-label="Comments">
           <LiaCommentSolid size={30} className="text-gray-700" />
         </IconButton>

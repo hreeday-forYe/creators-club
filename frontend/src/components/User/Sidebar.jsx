@@ -14,7 +14,7 @@ import { FaUserFriends } from 'react-icons/fa';
 import { RxDashboard } from 'react-icons/rx';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import CreatePost from './CreatePost';
+// import CreatePost from './CreatePost';
 import { BsFillFileEarmarkPostFill } from 'react-icons/bs';
 import { VscNewFile } from 'react-icons/vsc';
 import { CiSettings } from 'react-icons/ci';
@@ -80,7 +80,7 @@ const Sidebar = ({ active }) => {
       <div className="w-full h-[90vh] bg-white shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
         {/* single item */}
         <div className="w-full flex items-center p-4">
-          <Link to="/dashboard" className="w-full flex items-center">
+          <Link to="/feed" className="w-full flex items-center">
             <IoIosHome
               size={30}
               color={`${active === 1 ? 'crimson' : '#555'}`}

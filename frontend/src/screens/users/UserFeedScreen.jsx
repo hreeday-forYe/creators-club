@@ -1,8 +1,8 @@
 import React from 'react';
-import Navbar from '../../components/main/Navbar';
-import Rightbar from '../../components/main/Rightbar';
-import Sidebar from '../../components/main/Sidebar';
-import Feed from '../../components/main/Feed';
+import Navbar from '../../components/User/Navbar';
+import Rightbar from '../../components/User/Rightbar';
+import Sidebar from '../../components/User/Sidebar';
+import Feed from '../../components/User/Feed';
 import { Box, Stack } from '@mui/material';
 const UserFeedScreen = () => {
   return (

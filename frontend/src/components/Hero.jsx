@@ -4,93 +4,50 @@ import toast from 'react-hot-toast';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import { InputLabel, Input, FormHelperText } from '@mui/material';
+import hero from '../assets/hero.png';
 const Hero = () => {
   const notify = () => toast.success('Here is your toast.');
   return (
-    <div>
-      <h1 className="py-3">Hello From the HERO</h1>
-
-      <Link
-        to={'/login'}
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      >
-        LOGIN
-      </Link>
-
-      <Link
-        to={'/register'}
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      >
-        REGISTER
-      </Link>
-
-      <Link
-        to={'/create-page'}
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      >
-        CREATE PAGE
-      </Link>
-
-      <Link
-        to={'/verification'}
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      >
-        VERIFICATION
-      </Link>
-
-      <Link to={'/feed'}>
-        <Button variant="contained">Hello World</Button>
-      </Link>
-      <button onClick={notify}>Make me a toast</button>
-
-      <FormControl>
-        <InputLabel htmlFor="my-input">Email address</InputLabel>
-        <Input id="my-input" aria-describedby="my-helper-text" />
-        <FormHelperText id="my-helper-text">
-          We'll never share your email.
-        </FormHelperText>
-      </FormControl>
-    </div>
-    // <div className="bg-white pb-6 sm:pb-8 lg:pb-12">
-    //   <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
-    //     <section className="flex flex-col justify-between gap-6 sm:gap-10 md:gap-16 lg:flex-row">
-    //       {/* content - start */}
-    //       <div className="flex flex-col justify-center sm:text-center lg:py-12 lg:text-left xl:w-5/12 xl:py-24">
-    //         <h1 className="mb-8 text-4xl font-bold text-black sm:text-5xl md:mb-12 md:text-6xl">
-    //           Make money directly from what you do
-    //         </h1>
-    //         <p className="mb-8 leading-relaxed text-gray-500 md:mb-12 lg:w-4/5 xl:text-lg">
-    //           creators club empowers content creators and influencers start their own subscription page and turn their passion into income.
-    //         </p>
-    //         <div className="flex flex-col gap-2.5 sm:flex-row sm:justify-center lg:justify-start">
-    //           <Link
-    //             to={'/sign-up'}
-    //             className="inline-block rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base"
-    //           >
-    //             Get Started
-    //           </Link>
-    //           <a
-    //             href="/explore"
-    //             className="inline-block rounded-lg bg-gray-200 px-8 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-300 focus-visible:ring active:text-gray-700 md:text-base"
-    //           >
-    //             Explore
-    //           </a>
-    //         </div>
-    //       </div>
-    //       {/* content - end */}
-    //       {/* image - start */}
-    //       <div className="h-48 overflow-hidden rounded-lg bg-gray-100 shadow-lg lg:h-auto xl:w-5/12">
-    //         <img
-    //           src="https://images.unsplash.com/photo-1618004912476-29818d81ae2e?auto=format&q=75&fit=crop&w=1000"
-    //           loading="lazy"
-    //           alt="Photo by Fakurian Design"
-    //           className="h-full w-full object-cover object-center"
-    //         />
-    //       </div>
-    //       {/* image - end */}
-    //     </section>
-    //   </div>
-    // </div>
+    <section className="bg-white">
+      <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+        <div className="mr-auto place-self-center lg:col-span-7">
+          <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl">
+            Make money directly from what you do
+          </h1>
+          <p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl">
+            Creators Club empowers content creators and influencers start their
+            own subscription page and turn their passion into income.
+          </p>
+          <Link
+            to={'/create-page'}
+            className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-blue-700 transition duration-200 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
+          >
+            Create Your Page
+            <svg
+              className="w-5 h-5 ml-2 -mr-1"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </Link>
+          <Link
+            to={'/explore'}
+            className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-900 border transition duration-200 border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100"
+          >
+            Explore Creators
+          </Link>
+        </div>
+        <div className="sm:w-50% lg:mt-0 lg:col-span-5 lg:flex">
+          <img src={hero} alt="hero" />
+        </div>
+      </div>
+    </section>
   );
 };
 
