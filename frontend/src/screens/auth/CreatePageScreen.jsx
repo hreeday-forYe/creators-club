@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import CreatePage from '../../components/auth/CreatePage';
 import { useNavigate } from 'react-router-dom';
+import Header from '../../components/Header';
 const CreatePageScreen = () => {
   const userInfo = localStorage.getItem('userInfo');
   const pageInfo = localStorage.getItem('pageInfo');
@@ -15,7 +16,10 @@ const CreatePageScreen = () => {
   }, [userInfo, pageInfo]);
   return (
     <div>
-      <CreatePage />
+      <Header />
+      <div className="mt-8">
+        <CreatePage />
+      </div>
     </div>
   );
 };

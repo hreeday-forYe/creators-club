@@ -1,9 +1,10 @@
 import React from 'react';
-import ProfileContent from '../../components/User/ProfileContent';
+// import ProfileContent from '../../components/User/ProfileContent';
 const UserProfileScreen = () => {
   return (
     <>
-      <ProfileContent />
+      {/* <ProfileContent /> */}
+      User profile Screen
     </>
   );
 };

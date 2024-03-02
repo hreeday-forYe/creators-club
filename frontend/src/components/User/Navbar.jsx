@@ -47,7 +47,6 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  const pageInfo = JSON.parse(localStorage.getItem('pageInfo'));
   const logoutHandler = async () => {
     try {
       axios.defaults.withCredentials = true;

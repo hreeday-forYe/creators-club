@@ -13,6 +13,7 @@ const Header = () => {
     { name: 'WHO IS IT FOR?', link: '/' },
     { name: 'CREATORS', link: '/' },
     { name: 'FAQ', link: '/' },
+    { name: 'LOGIN', link: '/login' },
   ];
   let [open, setOpen] = useState(false);
 
