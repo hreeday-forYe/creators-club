@@ -10,6 +10,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
     register: builder.mutation({
       query: (data) => ({
         url: `${user_url}/register-user`,
@@ -17,6 +18,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
     verify: builder.mutation({
       query: (data) => ({
         url: `${user_url}/activate-user`,
@@ -24,13 +26,39 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
     logout: builder.mutation({
       query: () => ({
         url: `${user_url}/logout`,
         method: 'POST',
       }),
     }),
-    // TODO: updateProfile 
+
+    profile: builder.query({
+      query: () => ({
+        url: `${user_url}/profile`,
+        method: 'GET',
+      }),
+      keepUnusedDataFor: 5,
+    }),
+
+    updateUserInfo: builder.mutation({
+      query: (data) => ({
+        url: `${user_url}/update-user-info`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['User'],
+    }),
+
+    updateUserAvatar: builder.mutation({
+      query: () => ({
+        url: `${user_url}/update-avatar`,
+        method: 'PUT',
+        body: data,
+      }),
+    }),
+    invalidatesTags: ['User'],
   }),
 });
 
@@ -40,4 +68,7 @@ export const {
   useRegisterMutation,
   useVerifyMutation,
   useLogoutMutation,
+  useProfileQuery,
+  useUpdateUserInfoMutation,
+  useUpdateUserAvatarMutation,
 } = usersApiSlice;

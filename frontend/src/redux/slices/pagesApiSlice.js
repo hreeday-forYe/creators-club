@@ -10,6 +10,7 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
     createPage: builder.mutation({
       query: (data) => ({
         url: `${page_url}/create-page`,
@@ -17,6 +18,7 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
     verifyPage: builder.mutation({
       query: (data) => ({
         url: `${page_url}/activate-page`,
@@ -24,13 +26,63 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
     logoutPage: builder.mutation({
       query: () => ({
         url: `${page_url}/logout-page`,
         method: 'POST',
       }),
     }),
-    // TODO: updatePageInfo
+
+    profile: builder.query({
+      query: () => ({
+        url: `${page_url}/page-profile`,
+        method: 'GET',
+      }),
+    }),
+
+    updatePageProfile: builder.mutation({
+      query: (data) => ({
+        url: `${page_url}/update-page-info`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Page'],
+    }),
+
+    getPageInfo: builder.query({
+      query: (pageId) => ({
+        url: `${page_url}/${pageId}`,
+        method: 'GET',
+      }),
+      providesTags: ['Page'],
+      keepUnusedDataFor: 5,
+    }),
+
+    updatePageAvatar: builder.mutation({
+      query: (data) => ({
+        url: `${page_url}/update-page-avatar`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Page'],
+    }),
+
+    updateCoverImage: builder.mutation({
+      query: (data) => ({
+        url: `${page_url}/update-cover-image`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Page'],
+    }),
+
+    deletePage: builder.mutation({
+      query: () => ({
+        url: `${page_url}/delete-page`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
@@ -40,4 +92,8 @@ export const {
   useVerifyPageMutation,
   useCreatePageMutation,
   useLogoutPageMutation,
+  useGetPageInfoQuery,
+  useProfileQuery,
+  useUpdatePageInfoMutation,
+  useUpdatePageAvatarMutation,
 } = pagesApiSlice;

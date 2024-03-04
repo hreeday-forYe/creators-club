@@ -25,7 +25,7 @@ import { FaMoneyCheckAlt } from 'react-icons/fa';
 const Sidebar = ({ active }) => {
   return (
     <Box>
-      <div className="w-full h-[90vh] bg-white shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
+      <div className="w-full h-[90vh] bg-white shadow-sm  sticky top-0 left-0 z-10">
         {/* single item */}
         <div className="w-full flex items-center p-4">
           <Link to="/feed" className="w-full flex items-center">

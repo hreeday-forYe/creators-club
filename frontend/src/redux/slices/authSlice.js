@@ -1,12 +1,8 @@
-// This will set the user credientials to the local storage and remove them
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  userInfo: localStorage.getItem('userInfo')
-    ? JSON.parse(localStorage.getItem('userInfo'))
-    : null,
-  pageInfo: localStorage.getItem('pageInfo')
-    ? JSON.parse(localStorage.getItem('pageInfo'))
+  authInfo: localStorage.getItem('authInfo')
+    ? JSON.parse(localStorage.getItem('authInfo'))
     : null,
 };
 
@@ -15,25 +11,14 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      const { userType, data } = action.payload;
-      if (userType === 'user') {
-        state.userInfo = action.payload;
-        state.token = action.payload.token;
-        localStorage.setItem('userInfo', JSON.stringify(data));
-      } else if (userType === 'page') {
-        state.pageInfo = action.payload;
-        localStorage.setItem('pageInfo', JSON.stringify(data));
-      }
+      state.authInfo = action.payload;
+      localStorage.setItem('authInfo', JSON.stringify(action.payload));
     },
-    logout: (state, action) => {
-      const { userType } = action.payload;
-      if (userType === 'user') {
-        state.userInfo = null;
-        localStorage.removeItem('userInfo');
-      } else if (userType === 'page') {
-        state.pageInfo = null;
-        localStorage.removeItem('pageInfo');
-      }
+    logout: (state) => {
+      state.userInfo = null;
+      // NOTE: here we need to also remove the other things from storage so the next
+      // logged in user doesn't inherit the previous users payment history
+      localStorage.clear();
     },
   },
 });

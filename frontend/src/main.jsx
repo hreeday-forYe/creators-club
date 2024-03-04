@@ -18,6 +18,7 @@ import PageDashboardScreen from './screens/page/PageDashboardScreen';
 import UserFeedScreen from './screens/users/UserFeedScreen';
 import UserProfileScreen from './screens/users/UserProfileScreen';
 import PageProfileScreen from './screens/page/PageProfileScreen';
+import AdminDashboardScreen from './screens/admin/AdminDashboardScreen';
 // import CreatePost from './components/main/CreatePost';
 import { Provider } from 'react-redux';
 import Store from './redux/Store';
@@ -32,7 +33,10 @@ const router = createBrowserRouter(
       <Route path="/page-dashboard" element={<PageDashboardScreen />}></Route>
       <Route path="/feed" element={<UserFeedScreen />}></Route>
       <Route path="/profile" element={<UserProfileScreen />}></Route>
-      <Route path="/page/:id" element={<PageProfileScreen />}></Route>
+      <Route path="/admin-dashboard" element={<AdminDashboardScreen />}></Route>
+      <Route path="/page-profile" element={<PageProfileScreen />}></Route>
+      {/* <Route path="/page/:id" element={<ViewPageScreen />}></Route> */}
+
       {/* <Route path="/create-post" element={<CreatePost />}></Route> */}
     </Route>
   )

@@ -17,7 +17,7 @@ import {
 const postRouter = express.Router();
 
 postRouter.post('/create-post', isCreator, createPost);
-postRouter.get('/:id', isAuthenticated, likeUnlikePost); // #TODO: Make sure the creator can also like an unlike the post
+postRouter.patch('/:id', isAuthenticated, likeUnlikePost); // #TODO: Make sure the creator can also like an unlike the post
 postRouter.put('/:id', isCreator, updatePost);
 postRouter.delete('/:id', isCreator, deletePost);
 postRouter.get('/', isAuthenticated, getPostsOfFollowing);

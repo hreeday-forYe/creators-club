@@ -48,9 +48,9 @@ const Post = () => {
       </CardContent>
       <CardActions disableSpacing>
         <Checkbox
-          icon={<MdOutlineFavorite size={30} className="text-red-300" />}
+          icon={<MdOutlineFavorite size={30} className="text-gray-300" />}
           checkedIcon={
-            <MdOutlineFavorite size={30} className="text-red-600 border" />
+            <MdOutlineFavorite size={30} className="text-red-700 " />
           }
           onChange={likeUnlikeHandler}
         />

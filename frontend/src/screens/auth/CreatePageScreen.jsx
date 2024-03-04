@@ -11,7 +11,7 @@ const CreatePageScreen = () => {
     if (userInfo) {
       navigate('/feed');
     } else if (pageInfo) {
-      navigate('/page-dashbaord');
+      navigate('/page-dashboard');
     }
   }, [userInfo, pageInfo]);
   return (

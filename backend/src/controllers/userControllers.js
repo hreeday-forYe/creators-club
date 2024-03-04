@@ -314,7 +314,6 @@ const updateProfilePicture = asyncHandler(async (req, res, next) => {
     }
     // Here is the portioin where we save the new user to the database
     await user?.save();
-    await redis.set(userId, JSON.stringify(user));
 
     // Response
     res.status(201).json({

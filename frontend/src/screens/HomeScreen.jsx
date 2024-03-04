@@ -10,7 +10,7 @@ const HomeScreen = () => {
       <div className="mt-16">
         <Hero />
       </div>
-      <About/>
+      {/* <About/> */}
       <div className="flex">
         <div className="bg-teal-500 text-white flex-col hidden sm:block w-64">
           <div className="p-6">
