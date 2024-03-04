@@ -15,10 +15,10 @@ const authSlice = createSlice({
       localStorage.setItem('authInfo', JSON.stringify(action.payload));
     },
     logout: (state) => {
-      state.userInfo = null;
+      state.authInfo = null;
       // NOTE: here we need to also remove the other things from storage so the next
       // logged in user doesn't inherit the previous users payment history
-      localStorage.clear();
+      localStorage.removeItem('authInfo');
     },
   },
 });

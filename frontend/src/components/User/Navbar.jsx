@@ -4,19 +4,17 @@ import {
   Typography,
   Toolbar,
   Box,
-  Badge,
   Avatar,
 } from '@mui/material';
-import { RxButton } from 'react-icons/rx';
 import React, { useState } from 'react';
 import { InputBase, Menu, MenuItem } from '@mui/material';
 import { IoSearchOutline } from 'react-icons/io5';
-import { CgProfile } from 'react-icons/cg';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSearch } from 'react-icons/fa';
-import { user_url } from '../../constants';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import { useLogoutMutation } from '../../redux/slices/usersApiSlice';
+import { logout } from '../../redux/slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
 const StyledToolbar = styled(Toolbar)({
   display: 'flex',
   justifyContent: 'space-between',
@@ -42,28 +40,24 @@ const UserBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { display: 'none' },
 }));
 
-
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const { authInfo } = useSelector((state) => state.auth);
+  const [logoutApiCall, { isLoading }] = useLogoutMutation();
+  const dispatch = useDispatch();
   const logoutHandler = async () => {
     try {
-      axios.defaults.withCredentials = true;
-      const response = await axios(`${user_url}/logout`, {
-        method: 'POST',
-        withCredentials: true,
-      });
-      localStorage.clear();
+      await logoutApiCall().unwrap();
+      dispatch(logout());
       toast.success(response.data.message);
       navigate('/login');
     } catch (error) {
-      console.log(error.message);
       toast.error(error.message);
     }
   };
-  
-  console.log(userInfo);
+
+  console.log(authInfo);
   return (
     <AppBar position="sticky" sx={{ backgroundColor: 'black' }}>
       <StyledToolbar>

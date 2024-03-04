@@ -2,9 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineGift } from 'react-icons/ai';
 import { Avatar } from '@mui/material';
+import { useSelector } from 'react-redux';
 const DashboardHeader = () => {
-  const creator = JSON.parse(localStorage.getItem('pageInfo'));
-  console.log(creator);
+  const { authInfo } = useSelector((state) => state.auth);
+
+  const { creator } = authInfo;
   return (
     <div className="w-full h-[65px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
@@ -15,9 +17,10 @@ const DashboardHeader = () => {
       </div>
       <div className="flex items-center">
         <div className="flex items-center mr-4 space-x-2">
-          <Link to="/dashboard/subscribers" className="800px:block hidden">
-            Page Subscribers
-          </Link>
+          <Link
+            to="/dashboard/subscribers"
+            className="800px:block hidden"
+          ></Link>
 
           {/* Space for avatar */}
           <Link to={`/page-profile`}>
@@ -26,9 +29,9 @@ const DashboardHeader = () => {
                 sx={{ width: 46, height: 46 }}
                 alt="Jack Sparrow"
                 src={creator.avatar?.url}
-                className="hover:animate-pulse transition duration-100"
+                className="hover:animate-pulse transition duration-50"
               ></Avatar>
-              <h5 className="text-black text-lg hover:text-gray-600 transition duration-200 capitalize ">
+              <h5 className="text-gray-600 text-lg font-medium hover:text-gray-900 transition duration-200 capitalize ">
                 {creator.name}
               </h5>
             </div>

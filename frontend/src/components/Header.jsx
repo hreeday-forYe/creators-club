@@ -23,12 +23,14 @@ const Header = () => {
         {/* logo section */}
         <div className="font-bold text-2xl cursor-pointer flex items-center gap-1">
           {/* <BookOpenIcon className="w-7 h-7 text-blue-600" /> */}
-          <span>Creators Club</span>
+          <Link to={'/'}>
+            <span>Creators Club</span>
+          </Link>
         </div>
         {/* Menu icon */}
         <div
           onClick={() => setOpen(!open)}
-          className="absolute right-8 top-6 cursor-pointer md:hidden w-7 h-7"
+          className="absolute right-8 top-5 cursor-pointer md:hidden w-7 h-7"
         >
           {open ? <FaXmark size={30} /> : <IoMdMenu size={30} />}
         </div>

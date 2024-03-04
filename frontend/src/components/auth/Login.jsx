@@ -4,44 +4,37 @@ import styles from '../../styles/styles';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { user_url, page_url } from '../../constants';
+import Loader from '../Loader';
 import { toast } from 'react-hot-toast';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setCredentials } from '../../redux/slices/authSlice';
+import { useLoginMutation } from '../../redux/slices/usersApiSlice';
+import { useLoginPageMutation } from '../../redux/slices/pagesApiSlice';
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState('subscriber');
-
+  const [login, { isLoading }] = useLoginMutation();
+  const [loginPage, { isLoading: pageLoading }] = useLoginPageMutation();
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedOption === 'creator') {
       try {
-        const response = await axios.post(
-          `${page_url}/login-page`,
-          { email, password },
-          { withCredentials: true }
-        );
-        console.log(response.data.creator);
-        localStorage.setItem(
-          'pageInfo',
-          JSON.stringify(response.data?.creator)
-        );
-        toast.success(response.data.message);
+        const response = await loginPage({ email, password }).unwrap();
+        dispatch(setCredentials({ ...response }));
+        toast.success('Page Logged In Success');
         navigate('/page-dashboard');
       } catch (error) {
         toast.error(error.response.data.message);
       }
     } else if (selectedOption === 'subscriber') {
       try {
-        const response = await axios.post(
-          `${user_url}/login-user`,
-          { email, password },
-          { withCredentials: true }
-        );
-        console.log(response.data.user);
-        localStorage.clear();
-        localStorage.setItem('userInfo', JSON.stringify(response.data?.user));
+        const response = await login({ email, password }).unwrap();
+        dispatch(setCredentials({ ...response }));
+        toast.success('User Logged In Success');
         navigate('/feed');
       } catch (error) {
         toast.error(error.response.data.message);
@@ -179,9 +172,11 @@ const Login = () => {
               <button
                 type="submit"
                 className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                disabled={isLoading || pageLoading}
               >
                 Submit
               </button>
+              {isLoading || (pageLoading && <Loader />)}
             </div>
             <div className={`${styles.noramlFlex} w-full`}>
               <h4>Don't have any account?</h4>

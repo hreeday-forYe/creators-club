@@ -14,8 +14,10 @@ import { page_url } from '../../../constants';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 const DashboardSideBar = ({ active }) => {
-  const creator = JSON.parse(localStorage.getItem('pageInfo'));
+  const { authInfo } = useSelector((state) => state.auth);
+  const {creator} = authInfo
   const navigate = useNavigate();
   // Logout Page Profile
   const logoutHandler = async () => {

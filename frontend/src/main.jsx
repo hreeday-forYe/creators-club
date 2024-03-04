@@ -21,7 +21,7 @@ import PageProfileScreen from './screens/page/PageProfileScreen';
 import AdminDashboardScreen from './screens/admin/AdminDashboardScreen';
 // import CreatePost from './components/main/CreatePost';
 import { Provider } from 'react-redux';
-import Store from './redux/Store';
+import store from './redux/store';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -44,8 +44,9 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* <Provider store={Store}></Provider> */}
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );
 
