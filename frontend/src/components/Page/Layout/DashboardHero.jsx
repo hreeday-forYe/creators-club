@@ -91,7 +91,7 @@ const DashboardHero = ({
           autoHeight
         />
       </div> */}
-      noneman
+      Page Dashboard
     </div>
   );
 };

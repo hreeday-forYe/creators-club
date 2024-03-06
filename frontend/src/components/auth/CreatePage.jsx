@@ -7,6 +7,9 @@ import styles from '../../styles/styles';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { page_url } from '../../constants';
+import { useCreatePageMutation } from '../../redux/slices/pagesApiSlice';
+import Loader from '../Loader';
+import { useDispatch } from 'react-redux';
 const CreatePage = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -16,35 +19,53 @@ const CreatePage = () => {
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
+  const [createPage, { isLoading }] = useCreatePageMutation();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${page_url}/create-page`, {
+      // const response = await axios.post(`${page_url}/create-page`, {
+      //   name,
+      //   email,
+      //   password,
+      //   avatar,
+      //   address,
+      //   phoneNumber,
+      // });
+      // console.log(avatar);
+      // toast.success(response.data.message);
+      // // alert('register successfull');
+      // setName('');
+      // setEmail('');
+      // setPassword('');
+      // setPhoneNumber('');
+      // setAddress('');
+      // setAvatar('');
+      // navigate('/verification', {
+      //   state: {
+      //     activationToken: response.data.activationToken,
+      //     registerType: 'page',
+      //   },
+      // });
+      const response = await createPage({
         name,
+        phoneNumber,
         email,
         password,
         avatar,
         address,
-        phoneNumber,
-      });
-      console.log(avatar);
-      toast.success(response.data.message);
-      // alert('register successfull');
-      setName('');
-      setEmail('');
-      setPassword('');
-      setPhoneNumber('');
-      setAddress('');
-      setAvatar('');
+      }).unwrap();
+      console.log(response);
+      toast.success(response.message);
       navigate('/verification', {
         state: {
-          activationToken: response.data.activationToken,
+          activationToken: response.activationToken,
           registerType: 'page',
         },
       });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.message);
     }
   };
 
@@ -60,7 +81,9 @@ const CreatePage = () => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">

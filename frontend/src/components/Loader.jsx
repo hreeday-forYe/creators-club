@@ -1,9 +1,16 @@
-import React from 'react'
+import React from 'react';
 import ReactLoading from 'react-loading';
 const Loader = () => {
   return (
-    <ReactLoading type={"bars"} color={"#000000"} height={"20%"} width={"20%"}/>
-  )
-}
+    <div className="flex items-center justify-center top-6">
+      <ReactLoading
+        type={'bars'}
+        color={'#222341'}
+        height={'20%'}
+        width={'20%'}
+      />
+    </div>
+  );
+};
 
-export default Loader
+export default Loader;

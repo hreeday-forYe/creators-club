@@ -1,19 +1,19 @@
 import React from 'react';
-import DashboardHeader from '../../components/Page/Layout/DashboardHeader'
+import DashboardHeader from '../../components/Page/Layout/DashboardHeader';
 import DashboardSideBar from '../../components/Page/Layout/DashboardSidebar';
-import DashboardHero from '../../components/Page/Layout/DashboardHero'
-const PageDashboardScreen = () => {
+import CreatePost from '../../components/Page/CreatePost';
+const CreatePostScreen = () => {
   return (
     <div>
       <DashboardHeader />
       <div className="flex items-start justify-between w-full">
         <div className="w-[80px] 800px:w-[330px]">
-          <DashboardSideBar active={1} />
+          <DashboardSideBar active={4} />
         </div>
-        <DashboardHero />
+        <CreatePost />
       </div>
     </div>
   );
 };
 
-export default PageDashboardScreen;
+export default CreatePostScreen;

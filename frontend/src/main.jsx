@@ -22,6 +22,8 @@ import AdminDashboardScreen from './screens/admin/AdminDashboardScreen';
 // import CreatePost from './components/main/CreatePost';
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import CreatePostScreen from './screens/page/CreatePostScreen';
+import GetAllPostsScreen from './screens/page/GetAllPostsScreen'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -37,7 +39,10 @@ const router = createBrowserRouter(
       <Route path="/page-profile" element={<PageProfileScreen />}></Route>
       {/* <Route path="/page/:id" element={<ViewPageScreen />}></Route> */}
 
-      {/* <Route path="/create-post" element={<CreatePost />}></Route> */}
+      <Route path="/create-post" element={<CreatePostScreen />}></Route>
+    
+      <Route path="/page-posts" element={<GetAllPostsScreen />}></Route>
+    
     </Route>
   )
 );

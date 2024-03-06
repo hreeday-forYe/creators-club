@@ -329,7 +329,20 @@ export const getPostsOfFollowing = asyncHandler(async (req, res, next) => {
   }
 });
 
-// comment on a post
+// Get my posts
+export const getMyPosts = asyncHandler(async (req, res, next) => {
+  try {
+    const creatorId = req.creator._id;
+    const posts = await Post.find({ creator: creatorId });
+    res.status(200).json({
+      success: true,
+      message: 'Your Posts fetched',
+      posts,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 400));
+  }
+});
 
 // Get all posts of any page for admin
 export const adminAllPosts = asyncHandler(async (req, res, next) => {
