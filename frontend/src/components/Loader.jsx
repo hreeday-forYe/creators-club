@@ -2,7 +2,7 @@ import React from 'react';
 import ReactLoading from 'react-loading';
 const Loader = () => {
   return (
-    <div className="flex items-center justify-center top-6">
+    <div className="flex items-center justify-center top-16">
       <ReactLoading
         type={'bars'}
         color={'#222341'}

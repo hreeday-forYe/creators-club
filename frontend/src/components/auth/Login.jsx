@@ -18,17 +18,19 @@ const Login = () => {
   const [visible, setVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState('subscriber');
   const [login, { isLoading }] = useLoginMutation();
-  const [loginPage, { isLoading: pageLoading }] = useLoginPageMutation();
+  const [loginPage, { isLoading: pageLoading }, error] = useLoginPageMutation();
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedOption === 'creator') {
       try {
         const response = await loginPage({ email, password }).unwrap();
+        console.log(response);
         dispatch(setCredentials({ ...response }));
+
         toast.success('Page Logged In Success');
         navigate('/page-dashboard');
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error?.data?.message || error.error);
       }
     } else if (selectedOption === 'subscriber') {
       try {
@@ -37,7 +39,7 @@ const Login = () => {
         toast.success('User Logged In Success');
         navigate('/feed');
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error?.data?.message || error.error);
       }
     }
   };

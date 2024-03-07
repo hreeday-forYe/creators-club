@@ -35,8 +35,8 @@ const CreatePost = () => {
     console.log('handle');
   };
   return (
-    <div>
-      <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
+    <div className="w-full p-8 flex items-center justify-center">
+      <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3">
         <h5 className="text-[30px] font-Poppins text-center">
           Create New Post
         </h5>
