@@ -11,8 +11,7 @@ import { InputBase, Menu, MenuItem } from '@mui/material';
 import { IoSearchOutline } from 'react-icons/io5';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { useLogoutMutation } from '../../redux/slices/usersApiSlice';
-import { logout } from '../../redux/slices/authSlice';
+
 import { useDispatch, useSelector } from 'react-redux';
 
 const StyledToolbar = styled(Toolbar)({
@@ -42,22 +41,13 @@ const UserBox = styled(Box)(({ theme }) => ({
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
+  
   const { authInfo } = useSelector((state) => state.auth);
-  const [logoutApiCall, { isLoading }] = useLogoutMutation();
-  const dispatch = useDispatch();
-  const logoutHandler = async () => {
-    try {
-      await logoutApiCall().unwrap();
-      dispatch(logout());
-      toast.success(response.data.message);
-      navigate('/login');
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  
+  
 
   console.log(authInfo);
+  const { user } = authInfo?.user;
   return (
     <AppBar position="sticky" sx={{ backgroundColor: 'black' }}>
       <StyledToolbar>
@@ -81,7 +71,7 @@ const Navbar = () => {
             <IoNotifications size={25} />
           </Badge> */}
           <Avatar
-            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "
+            src={user?.avatar?.url}
             sx={{ width: 40, height: 40, cursor: 'pointer' }}
             onClick={(e) => setOpen(true)}
           />
@@ -112,7 +102,6 @@ const Navbar = () => {
         <Link to={'/profile'}>
           <MenuItem>Profile</MenuItem>
         </Link>
-        <MenuItem onClick={logoutHandler}>Logout</MenuItem>
       </Menu>
     </AppBar>
   );

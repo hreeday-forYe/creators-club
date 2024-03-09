@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { user_url } from '../../constants';
 import { toast } from 'react-hot-toast';
+import { useRegisterMutation } from '../../redux/slices/usersApiSlice';
+import Loader from '../Loader';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -12,29 +14,45 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
+  const [register, { isLoading }] = useRegisterMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post(`${user_url}/register-user`, { name, email, password })
-      .then((res) => {
-        toast.success(res.data.message);
-        // alert('register successfull');
-        setName('');
-        setEmail('');
-        setPassword('');
-        navigate('/verification', {
-          state: {
-            activationToken: res.data.activationToken,
-            registerType: 'user',
-          },
-        });
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
+    // axios
+    //   .post(`${user_url}/register-user`, { name, email, password })
+    //   .then((res) => {
+    //     toast.success(res.data.message);
+    //     // alert('register successfull');
+    //     setName('');
+    //     setEmail('');
+    //     setPassword('');
+    //     navigate('/verification', {
+    //       state: {
+    //         activationToken: res.data.activationToken,
+    //         registerType: 'user',
+    //       },
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     toast.error(error.response.data.message);
+    //   });
+
+    try {
+      const response = await register({ name, email, password }).unwrap();
+      toast.success(response.message);
+      navigate('/verification', {
+        state: {
+          activationToken: response.activationToken,
+          registerType: 'user',
+        },
       });
+    } catch (error) {
+      toast.error(error.data.message || error.error);
+    }
   };
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 mt-10">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">

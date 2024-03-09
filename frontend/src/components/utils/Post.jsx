@@ -12,18 +12,28 @@ import {
 } from '@mui/material';
 import { MdOutlineFavorite } from 'react-icons/md';
 import { LiaCommentSolid } from 'react-icons/lia';
-const Post = ({ posts, creator }) => {
+import { formatDistanceToNow, format } from 'date-fns';
+
+const Post = ({ posts }) => {
   const likeUnlikeHandler = () => {
     console.log('liked');
   };
+
+  // format date and time
+  const timeAgo = (getDate) => {
+    const date = new Date(getDate);
+    const timeAgo = formatDistanceToNow(date, { addSuffix: true });
+    return timeAgo;
+  };
+
   return posts.map((post, index) => (
-    <Card className="shadow-lg mb-12" key={index}>
+    <Card className="shadow-md mb-12" key={index}>
       <CardHeader
         avatar={
           <Avatar
             sx={{ bgcolor: 'red' }}
             aria-label="recipe"
-            src={creator?.avatar?.url}
+            src={post.creator.avatar.url}
           >
             R
           </Avatar>
@@ -33,8 +43,8 @@ const Post = ({ posts, creator }) => {
             {/* <MoreVertIcon /> */}
           </IconButton>
         }
-        title={creator.name}
-        subheader="January 14, 2024"
+        title={post?.creator?.name}
+        subheader={timeAgo(post.createdAt)}
       />
       {console.log(post.photos)}
       {post.photos && post.photos.length > 0 ? (

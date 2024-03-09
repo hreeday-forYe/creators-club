@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material';
 const Rightbar = () => {
   return (
     <>
-      <Box flex={2} p={2} sx={{ display: { xs: 'none', sm: 'block' } }}>
+      <Box flex={3} p={2} sx={{ display: { xs: 'none', sm: 'block' } }}>
         <Box position={'relative'}>
           <Typography variant="h6" fontWeight={300}>
             Suggested Pages

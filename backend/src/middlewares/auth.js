@@ -7,7 +7,7 @@ import Page from '../models/pagesModel.js';
 const isAuthenticated = asyncHandler(async (req, res, next) => {
   let token = req.cookies.jwt;
 
-  console.log(`As you can see the token is: ${token}`); // this line prints out undefined
+  // console.log(`As you can see the token is: ${token}`); // this line prints out undefined
   if (!token) {
     return next(new ErrorHandler('Please login to access this resource', 400));
   }

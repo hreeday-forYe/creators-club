@@ -160,7 +160,7 @@ const DashboardSideBar = ({ active }) => {
       )}
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
-        <Link to="/page-settings" className="w-full flex items-center">
+        <Link to="/page-profile" className="w-full flex items-center">
           <CiSettings
             size={30}
             color={`${active === 11 ? 'crimson' : '#555'}`}

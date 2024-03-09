@@ -1,75 +1,112 @@
 import React from 'react';
-import { FiShoppingBag } from 'react-icons/fi';
-import { GrWorkshop } from 'react-icons/gr';
 import { RxDashboard } from 'react-icons/rx';
-import { CiMoneyBill, CiSettings } from 'react-icons/ci';
+import { VscNewFile } from 'react-icons/vsc';
+import { CiSettings } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
-import { HiOutlineUserGroup } from 'react-icons/hi';
-import { BsHandbag } from 'react-icons/bs';
-import { MdOutlineLocalOffer } from 'react-icons/md';
-import { AiOutlineSetting } from 'react-icons/ai';
-
-const AdminSideBar = ({ active }) => {
+import { BiMessageSquareDetail } from 'react-icons/bi';
+import { BiSolidPurchaseTag } from 'react-icons/bi';
+import { MdExplore, MdOutlineAdminPanelSettings } from 'react-icons/md';
+import { CiMoneyBill } from 'react-icons/ci';
+import { BsFillFileEarmarkPostFill } from 'react-icons/bs';
+import { Button } from '@mui/base';
+import { CiLogout } from 'react-icons/ci';
+import { page_url } from '../../../constants';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { IoPeopleSharp } from 'react-icons/io5';
+import { GrWorkshop } from 'react-icons/gr';
+const DashboardSideBar = ({ active }) => {
+  const { authInfo } = useSelector((state) => state.auth);
+  const { creator } = authInfo;
+  const navigate = useNavigate();
+  // Logout Page Profile
+  const logoutHandler = async () => {
+    try {
+      axios.defaults.withCredentials = true;
+      const response = await axios(`${page_url}/logout-page`, {
+        method: 'POST',
+        withCredentials: true,
+      });
+      localStorage.clear();
+      toast.success(response.data.message);
+      navigate('/login');
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message);
+    }
+  };
   return (
-    <div className="w-full h-[90vh] bg-white shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
+    <div className="w-full h-[90vh] bg-white shadow-sm border border-3 sticky top-0 left-0 z-10">
       {/* single item */}
-      <div className="w-full flex items-center p-4">
-        <Link to="/admin/dashboard" className="w-full flex items-center">
-          <RxDashboard
-            size={30}
-            color={`${active === 1 ? 'crimson' : '#555'}`}
-          />
+      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+        <Link to="/admin-dashboard" className="w-full flex items-center">
+          <RxDashboard size={30} color={`${active === 1 ? 'blue' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 1 ? 'text-[crimson]' : 'text-[#555]'
+              active === 1 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
-            Dashboard
+            Admin Dashboard
           </h5>
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/admin-orders" className="w-full flex items-center">
-          <FiShoppingBag
+      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+        <Link to="/all-subscriptions" className="w-full flex items-center">
+          <BiSolidPurchaseTag
             size={30}
-            color={`${active === 2 ? 'crimson' : '#555'}`}
+            color={`${active === 2 ? 'blue ' : '#555'}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 2 ? 'text-[crimson]' : 'text-[#555]'
+              active === 2 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
-            All Orders
+            All Subscriptions
           </h5>
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/admin-sellers" className="w-full flex items-center">
-          <GrWorkshop
+      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+        <Link to="/all-posts" className="w-full flex items-center">
+          <BsFillFileEarmarkPostFill
             size={30}
-            color={`${active === 3 ? 'crimson' : '#555'}`}
+            color={`${active === 3 ? 'blue' : '#555'}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 3 ? 'text-[crimson]' : 'text-[#555]'
+              active === 3 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
-            All Sellers
+            All Posts
           </h5>
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/admin-users" className="w-full flex items-center">
-          <HiOutlineUserGroup
+      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+        <Link to="/all-creators" className="w-full flex items-center">
+          <GrWorkshop size={30} color={`${active === 3 ? 'blue' : '#555'}`} />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 3 ? 'text-blue-700' : 'text-[#555]'
+            }`}
+          >
+            All Creators
+          </h5>
+        </Link>
+      </div>
+
+      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+        <Link to="/all-users" className="w-full flex items-center">
+          <IoPeopleSharp
             size={30}
-            color={`${active === 4 ? 'crimson' : '#555'}`}
+            color={`${active === 3 ? 'blue' : '#555'}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 4 ? 'text-[crimson]' : 'text-[#555]'
+              active === 3 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
             All Users
@@ -77,36 +114,7 @@ const AdminSideBar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/admin-products" className="w-full flex items-center">
-          <BsHandbag size={30} color={`${active === 5 ? 'crimson' : '#555'}`} />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 5 ? 'text-[crimson]' : 'text-[#555]'
-            }`}
-          >
-            All Products
-          </h5>
-        </Link>
-      </div>
-
-      <div className="w-full flex items-center p-4">
-        <Link to="/admin-events" className="w-full flex items-center">
-          <MdOutlineLocalOffer
-            size={30}
-            color={`${active === 6 ? 'crimson' : '#555'}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 6 ? 'text-[crimson]' : 'text-[#555]'
-            }`}
-          >
-            All Events
-          </h5>
-        </Link>
-      </div>
-
-      <div className="w-full flex items-center p-4">
+      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Link to="/admin-withdraw-request" className="w-full flex items-center">
           <CiMoneyBill
             size={30}
@@ -122,23 +130,54 @@ const AdminSideBar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/profile" className="w-full flex items-center">
-          <AiOutlineSetting
+      {creator && creator.role === 'Admin' && (
+        <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+          <Link to="/page-dashboard" className="w-full flex items-center">
+            <MdOutlineAdminPanelSettings
+              size={30}
+              color={`${active === 8 ? 'crimson' : '#555'}`}
+            />
+            <h5
+              className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+                active === 8 ? 'text-[crimson]' : 'text-[#555]'
+              }`}
+            >
+              Page Dashboard
+            </h5>
+          </Link>
+        </div>
+      )}
+
+      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+        <Link to="/page-profile" className="w-full flex items-center">
+          <CiSettings
             size={30}
-            color={`${active === 8 ? 'crimson' : '#555'}`}
+            color={`${active === 11 ? 'crimson' : '#555'}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 8 ? 'text-[crimson]' : 'text-[#555]'
+              active === 11 ? 'text-[crimson]' : 'text-[#555]'
             }`}
           >
             Settings
           </h5>
         </Link>
       </div>
+
+      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+        <Button onClick={logoutHandler} className="w-full flex items-center">
+          <CiLogout size={30} color={`${active === 11 ? 'crimson' : '#555'}`} />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 11 ? 'text-[crimson]' : 'text-[#555]'
+            }`}
+          >
+            Logout
+          </h5>
+        </Button>
+      </div>
     </div>
   );
 };
 
-export default AdminSideBar;
+export default DashboardSideBar;

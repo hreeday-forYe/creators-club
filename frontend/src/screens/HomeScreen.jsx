@@ -7,7 +7,7 @@ const HomeScreen = () => {
   return (
     <>
       <Header />
-      <div className="mt-16">
+      <div className="my-16">
         <Hero />
       </div>
       <Footer />

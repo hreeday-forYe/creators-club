@@ -9,8 +9,8 @@ const UserFeedScreen = () => {
     <div>
       <Box>
         <Navbar />
-        <Stack direction="row" spacing={2} justifyContent={'space-between'}>
-          <Sidebar />
+        <Stack direction="row" spacing={6} justifyContent={'space-between'}>
+          <Sidebar active={1} />
           <Feed />
           <Rightbar />
         </Stack>

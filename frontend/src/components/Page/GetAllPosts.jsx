@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetMyPostsQuery } from '../../redux/slices/postApiSlice';
 import Loader from '../Loader';
-import Post from '../User/Post';
+import Post from '../utils/Post';
 const GetAllPosts = () => {
   const { data, isLoading, error } = useGetMyPostsQuery();
   console.log(data);

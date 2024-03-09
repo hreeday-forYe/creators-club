@@ -317,7 +317,7 @@ export const getPostsOfFollowing = asyncHandler(async (req, res, next) => {
         $in: user.following,
       },
       status: 'public',
-    });
+    }).populate('creator', 'name avatar');
 
     res.status(201).json({
       success: true,

@@ -12,16 +12,18 @@ import {
 } from '@mui/material';
 
 import React from 'react';
-import Post from './Post';
-
+import Post from '../utils/Post';
+import { usePostsOfFollowingsQuery } from '../../redux/slices/postApiSlice';
+import Loader from '../Loader';
 const Feed = () => {
-  return (
-    <Box flex={3} m={3} p={2}>
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
+  const { data, isLoading } = usePostsOfFollowingsQuery();
+  const posts = data?.posts;
+  console.log(posts);
+  return isLoading ? (
+    <Loader />
+  ) : (
+    <Box flex={4} p={6}>
+      <Post posts={posts} />
     </Box>
   );
 };

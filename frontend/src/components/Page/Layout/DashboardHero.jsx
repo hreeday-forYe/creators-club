@@ -16,13 +16,12 @@ const DashboardHero = () => {
   const { creator } = authInfo;
   console.log(creator);
 
-  // useEffect(() => {
-  //   dispatch(getAllOrdersOfShop(seller._id));
-  //   dispatch(getAllProductsShop(seller._id));
-  // }, [dispatch]);
-
   const availableBalance = creator?.availableBalance.toFixed(2);
-  const posts = creator.posts;
+  const { data, refetch: postRefetch } = useGetMyPostsQuery();
+  const posts = data?.posts;
+  useEffect(() => {
+    postRefetch();
+  }, [postRefetch]);
   const columns = [
     { field: 'id', headerName: 'Subscription ID', minWidth: 150, flex: 0.8 },
 

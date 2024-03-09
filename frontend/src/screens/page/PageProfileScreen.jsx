@@ -1,10 +1,10 @@
 import React from 'react';
-import PageProfile from '../../components/Page/PageProfile';
+import PageProfile from '../../components/Page/profile/PageProfile';
 const PageProfileScreen = () => {
   return (
-    <div>
-      <PageProfile />
-    </div>
+    <>
+      <PageProfile/>
+    </>
   );
 };
 

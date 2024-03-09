@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useCreatePostMutation } from '../../redux/slices/postApiSlice';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
+import PhotosUploader from '../utils/PhotosUploader';
 
 const CreatePost = () => {
   const { authInfo } = useSelector((state) => state.auth);
@@ -61,14 +62,16 @@ const CreatePost = () => {
             <label className="pb-2">
               Upload Images <span className="text-red-500">*</span>
             </label>
-            <input
+            {/* <input
               type="file"
               name=""
               id="upload"
               className="hidden"
               multiple
               onChange={handleImageChange}
-            />
+            /> */}
+
+            <PhotosUploader addedPhotos={images} onChange={setImages} />
             <div className="w-full flex items-center flex-wrap">
               <label htmlFor="upload">
                 <AiOutlinePlusCircle size={30} className="mt-3" color="#555" />

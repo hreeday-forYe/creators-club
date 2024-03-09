@@ -1,31 +1,33 @@
-import {
-  Avatar,
-  Box,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
+import { Box } from '@mui/material';
 import { IoIosHome } from 'react-icons/io';
 import { MdExplore } from 'react-icons/md';
 import { BiSolidPurchaseTag } from 'react-icons/bi';
 import { FaUserFriends } from 'react-icons/fa';
-import { RxDashboard } from 'react-icons/rx';
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import CreatePost from './CreatePost';
-import { BsFillFileEarmarkPostFill } from 'react-icons/bs';
-import { VscNewFile } from 'react-icons/vsc';
-import { CiSettings } from 'react-icons/ci';
 import { BiMessageSquareDetail } from 'react-icons/bi';
-import { HiOutlineReceiptRefund } from 'react-icons/hi';
-import { MdOutlinePostAdd } from 'react-icons/md';
-import { FaMoneyCheckAlt } from 'react-icons/fa';
+import { CiLogout } from 'react-icons/ci';
+import { useLogoutMutation } from '../../redux/slices/usersApiSlice';
+import { logout } from '../../redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 const Sidebar = ({ active }) => {
+  const [logoutApiCall, { isLoading }] = useLogoutMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const logoutHandler = async () => {
+    try {
+      const response = await logoutApiCall().unwrap();
+      dispatch(logout());
+      toast.success(response.message);
+      navigate('/login');
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
   return (
     <Box>
-      <div className="w-full h-[90vh] bg-white shadow-sm  sticky top-0 left-0 z-10">
+      <div className="w-full mr-2 h-[80vh] bg-white p-4 border shadow-sm sticky top-0 left-0 z-10">
         {/* single item */}
         <div className="w-full flex items-center p-4">
           <Link to="/feed" className="w-full flex items-center">
@@ -111,8 +113,8 @@ const Sidebar = ({ active }) => {
         </div>
 
         <div className="w-full flex items-center p-4">
-          <Link to="/settings" className="w-full flex items-center">
-            <CiSettings
+          <Link onClick={logoutHandler} className="w-full flex items-center">
+            <CiLogout
               size={30}
               color={`${active === 11 ? 'crimson' : '#555'}`}
             />
@@ -121,7 +123,7 @@ const Sidebar = ({ active }) => {
                 active === 11 ? 'text-[crimson]' : 'text-[#555]'
               }`}
             >
-              Settings
+              Logout
             </h5>
           </Link>
         </div>
