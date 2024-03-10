@@ -85,9 +85,10 @@ const DashboardHero = () => {
   const row = [];
 
   posts &&
-    posts.forEach((post) => {
+    posts.forEach((post, index) => {
+      console.log(post);
       row.push({
-        id: post,
+        id: post._id,
         // itemsQty: item.cart.reduce((acc, item) => acc + item.qty, 0),
         total: 'US$ ' + availableBalance,
         status: post.status,

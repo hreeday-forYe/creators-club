@@ -1,7 +1,7 @@
 import React from 'react';
-import DashboardHeader from '../../components/Page/Layout/DashboardHeader'
-import DashboardSideBar from '../../components/Page/Layout/DashboardSidebar';
-import DashboardHero from '../../components/Page/Layout/DashboardHero'
+import DashboardHeader from '../../components/Page/Layout/DashboardHeader';
+import DashboardSideBar from '../../components/Page/Layout/DashboardSideBar';
+import DashboardHero from '../../components/Page/Layout/DashboardHero';
 const PageDashboardScreen = () => {
   return (
     <div>

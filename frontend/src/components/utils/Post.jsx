@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -13,10 +13,14 @@ import {
 import { MdOutlineFavorite } from 'react-icons/md';
 import { LiaCommentSolid } from 'react-icons/lia';
 import { formatDistanceToNow, format } from 'date-fns';
+import { FaRegTrashAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
-const Post = ({ posts }) => {
+const Post = ({ posts, isCreator, deletePost }) => {
+  const [liked, setLiked] = useState(false);
   const likeUnlikeHandler = () => {
     console.log('liked');
+    setLiked(!liked);
   };
 
   // format date and time
@@ -30,20 +34,21 @@ const Post = ({ posts }) => {
     <Card className="shadow-md mb-12" key={index}>
       <CardHeader
         avatar={
-          <Avatar
-            sx={{ bgcolor: 'red' }}
-            aria-label="recipe"
-            src={post.creator.avatar.url}
-          >
-            R
-          </Avatar>
+          <Link to={`/page/${post?.creator?._id}`}>
+            <Avatar
+              sx={{ bgcolor: 'red' }}
+              aria-label="recipe"
+              src={post?.creator?.avatar?.url}
+            >
+              R
+            </Avatar>
+          </Link>
         }
-        action={
-          <IconButton aria-label="settings">
-            {/* <MoreVertIcon /> */}
-          </IconButton>
+        title={
+          <p className="text-lg font-medium capitalize">
+            {post?.creator?.name}
+          </p>
         }
-        title={post?.creator?.name}
         subheader={timeAgo(post.createdAt)}
       />
       {console.log(post.photos)}
@@ -51,10 +56,9 @@ const Post = ({ posts }) => {
         <>
           <CardMedia
             component="img"
-            height="30%"
-            image={post.photos[0]}
+            className="w-[20%] h-[500px]"
+            image={post.photos[0].url}
             alt="Paella dish"
-            allow="autoplay"
           />
           <CardContent>
             <Typography variant="body2" color="text.secondary">
@@ -80,9 +84,20 @@ const Post = ({ posts }) => {
         <IconButton aria-label="Comments">
           <LiaCommentSolid size={30} className="text-gray-700" />
         </IconButton>
+        {isCreator && (
+          <IconButton
+            aria-label="deletePost"
+            onClick={() => deletePost(post._id)}
+          >
+            <FaRegTrashAlt size={25} className="text-gray-700" />
+          </IconButton>
+        )}
       </CardActions>
     </Card>
   ));
 };
 
+Post.defaultProps = {
+  isCreator: false,
+};
 export default Post;

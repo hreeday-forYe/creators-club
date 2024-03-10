@@ -4,45 +4,67 @@ import { useNavigate } from 'react-router-dom';
 import { useCreatePostMutation } from '../../redux/slices/postApiSlice';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import PhotosUploader from '../utils/PhotosUploader';
+import toast from 'react-hot-toast';
+import Loader from '../Loader';
 
 const CreatePost = () => {
-  const { authInfo } = useSelector((state) => state.auth);
-  const { creator } = authInfo;
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [title, setTitle] = useState('');
-  const [images, setImages] = useState([]);
+  const [photos, setPhotos] = useState([]);
+  const [postStatus, setStatus] = useState(false);
+  const [createPost, { isLoading }] = useCreatePostMutation();
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
 
-    console.log(files);
-    setImages([]);
+    setPhotos([]);
 
     files.forEach((file) => {
       const reader = new FileReader();
 
       reader.onload = () => {
         if (reader.readyState === 2) {
-          setImages((old) => [...old, reader.result]);
+          setPhotos((old) => [...old, reader.result]);
         }
       };
       reader.readAsDataURL(file);
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('handle');
+    const data = new FormData();
+    if (photos) {
+      photos.forEach((image, index) => {
+        data.append(`photos[${index}]`, image);
+      });
+    }
+    let status;
+    if (postStatus) {
+      status = 'private';
+    } else {
+      status = 'public';
+    }
+
+    data.append('title', title);
+
+    try {
+      await createPost({ title, photos, status });
+      toast.success('Post Created Successfully');
+      navigate('/page-posts');
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
+    }
   };
   return (
     <div className="w-full p-8 flex items-center justify-center">
-      <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3">
+      <div className="w-[90%] 800px:w-[50%] bg-white  shadow-md mt-4 h-[65vh] rounded-[4px] p-3">
         <h5 className="text-[30px] font-Poppins text-center">
           Create New Post
         </h5>
+        {isLoading && <Loader />}
         {/* create product form */}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="flex flex-col ">
           <br />
           <div>
             <label className="pb-2">
@@ -58,26 +80,23 @@ const CreatePost = () => {
             />
           </div>
 
-          <div>
-            <label className="pb-2">
-              Upload Images <span className="text-red-500">*</span>
-            </label>
-            {/* <input
+          <div className="mt-4">
+            <label className="pb-2">Upload Images</label>
+            <input
               type="file"
-              name=""
+              name="photos"
               id="upload"
               className="hidden"
               multiple
               onChange={handleImageChange}
-            /> */}
+            />
 
-            <PhotosUploader addedPhotos={images} onChange={setImages} />
             <div className="w-full flex items-center flex-wrap">
               <label htmlFor="upload">
                 <AiOutlinePlusCircle size={30} className="mt-3" color="#555" />
               </label>
-              {images &&
-                images.map((i) => (
+              {photos &&
+                photos.map((i) => (
                   <img
                     src={i}
                     key={i}
@@ -87,8 +106,24 @@ const CreatePost = () => {
                 ))}
             </div>
             <br />
-            <div>Status</div>
-            <div>
+            <div className="flex items-center mb-4">
+              <input
+                id="default-checkbox"
+                type="checkbox"
+                checked={postStatus}
+                onChange={setStatus}
+                name="status"
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label
+                htmlFor="default-checkbox"
+                className="ms-2 text-sm font-Roboto font-medium text-gray-900"
+              >
+                Private
+              </label>
+            </div>
+
+            <div className="mt-4">
               <input
                 type="submit"
                 value="Upload"

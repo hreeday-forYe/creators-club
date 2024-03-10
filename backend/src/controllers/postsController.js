@@ -27,6 +27,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
     if (title && photos) {
       // Converting the image to the array if only one image is provided
       let images = [];
+      console.log('I am here');
       if (typeof req.body.photos === 'string') {
         images.push(req.body.photos);
       } else {
@@ -46,12 +47,12 @@ export const createPost = asyncHandler(async (req, res, next) => {
           url: result.secure_url,
         });
       }
-
+      console.log('image upload successfull');
       // Creating the Post
       post = await Post.create({
         creator: page._id,
         title,
-        photos: images,
+        photos: imagesLinks,
         status,
       });
     } else if (title && video) {
@@ -77,7 +78,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
       post,
     });
   } catch (error) {
-    return next(new ErrorHandler(error, 400));
+    return next(new ErrorHandler(error.message, 400));
   }
 });
 
@@ -131,7 +132,7 @@ export const deletePost = asyncHandler(async (req, res, next) => {
 
     for (let i = 0; i < post.photos.length; i++) {
       const result = await cloudinary.v2.uploader.destroy(
-        post.images[i].public_id
+        post.photos[i].public_id
       );
     }
 
@@ -317,7 +318,9 @@ export const getPostsOfFollowing = asyncHandler(async (req, res, next) => {
         $in: user.following,
       },
       status: 'public',
-    }).populate('creator', 'name avatar');
+    })
+      .populate('creator', 'name avatar')
+      .sort({ createdAt: -1 });
 
     res.status(201).json({
       success: true,
@@ -333,7 +336,9 @@ export const getPostsOfFollowing = asyncHandler(async (req, res, next) => {
 export const getMyPosts = asyncHandler(async (req, res, next) => {
   try {
     const creatorId = req.creator._id;
-    const posts = await Post.find({ creator: creatorId });
+    const posts = await Post.find({ creator: creatorId })
+      .populate('creator', 'name avatar')
+      .sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
       message: 'Your Posts fetched',
