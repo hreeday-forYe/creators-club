@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -9,18 +9,56 @@ import {
   Typography,
   CardActions,
   Checkbox,
+  Dialog,
+  Input,
+  Button,
 } from '@mui/material';
 import { MdOutlineFavorite } from 'react-icons/md';
 import { LiaCommentSolid } from 'react-icons/lia';
 import { formatDistanceToNow, format } from 'date-fns';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import Carousel from './Carousel';
+import CommentCard from './CommentCard';
+import { FaLocationArrow } from 'react-icons/fa';
+import { useLikeUnlikePostMutation } from '../../redux/slices/postApiSlice';
+import { useCreateCommentMutation } from '../../redux/slices/postApiSlice';
+import toast from 'react-hot-toast';
+import Loader from '../Loader';
 
-const Post = ({ posts, isCreator, deletePost }) => {
+const Post = ({ post, isCreator, deletePost, refetch, user }) => {
   const [liked, setLiked] = useState(false);
-  const likeUnlikeHandler = () => {
-    console.log('liked');
-    setLiked(!liked);
+  const [comment, setComment] = useState('');
+  const [commentDialog, setCommentDialog] = useState(false);
+
+  const [likeUnlikePost] = useLikeUnlikePostMutation();
+  const [commentOnPost] = useCreateCommentMutation();
+  console.log(post);
+  // console.log(user._id);
+  const likeUnlikeHandler = async (post) => {
+    try {
+      await likeUnlikePost(post._id);
+      setLiked(true);
+
+      refetch();
+    } catch (error) {
+      toast.error('something went wrong');
+    }
+  };
+
+  const commentHandler = async (e, post) => {
+    e.preventDefault();
+    try {
+      const postId = post?._id;
+      console.log('the post ID ', postId);
+      console.log(comment);
+      const response = await commentOnPost({ postId, comment });
+      setComment('');
+      refetch();
+      toast.success('comment added ');
+    } catch (error) {
+      toast.error('something went wrong');
+    }
   };
 
   // format date and time
@@ -30,8 +68,10 @@ const Post = ({ posts, isCreator, deletePost }) => {
     return timeAgo;
   };
 
-  return posts.map((post, index) => (
-    <Card className="shadow-md mb-12" key={index}>
+  return !post ? (
+    <Loader />
+  ) : (
+    <Card className="shadow-md mb-12">
       <CardHeader
         avatar={
           <Link to={`/page/${post?.creator?._id}`}>
@@ -65,6 +105,7 @@ const Post = ({ posts, isCreator, deletePost }) => {
               {post.title}
             </Typography>
           </CardContent>
+          {/* <Carousel photos={post.photos} /> */}
         </>
       ) : (
         <CardContent>
@@ -73,17 +114,37 @@ const Post = ({ posts, isCreator, deletePost }) => {
           </Typography>
         </CardContent>
       )}
-      <CardActions disableSpacing>
-        <Checkbox
-          icon={<MdOutlineFavorite size={30} className="text-gray-300" />}
-          checkedIcon={
-            <MdOutlineFavorite size={30} className="text-red-700 " />
-          }
-          onChange={likeUnlikeHandler}
-        />
-        <IconButton aria-label="Comments">
-          <LiaCommentSolid size={30} className="text-gray-700" />
-        </IconButton>
+      <CardActions className="flex space-x-4">
+        <div className="flex items-center">
+          <Checkbox
+            icon={<MdOutlineFavorite size={30} className="text-gray-300" />}
+            checkedIcon={
+              <MdOutlineFavorite size={30} className="text-red-700 " />
+            }
+            value={liked}
+            onChange={() => likeUnlikeHandler(post)}
+          />
+          <span>{post.likes.length} likes</span>
+        </div>
+        <div className="flex items-center">
+          <IconButton
+            aria-label="Comments"
+            onClick={() => setCommentDialog(!commentDialog)}
+          >
+            <LiaCommentSolid size={30} className="text-gray-700 mr-2" />
+          </IconButton>
+          <form onSubmit={(e) => commentHandler(e, post)}>
+            <Input
+              type=""
+              placeholder="write your comment"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <Button type="submit" className="">
+              <FaLocationArrow size={20} />
+            </Button>
+          </form>
+        </div>
         {isCreator && (
           <IconButton
             aria-label="deletePost"
@@ -93,8 +154,47 @@ const Post = ({ posts, isCreator, deletePost }) => {
           </IconButton>
         )}
       </CardActions>
+
+      <Dialog
+        open={commentDialog}
+        onClose={() => setCommentDialog(!commentDialog)}
+      >
+        <div className="min-w-[500px] h-[100vh] p-2">
+          <Typography variant="h4">Comments</Typography>
+
+          <form className="flex m-6" onSubmit={(e) => commentHandler(e, post)}>
+            <input
+              type="text"
+              value={comment}
+              className="w-[100%] py-2 px-4 outline-none border rounded-md font-Roboto"
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Comment here..."
+              required
+            />
+
+            <Button type="submit" className="rounded-sm" variant="contained">
+              <FaLocationArrow size={20} />
+            </Button>
+          </form>
+          {post.comments.length > 0 ? (
+            post.comments.map((comment, index) => {
+              return (
+                <>
+                  <CommentCard
+                    comment={comment}
+                    key={index}
+                    isCreator={isCreator}
+                  />
+                </>
+              );
+            })
+          ) : (
+            <Typography>No comments Yet</Typography>
+          )}
+        </div>
+      </Dialog>
     </Card>
-  ));
+  );
 };
 
 Post.defaultProps = {

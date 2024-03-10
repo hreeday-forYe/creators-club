@@ -28,7 +28,7 @@ const Sidebar = ({ active }) => {
   };
   return (
     <Box>
-      <div className="w-full mr-2 h-[80vh] bg-white p-4 border shadow-sm sticky top-7 left-4 z-10">
+      <div className="w-full mr-2 h-[90vh] bg-white p-4 border shadow-sm sticky top-7 left-4 z-10">
         {/* single item */}
         <div className="w-full flex items-center p-4">
           <Link to="/feed" className="w-full flex items-center">
@@ -70,23 +70,17 @@ const Sidebar = ({ active }) => {
                 active === 3 ? 'text-[crimson]' : 'text-[#555]'
               }`}
             >
-              Following
+              Followings
             </h5>
           </Link>
         </div>
 
         <div className="w-full flex items-center p-4">
-          <Link
-            to="/dashboard-create-event"
-            className="w-full flex items-center"
-          >
-            <MdExplore
-              size={30}
-              color={`${active === 6 ? 'crimson' : '#555'}`}
-            />
+          <Link to="/explore" className="w-full flex items-center">
+            <MdExplore size={30} color={`${active === 6 ? 'blue' : '#555'}`} />
             <h5
               className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-                active === 6 ? 'text-[crimson]' : 'text-[#555]'
+                active === 6 ? 'text-blue-600' : 'text-[#555]'
               }`}
             >
               Explore

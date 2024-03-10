@@ -206,6 +206,7 @@ export const commentOnPost = asyncHandler(async (req, res, next) => {
         commentIndex = index;
       }
     });
+    console.log("comment: ",req.body.comment);
     // Updating the comment from the body
     if (commentIndex !== -1) {
       post.comments[commentIndex].comment = req.body.comment;

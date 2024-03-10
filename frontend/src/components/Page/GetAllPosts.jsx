@@ -10,6 +10,7 @@ const GetAllPosts = () => {
   console.log(data);
   const posts = data?.posts;
   const { authInfo } = useSelector((state) => state.auth);
+  const creator = authInfo?.creator;
 
   const [deletePost, { isLoading: deleteLoading }] = useDeletePostMutation();
 
@@ -37,11 +38,18 @@ const GetAllPosts = () => {
           {isLoading || deleteLoading ? (
             <Loader />
           ) : (
-            <Post
-              posts={posts}
-              isCreator={true}
-              deletePost={deletePostHandler}
-            />
+            // {toast.success("working fine")}
+            posts &&
+            posts.map((post) => {
+              return (
+                <Post
+                  post={post}
+                  isCreator={true}
+                  deletePost={deletePostHandler}
+                  refetch={refetch}
+                />
+              );
+            })
           )}
         </div>
       </div>

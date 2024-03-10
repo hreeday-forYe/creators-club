@@ -45,9 +45,10 @@ export const postApiSlice = apiSlice.injectEndpoints({
     }),
 
     createComment: builder.mutation({
-      query: (postId) => ({
+      query: ({ postId, comment }) => ({
         url: `${post_url}/comment/${postId}`,
         method: 'PUT',
+        body: { comment },
       }),
       invalidatesTags: ['Post'],
     }),

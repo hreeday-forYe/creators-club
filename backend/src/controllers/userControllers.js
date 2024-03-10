@@ -366,6 +366,14 @@ export const followUnfollowPage = asyncHandler(async (req, res, next) => {
   }
 });
 
+export const getUser = asyncHandler(async (req, res, next) => {
+  try {
+    getUserById(req.params.id, res);
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+
 export {
   registerUser,
   activateUser,

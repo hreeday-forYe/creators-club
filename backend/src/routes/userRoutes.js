@@ -2,6 +2,7 @@ import express from 'express';
 import {
   activateUser,
   followUnfollowPage,
+  getUser,
   getUserProfile,
   loginUser,
   logoutUser,
@@ -24,7 +25,7 @@ userRouter.post('/social-auth', socialAuth);
 userRouter.put('/update-user-info', isAuthenticated, updateUserInfo);
 userRouter.put('/update-password', isAuthenticated, updateUserPassword);
 userRouter.put('/update-avatar', isAuthenticated, updateProfilePicture);
-
+userRouter.get('/:id', isAuthenticated, getUser);
 userRouter.put('/follow/:id', isAuthenticated, followUnfollowPage);
 
 export default userRouter;
