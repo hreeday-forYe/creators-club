@@ -36,7 +36,7 @@ const DashboardSideBar = ({ active }) => {
     }
   };
   return (
-    <div className="w-full h-[90vh] bg-white shadow-sm border border-3 sticky top-0 left-0 z-10">
+    <div className="w-[80px] h-[100vh] bg-white shadow-sm border border-3 fixed top-15 left-0 z-10 overflow-x-hidden overflow-y-auto 800px:w-[250px]">
       {/* single item */}
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Link to="/page-dashboard" className="w-full flex items-center">
@@ -160,14 +160,11 @@ const DashboardSideBar = ({ active }) => {
       )}
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
-        <Link to="/page-profile" className="w-full flex items-center">
-          <CiSettings
-            size={30}
-            color={`${active === 11 ? 'crimson' : '#555'}`}
-          />
+        <Link to="/page-settings" className="w-full flex items-center">
+          <CiSettings size={30} color={`${active === 11 ? 'blue' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 11 ? 'text-[crimson]' : 'text-[#555]'
+              active === 11 ? 'text-[blue]' : 'text-[#555]'
             }`}
           >
             Settings
@@ -177,10 +174,10 @@ const DashboardSideBar = ({ active }) => {
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Button onClick={logoutHandler} className="w-full flex items-center">
-          <CiLogout size={30} color={`${active === 11 ? 'crimson' : '#555'}`} />
+          <CiLogout size={30} color={`${active === 12 ? 'crimson' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 11 ? 'text-[crimson]' : 'text-[#555]'
+              active === 12 ? 'text-[crimson]' : 'text-[#555]'
             }`}
           >
             Logout

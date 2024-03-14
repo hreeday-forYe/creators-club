@@ -206,7 +206,7 @@ export const commentOnPost = asyncHandler(async (req, res, next) => {
         commentIndex = index;
       }
     });
-    console.log("comment: ",req.body.comment);
+    console.log('comment: ', req.body.comment);
     // Updating the comment from the body
     if (commentIndex !== -1) {
       post.comments[commentIndex].comment = req.body.comment;
@@ -314,18 +314,29 @@ export const getPostsOfFollowing = asyncHandler(async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
 
+    if (!user) {
+      return next(new ErrorHandler('User does not exists', 404));
+    }
+
     const posts = await Post.find({
-      creator: {
-        $in: user.following,
-      },
-      status: 'public',
+      $or: [
+        { creator: { $in: user.following }, status: 'public' },
+        {
+          creator: { $in: user.subscriptions },
+          status: { $in: ['public', 'private'] },
+        },
+      ],
     })
       .populate('creator', 'name avatar')
+      .populate({
+        path: 'comments.user', // Specify path to populate
+        select: 'name avatar', // Select fields to populate
+      })
       .sort({ createdAt: -1 });
 
     res.status(201).json({
       success: true,
-      message: 'Posts of the pages you are following is fetched',
+      message: 'Posts of the pages you are following or subscribed is fetched',
       posts,
     });
   } catch (error) {
@@ -339,12 +350,50 @@ export const getMyPosts = asyncHandler(async (req, res, next) => {
     const creatorId = req.creator._id;
     const posts = await Post.find({ creator: creatorId })
       .populate('creator', 'name avatar')
+      .populate({
+        path: 'comments.user', // Specify path to populate
+        select: 'name avatar', // Select fields to populate
+      })
       .sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
       message: 'Your Posts fetched',
       posts,
     });
+  } catch (error) {
+    return next(new ErrorHandler(error, 400));
+  }
+});
+
+// Get posts of a page
+export const getPostsOfPage = asyncHandler(async (req, res, next) => {
+  try {
+    const pageId = req.params.id;
+    const userId = req.body._id;
+
+    let isSubscribed = false;
+
+    if (userId) {
+      const user = await User.findById(userId);
+      // If the user doesnot exists here the isSubscribed will not be changed
+      if (user) {
+        isSubscribed =
+          user.subscriptions && user.subscriptions.includes(pageId);
+      }
+    }
+
+    const posts = await Post.find({
+      creator: pageId,
+      status: isSubscribed ? { $in: ['public', 'private'] } : 'public',
+    })
+      .populate('creator', 'name avatar')
+      .populate({
+        path: 'comments.user', // Specify path to populate
+        select: 'name avatar', // Select fields to populate
+      })
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(posts);
   } catch (error) {
     return next(new ErrorHandler(error, 400));
   }

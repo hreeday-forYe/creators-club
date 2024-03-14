@@ -11,11 +11,20 @@ const Carousel = ({ photos }) => {
   console.log(photos[0]);
   return (
     <>
-      <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
+      <Swiper
+        navigation={true}
+        modules={[Navigation]}
+        className="w-[100%] h-auto"
+      >
         {photos.map((photo, index) => (
           <>
-            <SwiperSlide>
-              <img src={photo.url} alt="" />
+            <SwiperSlide key={index}>
+              <img
+                src={photo.url}
+                alt=""
+                style={{ width: '100%', objectFit: 'cover', height: '100%' }}
+                className="w-[100%] h-[500px] object-cover"
+              />
             </SwiperSlide>
           </>
         ))}

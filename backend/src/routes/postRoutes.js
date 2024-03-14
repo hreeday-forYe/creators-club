@@ -12,6 +12,7 @@ import {
   deletePost,
   getMyPosts,
   getPostsOfFollowing,
+  getPostsOfPage,
   likeUnlikePost,
   updatePost,
 } from '../controllers/postsController.js';
@@ -25,4 +26,6 @@ postRouter.get('/', isAuthenticated, getPostsOfFollowing);
 postRouter.put('/comment/:id', isAuthenticated, commentOnPost);
 postRouter.delete('/comment/:id', isUserOrCreator, deleteComment);
 postRouter.get('/my-posts', isCreator, getMyPosts);
+// Checks if the user is authenticated if not then sends the public posts if user is authenticated and subscribed to user then it sends private and public posts elese public posts
+postRouter.get('/page-posts', getPostsOfPage);
 export default postRouter;

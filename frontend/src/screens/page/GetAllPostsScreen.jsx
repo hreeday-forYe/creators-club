@@ -1,6 +1,7 @@
 import React from 'react';
+import { Stack } from '@mui/material';
 import DashboardHeader from '../../components/Page/Layout/DashboardHeader';
-import DashboardSideBar from '../../components/Page/Layout/DashboardSidebar';
+import DashboardSideBar from '../../components/Page/Layout/DashboardSideBar';
 import GetAllPosts from '../../components/Page/GetAllPosts.jsx';
 const CreatePostScreen = () => {
   return (
@@ -12,6 +13,10 @@ const CreatePostScreen = () => {
         </div>
         <GetAllPosts />
       </div>
+      {/* <Stack direction="row" spacing={6} justifyContent={'space-between'}>
+        <DashboardSideBar active={3} />
+        <GetAllPosts />
+      </Stack> */}
     </div>
   );
 };

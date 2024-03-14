@@ -1,17 +1,20 @@
 import React from 'react';
-import { Card } from '@mui/material';
+import styles from '../../../styles/styles';
+import PageInfo from './PageInfo';
+import PageProfileData from './PageProfileData';
+
 const PageProfile = () => {
   return (
-    <Card className="w-[50%] rounded-md m-2 shadow-xl overflow-hidden">
-      <div className="h-24">
-        <img
-          src="https://plus.unsplash.com/premium_photo-1668618252845-d7b02384708a?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt=""
-          className="w-[100%]"
-        />
+    <div className={`${styles.section} bg-[#f5f5f5]`}>
+      <div className="w-full flex py-10 justify-between">
+        <div className="w-[25%] bg-[#fff] rounded-[4px] shadow-sm overflow-y-scroll h-[90vh] sticky top-10 left-0 z-10">
+          <PageInfo isCreator={true} />
+        </div>
+        <div className="w-[72%] rounded-[4px]">
+          <PageProfileData isCreator={true} />
+        </div>
       </div>
-      <div className="p-4">John Doe</div>
-    </Card>
+    </div>
   );
 };
 

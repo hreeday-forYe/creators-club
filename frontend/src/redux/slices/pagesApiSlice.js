@@ -94,6 +94,7 @@ export const {
   useLogoutPageMutation,
   useGetPageInfoQuery,
   useProfileQuery,
-  useUpdatePageInfoMutation,
+  useUpdatePageProfileMutation,
   useUpdatePageAvatarMutation,
+  useUpdateCoverImageMutation,
 } = pagesApiSlice;

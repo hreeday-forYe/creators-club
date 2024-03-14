@@ -58,7 +58,7 @@ const CreatePost = () => {
   };
   return (
     <div className="w-full p-8 flex items-center justify-center">
-      <div className="w-[90%] 800px:w-[50%] bg-white  shadow-md mt-4 h-[65vh] rounded-[4px] p-3">
+      <div className="w-[90%] 800px:w-[50%] bg-white  shadow-md mt-4 h-[70vh] rounded-[4px] p-3">
         <h5 className="text-[30px] font-Poppins text-center">
           Create New Post
         </h5>
@@ -111,7 +111,7 @@ const CreatePost = () => {
                 id="default-checkbox"
                 type="checkbox"
                 checked={postStatus}
-                onChange={setStatus}
+                onChange={() => setStatus(!postStatus)}
                 name="status"
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
               />

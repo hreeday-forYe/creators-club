@@ -260,6 +260,7 @@ const updatePageInfo = asyncHandler(async (req, res, next) => {
     await creator.save();
     res.status(201).json({
       success: true,
+      message: 'Profile updated Successfully',
       creator,
     });
   } catch (error) {

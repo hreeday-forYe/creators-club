@@ -5,6 +5,7 @@ import Loader from '../Loader';
 import Post from '../utils/Post';
 import { useDeletePostMutation } from '../../redux/slices/postApiSlice';
 import { toast } from 'react-hot-toast';
+import { Box } from '@mui/material';
 const GetAllPosts = () => {
   const { data, isLoading, error, refetch } = useGetMyPostsQuery();
   console.log(data);
@@ -26,31 +27,43 @@ const GetAllPosts = () => {
     }
   };
 
+  const updatePost = async (postId) => {
+    navigate;
+    try {
+    } catch (error) {}
+  };
+
   useEffect(() => {
     refetch();
   }, [refetch]);
 
   return (
     <>
-      <div className="w-full p-8">
-        <h1 className="mb-4 text-2xl font-semibold">My Posts</h1>
-        <div className="w-[80%] px-16 flex flex-col">
-          {isLoading || deleteLoading ? (
-            <Loader />
-          ) : (
-            // {toast.success("working fine")}
-            posts &&
-            posts.map((post) => {
-              return (
-                <Post
-                  post={post}
-                  isCreator={true}
-                  deletePost={deletePostHandler}
-                  refetch={refetch}
-                />
-              );
-            })
-          )}
+      <div className="w-full p-3 800px:p-8">
+        <h1 className="mb-4 text-2xl font-semibold text-center 800px:text-start">
+          My Posts
+        </h1>
+        <div className="flex justify-center w-[100%]">
+          <div className="w-[100%] 800px:w-[800px] border  flex flex-col justify-center">
+            {isLoading || deleteLoading ? (
+              <Loader />
+            ) : !posts ? (
+              <h4>You have no posts yet</h4>
+            ) : (
+              posts &&
+              posts.map((post) => {
+                return (
+                  <Post
+                    post={post}
+                    isCreator={true}
+                    deletePost={deletePostHandler}
+                    refetch={refetch}
+                    user={creator}
+                  />
+                );
+              })
+            )}
+          </div>
         </div>
       </div>
     </>

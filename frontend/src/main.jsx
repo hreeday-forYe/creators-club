@@ -20,11 +20,13 @@ import UserProfileScreen from './screens/users/UserProfileScreen';
 import PageProfileScreen from './screens/page/PageProfileScreen';
 import AdminDashboardScreen from './screens/admin/AdminDashboardScreen';
 // import CreatePost from './components/main/CreatePost';
+import ViewPageScreen from './screens/page/ViewPageScreen';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import CreatePostScreen from './screens/page/CreatePostScreen';
 import GetAllPostsScreen from './screens/page/GetAllPostsScreen';
 import PageAllSubscribersScreen from './screens/page/PageAllSubscribersScreen';
+import PageSettingsScreen from './screens/page/PageSettingsScreen';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -38,15 +40,13 @@ const router = createBrowserRouter(
       <Route path="/profile" element={<UserProfileScreen />}></Route>
       <Route path="/admin-dashboard" element={<AdminDashboardScreen />}></Route>
       <Route path="/page-profile" element={<PageProfileScreen />}></Route>
-      {/* <Route path="/page/:id" element={<ViewPageScreen />}></Route> */}
+      <Route path="/page/:id" element={<ViewPageScreen />}></Route>
 
       <Route path="/create-post" element={<CreatePostScreen />}></Route>
 
       <Route path="/page-posts" element={<GetAllPostsScreen />}></Route>
-      <Route
-        path="/page-subscribers"
-        element={<PageAllSubscribersScreen />}
-      ></Route>
+      <Route path="/page-subscribers" element={<PageAllSubscribersScreen />}></Route>
+      <Route path='/page-settings' element={<PageSettingsScreen/>}></Route>
     </Route>
   )
 );

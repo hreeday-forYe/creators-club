@@ -1,43 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-  Typography,
-  Button,
-} from '@mui/material';
+import { Avatar, Typography, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { useGetUserByIdQuery } from '../../redux/slices/usersApiSlice';
-const CommentCard = ({ comment, key, isCreator, deleteCommentHandle }) => {
-  const { authInfo } = useSelector((state) => state.auth);
-  const { user } = authInfo;
-  const [userInfo, setUserInfo] = useState();
-  const { getUserById } = useGetUserByIdQuery();
-  // useEffect(async () => {
-  //   const userId = comment.user;
-  //   const response = await getUserById({ userId });
-  //   console.log('response;', response);
-  //   setUserInfo(...response);
-  // }, [comment]);
+
+const CommentCard = ({
+  comment,
+  key,
+  isCreator,
+  user,
+  deleteCommentHandler,
+}) => {
+  const commentId = comment._id;
+  console.log(comment._id);
+  console.log(comment.user);
   return (
-    <div className="flex items-center">
-      <Avatar>R</Avatar>
-      <Typography style={{ minWidth: '6vmax' }} className="mr-2">
-        {comment.user}
+    <div
+      className="flex border justify-evenly items-center p-2 space-x-4"
+      key={key}
+    >
+      <Avatar></Avatar>
+      <Typography style={{ minWidth: '6vmax' }} className="mr-2 capitalize">
+        {comment?.user?.name}:
       </Typography>
       <Typography>{comment.comment}</Typography>
 
       {isCreator ? (
-        <Button onClick={deleteCommentHandle}>
+        <Button onClick={() => deleteCommentHandler(commentId)}>
           <FaRegTrashAlt size={25} />
         </Button>
-      ) : comment.user === user._id ? (
-        <Button onClick={deleteCommentHandle}>
+      ) : comment.user._id === user._id ? (
+        <Button onClick={() => deleteCommentHandler(commentId)}>
           <FaRegTrashAlt />
         </Button>
       ) : null}

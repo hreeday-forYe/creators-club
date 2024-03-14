@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { AiOutlineGift } from 'react-icons/ai';
 import { Avatar } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { IoNotificationsOutline } from 'react-icons/io5';
 const DashboardHeader = () => {
   const { authInfo } = useSelector((state) => state.auth);
 
@@ -16,11 +17,12 @@ const DashboardHeader = () => {
         </Link>
       </div>
       <div className="flex items-center">
-        <div className="flex items-center mr-4 space-x-2">
-          <Link
-            to="/dashboard/subscribers"
-            className="800px:block hidden"
-          ></Link>
+        <div className="flex items-center mr-4 space-x-4">
+          <Link to="/dashboard/subscribers" className="800px:block hidden">
+            <div className="flex items-center space-x-2">
+              <IoNotificationsOutline size={30} />
+            </div>
+          </Link>
 
           {/* Space for avatar */}
           <Link to={`/page-profile`}>

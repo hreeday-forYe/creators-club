@@ -12,6 +12,7 @@ import {
   Dialog,
   Input,
   Button,
+  // Box,
 } from '@mui/material';
 import { MdOutlineFavorite } from 'react-icons/md';
 import { LiaCommentSolid } from 'react-icons/lia';
@@ -20,11 +21,13 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Carousel from './Carousel';
 import CommentCard from './CommentCard';
-import { FaLocationArrow } from 'react-icons/fa';
+import { FaLocationArrow, FaEdit } from 'react-icons/fa';
 import { useLikeUnlikePostMutation } from '../../redux/slices/postApiSlice';
 import { useCreateCommentMutation } from '../../redux/slices/postApiSlice';
+import { useDeleteCommentMutation } from '../../redux/slices/postApiSlice';
 import toast from 'react-hot-toast';
 import Loader from '../Loader';
+import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 
 const Post = ({ post, isCreator, deletePost, refetch, user }) => {
   const [liked, setLiked] = useState(false);
@@ -33,31 +36,51 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
 
   const [likeUnlikePost] = useLikeUnlikePostMutation();
   const [commentOnPost] = useCreateCommentMutation();
-  console.log(post);
+  const [deleteComment] = useDeleteCommentMutation();
+  const postId = post?._id;
+
+  useEffect(() => {
+    if (post.likes.includes(user._id)) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  }, [post]);
+  // console.log(user);
+  // console.log(post.comments);
   // console.log(user._id);
   const likeUnlikeHandler = async (post) => {
     try {
-      await likeUnlikePost(post._id);
-      setLiked(true);
-
+      await likeUnlikePost(post._id).unwrap();
+      setLiked(!liked);
       refetch();
+      // console.log(post.likes);
     } catch (error) {
-      toast.error('something went wrong');
+      toast.error(error.data.message || error.error);
     }
   };
 
-  const commentHandler = async (e, post) => {
+  const commentHandler = async (e) => {
     e.preventDefault();
     try {
-      const postId = post?._id;
       console.log('the post ID ', postId);
       console.log(comment);
-      const response = await commentOnPost({ postId, comment });
+      await commentOnPost({ postId, comment }).unwrap();
       setComment('');
       refetch();
       toast.success('comment added ');
     } catch (error) {
-      toast.error('something went wrong');
+      toast.error(error?.data?.message || error.error);
+    }
+  };
+
+  const deleteCommentHandler = async (commentId) => {
+    try {
+      await deleteComment({ postId, commentId }).unwrap();
+      refetch();
+      toast.success('comment deleted Succesfully');
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
     }
   };
 
@@ -71,7 +94,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
   return !post ? (
     <Loader />
   ) : (
-    <Card className="shadow-md mb-12">
+    <Card className="shadow-md mb-12 w-[100%] 800px:w-[100%] border">
       <CardHeader
         avatar={
           <Link to={`/page/${post?.creator?._id}`}>
@@ -85,11 +108,23 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
           </Link>
         }
         title={
-          <p className="text-lg font-medium capitalize">
-            {post?.creator?.name}
-          </p>
+          <div>
+            <span className="text-lg font-medium capitalize">
+              {post?.creator?.name}
+            </span>
+            <span className="text-md ml-2 font-light text-gray-600">
+              just posted
+            </span>
+          </div>
         }
-        subheader={timeAgo(post.createdAt)}
+        subheader={
+          <div>
+            <span>{timeAgo(post.createdAt)}</span>
+            <span className="ml-2">
+              {post.status === 'public' ? 'Public' : 'Private'}
+            </span>
+          </div>
+        }
       />
       {console.log(post.photos)}
       {post.photos && post.photos.length > 0 ? (
@@ -100,12 +135,12 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
             image={post.photos[0].url}
             alt="Paella dish"
           />
+          {/* <Box size={2}>
+            <Carousel photos={post.photos} />
+          </Box> */}
           <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              {post.title}
-            </Typography>
+            <h4 className="text-black font-medium">{post.title}</h4>
           </CardContent>
-          {/* <Carousel photos={post.photos} /> */}
         </>
       ) : (
         <CardContent>
@@ -115,43 +150,60 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
         </CardContent>
       )}
       <CardActions className="flex space-x-4">
-        <div className="flex items-center">
-          <Checkbox
-            icon={<MdOutlineFavorite size={30} className="text-gray-300" />}
-            checkedIcon={
-              <MdOutlineFavorite size={30} className="text-red-700 " />
-            }
-            value={liked}
-            onChange={() => likeUnlikeHandler(post)}
-          />
-          <span>{post.likes.length} likes</span>
+        <div className="flex items-center ml-4">
+          {/* Like Section */}
+          {liked ? (
+            <MdFavorite
+              size={30}
+              onClick={() => likeUnlikeHandler(post)}
+              className="cursor-pointer text-red-600"
+            />
+          ) : (
+            <MdFavoriteBorder
+              size={30}
+              onClick={() => likeUnlikeHandler(post)}
+              className="cursor-pointer"
+            />
+          )}
+          <span className="pl-1 hidden 800px:block text-black font-medium">
+            {post.likes.length} likes
+          </span>
         </div>
+        {/* Comment Section */}
         <div className="flex items-center">
           <IconButton
             aria-label="Comments"
             onClick={() => setCommentDialog(!commentDialog)}
           >
-            <LiaCommentSolid size={30} className="text-gray-700 mr-2" />
+            <LiaCommentSolid size={30} className="text-black mr-2" />
           </IconButton>
           <form onSubmit={(e) => commentHandler(e, post)}>
             <Input
               type=""
-              placeholder="write your comment"
+              placeholder="comment here..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
-            <Button type="submit" className="">
-              <FaLocationArrow size={20} />
+            <Button type="submit">
+              <FaLocationArrow size={20} className="hidden 800px:inline" />
             </Button>
           </form>
         </div>
         {isCreator && (
-          <IconButton
-            aria-label="deletePost"
-            onClick={() => deletePost(post._id)}
-          >
-            <FaRegTrashAlt size={25} className="text-gray-700" />
-          </IconButton>
+          <>
+            <IconButton
+              aria-label="deletePost"
+              onClick={() => deletePost(post._id)}
+            >
+              <FaRegTrashAlt size={25} className="text-gray-700" />
+            </IconButton>
+            <IconButton
+              aria-label="updatePost"
+              onClick={() => updatePost(post._id)}
+            >
+              <FaEdit size={25} className="text-gray-700" />
+            </IconButton>
+          </>
         )}
       </CardActions>
 
@@ -159,7 +211,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
         open={commentDialog}
         onClose={() => setCommentDialog(!commentDialog)}
       >
-        <div className="min-w-[500px] h-[100vh] p-2">
+        <div className=" min-w-[350px] 800px:min-w-[500px]  h-[100vh] p-2">
           <Typography variant="h4">Comments</Typography>
 
           <form className="flex m-6" onSubmit={(e) => commentHandler(e, post)}>
@@ -184,6 +236,8 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
                     comment={comment}
                     key={index}
                     isCreator={isCreator}
+                    user={user}
+                    deleteCommentHandler={deleteCommentHandler}
                   />
                 </>
               );
