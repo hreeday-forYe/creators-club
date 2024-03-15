@@ -29,6 +29,10 @@ import toast from 'react-hot-toast';
 import Loader from '../Loader';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 
+import socketIO from 'socket.io-client';
+import { socket_server_url } from '../../constants';
+const socketId = socketIO(socket_server_url, { transports: ['websocket'] });
+
 const Post = ({ post, isCreator, deletePost, refetch, user }) => {
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState('');
@@ -54,6 +58,11 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
       await likeUnlikePost(post._id).unwrap();
       setLiked(!liked);
       refetch();
+      socketId.emit('notification', {
+        title: 'liked your post',
+        message: `${user.name} just liked your post`,
+        userId: user._id,
+      });
       // console.log(post.likes);
     } catch (error) {
       toast.error(error.data.message || error.error);
@@ -69,6 +78,11 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
       setComment('');
       refetch();
       toast.success('comment added ');
+      socketId.emit('notification', {
+        title: 'Comment on your post',
+        message: `${user.name} just commented on your post`,
+        userId: user._id,
+      });
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }

@@ -1,22 +1,17 @@
 import React from 'react';
 import SuggestedPages from './SuggestedPages';
-import { Box, Typography } from '@mui/material';
 const Rightbar = () => {
+  // #TODO: GET THE SUGGESTED PAGES FOR THE USER using the rtk query 
   return (
-    <>
-      <Box flex={3} p={2} sx={{ display: { xs: 'none', sm: 'block' } }}>
-        <Box position={'relative'}>
-          <Typography variant="h6" fontWeight={300}>
-            Suggested Pages
-          </Typography>
-          <SuggestedPages />
-          <SuggestedPages />
-          <SuggestedPages />
-          <SuggestedPages />
-          <SuggestedPages />
-        </Box>
-      </Box>
-    </>
+    <div className="mt-4">
+      <h2 className="text-gray-900 text-xl pl-2">Suggested Pages</h2>
+      <div className="mt-4 p-2">
+        <SuggestedPages />
+        <SuggestedPages />
+        <SuggestedPages />
+        <SuggestedPages />
+      </div>
+    </div>
   );
 };
 

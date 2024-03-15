@@ -3,27 +3,18 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Login from '../../components/auth/Login';
 import Header from '../../components/Header';
-
+import { useSelector } from 'react-redux';
 const LoginScreen = () => {
+  const { authInfo } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  // const { isAuthenticated } = useSelector((state) => state.user);
-
-  // useEffect(() => {
-  //   if (isAuthenticated === true) {
-  //     navigate('/');
-  //   }
-  // }, []);
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  const pageInfo = JSON.parse(localStorage.getItem('pageInfo'));
-  useEffect(() => {
-    if (userInfo) {
-      navigate('/feed');
-    } else if (pageInfo) {
+  useEffect(()=>{
+    if (authInfo?.creator) {
       navigate('/page-dashboard');
-    } else {
-      navigate('/login');
+    } else if (authInfo?.user) {
+      navigate('/feed');
     }
-  }, [userInfo, pageInfo]);
+  })
+  
   return (
     <div>
       <Header />

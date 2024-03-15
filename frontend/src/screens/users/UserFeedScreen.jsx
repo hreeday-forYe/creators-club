@@ -7,14 +7,18 @@ import { Box, Stack } from '@mui/material';
 const UserFeedScreen = () => {
   return (
     <div>
-      <Box>
-        <Navbar />
-        <Stack direction="row" spacing={6} justifyContent={'space-between'}>
+      <Navbar />
+      <div className="flex items-start w-full">
+        <div className="w-[25vw] 800px:w-[330px]">
           <Sidebar active={1} />
+        </div>
+        <div className="w-full 800px:w-[50vw]">
           <Feed />
+        </div>
+        <div className="hidden w-[25vw] 800px:block">
           <Rightbar />
-        </Stack>
-      </Box>
+        </div>
+      </div>
     </div>
   );
 };

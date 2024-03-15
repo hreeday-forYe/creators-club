@@ -4,6 +4,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 import app from './app.js';
 import cloudinary from 'cloudinary';
+import http from 'http';
+import { initSocketServer } from './socketServer.js';
+
+// creating server
+const server = http.createServer(app);
 
 // Cloudinary config
 
@@ -13,13 +18,15 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+initSocketServer(server);
+
 connectDB()
   .then(() => {
-    app.on('error', (error) => {
+    server.on('error', (error) => {
       console.log('Err:', error);
       throw error;
     });
-    app.listen(process.env.PORT || 5000, () => {
+    server.listen(process.env.PORT || 5000, () => {
       console.log(`Server is running at PORT: ${process.env.PORT}`);
     });
   })

@@ -4,6 +4,10 @@ import { AiOutlineGift } from 'react-icons/ai';
 import { Avatar } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { IoNotificationsOutline } from 'react-icons/io5';
+import socketIO from 'socket.io-client';
+import { socket_server_url } from '../../../constants';
+const socketId = socketIO(socket_server_url, { transports: ['websocket'] });
+
 const DashboardHeader = () => {
   const { authInfo } = useSelector((state) => state.auth);
 

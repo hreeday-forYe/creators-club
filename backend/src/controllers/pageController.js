@@ -282,7 +282,7 @@ const updatePageAvatar = asyncHandler(async (req, res, next) => {
     // Uploading the new image to the cloudinary
     const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
       folder: 'avatars',
-      width: 150,
+      // width: 150,
     });
 
     existsCreator.avatar = {
@@ -316,7 +316,7 @@ const updateCoverImage = asyncHandler(async (req, res, next) => {
     // uploading the new image to the cloudinary
     const myCloud = await cloudinary.v2.uploader.upload(req.body.coverImage, {
       folder: 'coverImage',
-      width: 700,
+      // width: 700,
     });
 
     currentCreator.coverImage = {

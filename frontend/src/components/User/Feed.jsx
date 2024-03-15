@@ -21,19 +21,17 @@ const Feed = () => {
   const { data, isLoading, refetch } = usePostsOfFollowingsQuery();
   const posts = data?.posts;
   console.log(posts);
-
   const { authInfo } = useSelector((state) => state.auth);
-
   console.log(authInfo);
-  const user = authInfo?.user;
-  console.log(user);
+  const user = authInfo.user;
   return isLoading ? (
     <Loader />
   ) : (
-    <Box flex={4} p={6}>
-      {posts &&
-        posts.map((post) => <Post post={post} refetch={refetch} user={user} />)}
-    </Box>
+    <div className="w-full p-1 800px:p-8">
+      {posts.map((post) => {
+        return <Post post={post} user={user} refetch={refetch} />;
+      })}
+    </div>
   );
 };
 

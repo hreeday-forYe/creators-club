@@ -10,28 +10,44 @@ import { FaMoneyCheckAlt } from 'react-icons/fa';
 import { BsFillFileEarmarkPostFill } from 'react-icons/bs';
 import { Button } from '@mui/base';
 import { CiLogout } from 'react-icons/ci';
-import { page_url } from '../../../constants';
-import axios from 'axios';
+
+import { logout } from '../../../redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useLogoutPageMutation } from '../../../redux/slices/pagesApiSlice';
+
 const DashboardSideBar = ({ active }) => {
   const { authInfo } = useSelector((state) => state.auth);
   const { creator } = authInfo;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [logoutApiCall] = useLogoutPageMutation();
   // Logout Page Profile
+  // const logoutHandler = async () => {
+  //   try {
+  //     axios.defaults.withCredentials = true;
+  //     const response = await axios(`${page_url}/logout-page`, {
+  //       method: 'POST',
+  //       withCredentials: true,
+  //     });
+  //     localStorage.clear();
+  //     toast.success(response.data.message);
+  //     navigate('/');
+  //   } catch (error) {
+  //     console.log(error.message);
+  //     toast.error(error.message);
+  //   }
+  // };
+
   const logoutHandler = async () => {
     try {
-      axios.defaults.withCredentials = true;
-      const response = await axios(`${page_url}/logout-page`, {
-        method: 'POST',
-        withCredentials: true,
-      });
-      localStorage.clear();
-      toast.success(response.data.message);
+      const response = await logoutApiCall().unwrap();
+      dispatch(logout());
+      toast.success(response.message);
       navigate('/login');
     } catch (error) {
-      console.log(error.message);
       toast.error(error.message);
     }
   };
@@ -98,10 +114,10 @@ const DashboardSideBar = ({ active }) => {
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Link to="/explore" className="w-full flex items-center">
-          <MdExplore size={30} color={`${active === 6 ? 'crimson' : '#555'}`} />
+          <MdExplore size={30} color={`${active === 6 ? 'blue' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 6 ? 'text-[crimson]' : 'text-[#555]'
+              active === 5 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
             Explore
@@ -113,11 +129,11 @@ const DashboardSideBar = ({ active }) => {
         <Link to="/page-withdraw-money" className="w-full flex items-center">
           <FaMoneyCheckAlt
             size={30}
-            color={`${active === 7 ? 'crimson' : '#555'}`}
+            color={`${active === 7 ? 'blue' : '#555'}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 7 ? 'text-[crimson]' : 'text-[#555]'
+              active === 7 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
             Withdraw Money

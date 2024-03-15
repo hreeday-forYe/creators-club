@@ -1,90 +1,44 @@
-import {
-  AppBar,
-  styled,
-  Typography,
-  Toolbar,
-  Box,
-  Avatar,
-} from '@mui/material';
-import React, { useState } from 'react';
-import { InputBase, Menu, MenuItem } from '@mui/material';
-import { IoSearchOutline } from 'react-icons/io5';
-import { Link, useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
-
-import { useDispatch, useSelector } from 'react-redux';
-
-const StyledToolbar = styled(Toolbar)({
-  display: 'flex',
-  justifyContent: 'space-between',
-});
-
-const Search = styled('div')(({ theme }) => ({
-  backgroundColor: 'white',
-  padding: '5px 10px',
-  borderRadius: '10px',
-  width: '30%',
-}));
-const Icons = styled(Box)(({ theme }) => ({
-  display: 'none',
-  gap: '10px',
-  alignItems: 'center',
-  [theme.breakpoints.up('sm')]: { display: 'flex' },
-}));
-
-const UserBox = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  gap: '20px',
-  alignItems: 'center',
-  [theme.breakpoints.up('sm')]: { display: 'none' },
-}));
-
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { IoNotificationsOutline } from 'react-icons/io5';
+import { Avatar } from '@mui/material';
+import { useSelector } from 'react-redux';
 const Navbar = () => {
-  const [open, setOpen] = useState(false);
-
   const { authInfo } = useSelector((state) => state.auth);
-
-  console.log(authInfo);
-  const { user } = authInfo?.user;
+  const { user } = authInfo;
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: 'white' }}>
-      <StyledToolbar>
-        <Typography
-          variant="h6"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            fontWeight: 'bold',
-            color: 'black',
-          }}
-        >
-          Creators Club
-        </Typography>
-        {/* TODO: Here we can use our own logo and give the sx property */}
-        {/* <RxButton size={40} className="none md:block" /> */}
-        <Search className="flex items-center justify-between border border-gray-300">
-          <InputBase placeholder="Search..." />
-          <IoSearchOutline className="text-gray-700" size={25} />
-        </Search>
-        <Icons>
-          {/* <Badge badgeContent={4} color="error">
-            <IoNotifications size={25} />
-          </Badge> */}
-          <Link to={'/profile'}>
-            <Avatar
-              src={user?.avatar?.url}
-              sx={{ width: 40, height: 40, cursor: 'pointer' }}
-            />
+    <div className="w-full h-[65px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
+      <div>
+        <Link to="/page-dashboard">
+          {/* <img src="" alt="Creators Club Logo" /> */}
+          <h6 className="text-black font-medium text-xl">Creators Club</h6>
+        </Link>
+      </div>
+      <div className="flex items-center">
+        <div className="flex items-center mr-4 space-x-4">
+          <Link to="/dashboard/subscribers" className="800px:block hidden">
+            <div className="flex items-center space-x-2">
+              <IoNotificationsOutline size={30} />
+            </div>
           </Link>
-        </Icons>
-        <UserBox onClick={(e) => setOpen(true)}>
-          <Avatar sx={{ width: 30, height: 30 }} />
-          <Typography className="-pl-2">
-            noneman
-            {/* {userInfo ? userInfo.name : pageInfo.name} */}
-          </Typography>
-        </UserBox>
-      </StyledToolbar>
-    </AppBar>
+
+          {/* Space for avatar */}
+          <Link to={`/page-profile`}>
+            <div className="flex items-center space-x-2">
+              <Avatar
+                sx={{ width: 46, height: 46 }}
+                alt="Jack Sparrow"
+                src={user.avatar?.url}
+                className="hover:animate-pulse transition duration-50"
+              ></Avatar>
+              <h5 className="text-gray-600 text-lg font-medium hover:text-gray-900 transition duration-200 capitalize ">
+                {user?.name}
+              </h5>
+            </div>
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 };
 

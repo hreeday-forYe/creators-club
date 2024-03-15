@@ -2,18 +2,17 @@ import React, { useEffect } from 'react';
 import CreatePage from '../../components/auth/CreatePage';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
+import { useSelector } from 'react-redux';
 const CreatePageScreen = () => {
-  const userInfo = localStorage.getItem('userInfo');
-  const pageInfo = localStorage.getItem('pageInfo');
+  const { authInfo } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-
   useEffect(() => {
-    if (userInfo) {
-      navigate('/feed');
-    } else if (pageInfo) {
+    if (authInfo?.creator) {
       navigate('/page-dashboard');
+    } else if (authInfo?.user) {
+      navigate('/feed');
     }
-  }, [userInfo, pageInfo]);
+  });
   return (
     <div>
       <Header />

@@ -366,6 +366,10 @@ export const followUnfollowPage = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Suggested Pages for User
+export const getSuggestedPage = asyncHandler(async (req, res, next) => {});
+
+// Admim route controller function
 export const getUser = asyncHandler(async (req, res, next) => {
   try {
     getUserById(req.params.id, res);

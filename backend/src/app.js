@@ -1,10 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import { ErrorMiddleware } from './middlewares/Error.js';
+
+// ROUTES: USER, PAGE, POST, WITHDRAW, SUBSCRIBE
 import userRouter from './routes/userRoutes.js';
 import pageRouter from './routes/pageRoutes.js';
-import { ErrorMiddleware } from './middlewares/Error.js';
 import postRouter from './routes/postRoutes.js';
+import withdrawRouter from './routes/withdrawRoutes.js';
+import subscribeRouter from './routes/subscribeRoutes.js';
 const app = express();
 
 // Configuring accepting the json
@@ -39,6 +43,8 @@ app.use(cookieParser());
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/page', pageRouter);
 app.use('/api/v1/post', postRouter);
+app.use('/api/v1/subscribe', subscribeRouter);
+app.use('/api/v1/withdraw', withdrawRouter);
 
 // TEST ROUTES
 app.get('/test', (req, res, next) => {

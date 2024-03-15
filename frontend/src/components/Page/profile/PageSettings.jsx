@@ -11,6 +11,7 @@ import {
 } from '../../../redux/slices/pagesApiSlice';
 import { setCredentials } from '../../../redux/slices/authSlice';
 import { FiDollarSign } from 'react-icons/fi';
+import Loader from '../../Loader';
 const PageSettings = () => {
   const { authInfo } = useSelector((state) => state.auth);
   const creator = authInfo.creator;
@@ -19,9 +20,9 @@ const PageSettings = () => {
   const [cover, setCover] = useState();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [address, setAddress] = useState();
+  const [address, setAddress] = useState('');
   const [subscriptionCharge, setSubscriptionCharge] = useState(0);
-  const [phoneNumber, setPhoneNumber] = useState();
+  const [phoneNumber, setPhoneNumber] = useState(0);
   // redux hooks
   const dispatch = useDispatch();
   const [updatePageProfile, { isLoading: updateLoading }] =
@@ -46,7 +47,7 @@ const PageSettings = () => {
   ]);
 
   // Update Functions
-  const handleImage = (e) => {
+  const handleImage = async (e) => {
     const reader = new FileReader();
     reader.onload = async () => {
       if (reader.readyState === 2) {
@@ -54,7 +55,10 @@ const PageSettings = () => {
         console.log(reader.result);
 
         try {
-          await updatePageAvatar({ avatar: reader.result }).unwrap();
+          const res = await updatePageAvatar({
+            avatar: reader.result,
+          }).unwrap();
+          dispatch(setCredentials({ ...res }));
           toast.success('Profile Image Updated');
         } catch (error) {
           toast.error('internal error');
@@ -64,7 +68,27 @@ const PageSettings = () => {
 
     reader.readAsDataURL(e.target.files[0]);
   };
-  const updateCoverImage = () => {};
+  const updateCoverImage = (e) => {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      if (reader.readyState === 2) {
+        setCover(reader.result);
+        console.log(reader.cover);
+        try {
+          const res = await updatePageCover({
+            coverImage: reader.result,
+          }).unwrap();
+          dispatch(setCredentials({ ...res }));
+          toast.success('Cover Image Uploaded');
+        } catch (error) {
+          toast.error(error?.data?.message || error.error);
+        }
+      }
+    };
+
+    //call reader.read data file
+    reader.readAsDataURL(e.target.files[0]);
+  };
 
   const updateHandler = async (e) => {
     e.preventDefault();
@@ -76,54 +100,91 @@ const PageSettings = () => {
         subscriptionCharge,
         address,
       }).unwrap();
-      let creator = res.creator;
-      dispatch(setCredentials({ ...creator }));
+      dispatch(setCredentials({ ...res }));
       toast.success('Profile Info updated Successfully');
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.message || error.error);
     }
   };
+
   return (
     <div className="w-full m-2 min-h-screen flex flex-col items-center">
       <div className="flex w-full 800px:w-[80%] flex-col justify-center my-5 border-red-500">
         {/* Cover Image */}
         <div className="h-[320px] relative">
           {creator.coverImage ? (
-            <div className="relative">
-              <img
-                className="w-[100%] h-[250px] object-cover"
-                src={creator?.coverImage}
-                alt="coverImage"
-              />
-              <button className="p-4 absolute bottom-1 right-0">
-                Change Cover Image
-              </button>
-            </div>
+            coverLoading ? (
+              <Loader />
+            ) : (
+              <div>
+                <img
+                  className="w-[100%] h-[250px] object-cover shadow-md rounded-md"
+                  src={creator?.coverImage?.url}
+                  alt="coverImage"
+                />
+                <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-16 right-0">
+                  <input
+                    type="file"
+                    id="image"
+                    className="hidden"
+                    onChange={handleImage}
+                  />
+                  <label htmlFor="image">
+                    <AiOutlineCamera />
+                  </label>
+                </div>
+              </div>
+            )
           ) : (
-            <div className="w-full h-[250px] border  bg-gray-300 relative rounded-md transition duration-200 animate-pulse">
-              <div className="p-2 cursor-pointer border absolute bottom-1 right-0 bg-white flex items-center text-sm rounded-md "></div>
+            // Skeleton
+            <div className="w-full h-[250px] border bg-gray-300 relative rounded-md">
+              {coverLoading ? (
+                <Loader />
+              ) : (
+                <div>
+                  <label
+                    htmlFor="CoverImage"
+                    className="bg-white p-2 inline-flex absolute inset-0 rounded-md  items-center space-x-2 cursor-pointer "
+                  >
+                    <IoCameraOutline className="mr-2" size={20} />
+                    Upload Cover Image
+                  </label>
+                  <input
+                    id="CoverImage"
+                    type="file"
+                    className="hidden"
+                    onChange={updateCoverImage}
+                  />
+                </div>
+              )}
             </div>
           )}
 
           <div className="w-full flex absolute top-[150px] left-0 right-0 items-center justify-center">
             <div className="relative cursor-pointer">
-              <img
-                src={avatar ? avatar : `${creator.avatar?.url}`}
-                alt=""
-                className="w-[150px] h-[150px] rounded-full cursor-pointer"
-              />
-              <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[10px] right-[15px]">
-                <input
-                  type="file"
-                  id="image"
-                  className="hidden"
-                  onChange={handleImage}
-                />
-                <label htmlFor="image">
-                  <AiOutlineCamera />
-                </label>
-              </div>
+              {avatarLoading ? (
+                <Loader />
+              ) : (
+                <>
+                  <img
+                    src={avatar ? avatar : `${creator.avatar?.url}`}
+                    alt=""
+                    className="w-[150px] h-[150px] rounded-full cursor-pointer object-cover"
+                  />
+                  <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[10px] right-[15px]">
+                    <input
+                      type="file"
+                      id="image"
+                      className="hidden"
+                      onChange={handleImage}
+                    />
+                    <label htmlFor="image">
+                      <AiOutlineCamera />
+                    </label>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -140,7 +201,7 @@ const PageSettings = () => {
             </div>
             <input
               type="name"
-              placeholder={`${creator.name}`}
+              placeholder={`Choose your Page Name`}
               value={name}
               onChange={(e) => setName(e.target.value)}
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
@@ -154,11 +215,7 @@ const PageSettings = () => {
             <textarea
               id="desciption"
               rows={4}
-              placeholder={`${
-                creator?.description
-                  ? creator.description
-                  : 'Enter your page description'
-              }`}
+              placeholder={'Enter your page description'}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0 `}
@@ -171,7 +228,7 @@ const PageSettings = () => {
             </div>
             <input
               type="number"
-              placeholder={`$ ${creator?.subscriptionCharge}`}
+              placeholder={`Choose your Subscription Charge`}
               value={subscriptionCharge}
               onChange={(e) => setSubscriptionCharge(e.target.value)}
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
@@ -185,7 +242,7 @@ const PageSettings = () => {
             </div>
             <input
               type="name"
-              placeholder={creator?.address}
+              placeholder={'Enter your address'}
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
