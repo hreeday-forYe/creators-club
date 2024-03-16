@@ -12,6 +12,7 @@ const DashboardHeader = () => {
   const { authInfo } = useSelector((state) => state.auth);
 
   const { creator } = authInfo;
+  console.log(creator);
   return (
     <div className="w-full h-[65px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
@@ -22,14 +23,14 @@ const DashboardHeader = () => {
       </div>
       <div className="flex items-center">
         <div className="flex items-center mr-4 space-x-4">
-          <Link to="/dashboard/subscribers" className="800px:block hidden">
+          <Link to="/page-notifications" className="800px:block hidden">
             <div className="flex items-center space-x-2">
               <IoNotificationsOutline size={30} />
             </div>
           </Link>
 
           {/* Space for avatar */}
-          <Link to={`/page-profile`}>
+          <Link to={`/page/${creator._id}`}>
             <div className="flex items-center space-x-2">
               <Avatar
                 sx={{ width: 46, height: 46 }}

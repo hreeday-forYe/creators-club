@@ -60,10 +60,23 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['User'],
     }),
 
+    getSuggestedPages: builder.query({
+      query: () => ({
+        url: `${user_url}/suggested-pages`,
+        method: 'GET',
+      }),
+    }),
+
     getUserById: builder.query({
-      quer: ({ userId }) => ({
+      query: ({ userId }) => ({
         url: `${user_url}/${userId}`,
         method: 'GET',
+      }),
+    }),
+    followUnfollowPage: builder.mutation({
+      query: ({ pageId }) => ({
+        url: `${user_url}/follow/${pageId}`,
+        method: "PUT"
       }),
     }),
   }),
@@ -78,5 +91,7 @@ export const {
   useProfileQuery,
   useUpdateUserInfoMutation,
   useUpdateUserAvatarMutation,
-  useGetUserByIdQuery
+  useGetUserByIdQuery,
+  useGetSuggestedPagesQuery,
+  useFollowUnfollowPageMutation
 } = usersApiSlice;

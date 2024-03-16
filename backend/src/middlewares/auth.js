@@ -25,6 +25,7 @@ const isAuthenticated = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new ErrorHandler('User not found', 400));
   }
+  console.log(user);
   req.user = user;
   next();
 });
@@ -47,6 +48,7 @@ const isCreator = asyncHandler(async (req, res, next) => {
   if (!creator) {
     return next(new ErrorHandler('Creator Not Found', 400));
   }
+  console.log(creator);
   req.creator = creator;
   next();
 });

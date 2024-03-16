@@ -51,7 +51,7 @@ const GetAllPosts = () => {
               <h4>You have no posts yet</h4>
             ) : (
               posts &&
-              posts.map((post) => {
+              posts.map((post, index) => {
                 return (
                   <Post
                     post={post}
@@ -59,6 +59,7 @@ const GetAllPosts = () => {
                     deletePost={deletePostHandler}
                     refetch={refetch}
                     user={creator}
+                    key={index}
                   />
                 );
               })

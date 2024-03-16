@@ -51,7 +51,7 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
     }),
 
     getPageInfo: builder.query({
-      query: (pageId) => ({
+      query: ({ pageId }) => ({
         url: `${page_url}/${pageId}`,
         method: 'GET',
       }),

@@ -175,7 +175,7 @@ const logoutUser = asyncHandler(async (req, res, next) => {
 const getUserProfile = asyncHandler(async (req, res, next) => {
   try {
     const userId = req.user?._id;
-    getUserById(userId, res);
+    getUserById(userId, res, next);
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
@@ -282,7 +282,7 @@ const updateUserPassword = asyncHandler(async (req, res, next) => {
 const updateProfilePicture = asyncHandler(async (req, res, next) => {
   try {
     const { avatar } = req.body;
-    const userId = req.user?.id;
+    const userId = req.user._id;
 
     const user = await userModel.findById(userId);
 
@@ -367,12 +367,38 @@ export const followUnfollowPage = asyncHandler(async (req, res, next) => {
 });
 
 // Suggested Pages for User
-export const getSuggestedPage = asyncHandler(async (req, res, next) => {});
+// Suggested Pages for User
+export const getSuggestedPage = asyncHandler(async (req, res, next) => {
+  try {
+    let pages;
+    if (req.user) {
+      const userId = req.user._id;
+      console.log('USERID ', userId);
+      const user = await User.findById(userId);
+
+      // Getting the followed and subscribed page id
+      const followedPageIds = user.following.concat(user.subscriptions);
+
+      // getting the pages id whose id does not exist in followedPageIds
+      pages = await Page.find({ _id: { $nin: followedPageIds } });
+    } else {
+      pages = await Page.find();
+    }
+
+    console.log(pages);
+    res.status(200).json({
+      success: true,
+      pages,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
 
 // Admim route controller function
 export const getUser = asyncHandler(async (req, res, next) => {
   try {
-    getUserById(req.params.id, res);
+    getUserById(req.params.id, res, next);
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }

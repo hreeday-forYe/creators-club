@@ -28,6 +28,7 @@ import GetAllPostsScreen from './screens/page/GetAllPostsScreen';
 import PageAllSubscribersScreen from './screens/page/PageAllSubscribersScreen';
 import PageSettingsScreen from './screens/page/PageSettingsScreen';
 import PageWithdrawMoneyScreen from './screens/page/PageWithdrawMoneyScreen';
+import SubscribePageScreen from './screens/users/SubscribePageScreen';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -42,10 +43,20 @@ const router = createBrowserRouter(
       <Route path="/admin-dashboard" element={<AdminDashboardScreen />}></Route>
       <Route path="/create-post" element={<CreatePostScreen />}></Route>
       <Route path="/page-posts" element={<GetAllPostsScreen />}></Route>
-      <Route path="/page-subscribers" element={<PageAllSubscribersScreen />}></Route>
+      <Route
+        path="/page-subscribers"
+        element={<PageAllSubscribersScreen />}
+      ></Route>
       <Route path="/page-settings" element={<PageSettingsScreen />}></Route>
-      <Route path="/page-withdraw-money" element={<PageWithdrawMoneyScreen />}></Route>
-      <Route path='/page/:id' element={<PageProfileScreen/>}></Route>
+      <Route
+        path="/page-withdraw-money"
+        element={<PageWithdrawMoneyScreen />}
+      ></Route>
+      <Route path="/page/:id" element={<PageProfileScreen />}></Route>
+      <Route
+        path="/page/subscribe/:id"
+        element={<SubscribePageScreen />}
+      ></Route>
     </Route>
   )
 );

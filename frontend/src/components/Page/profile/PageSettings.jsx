@@ -126,11 +126,11 @@ const PageSettings = () => {
                 <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-16 right-0">
                   <input
                     type="file"
-                    id="image"
+                    id="CoverImage"
                     className="hidden"
-                    onChange={handleImage}
+                    onChange={updateCoverImage}
                   />
-                  <label htmlFor="image">
+                  <label htmlFor="CoverImage">
                     <AiOutlineCamera />
                   </label>
                 </div>

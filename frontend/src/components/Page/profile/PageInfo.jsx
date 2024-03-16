@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const PageInfo = () => {
-  return (
-    <div>PageInfo</div>
-  )
-}
+  return <div>PageInfo</div>;
+};
 
-export default PageInfo
+export default PageInfo;

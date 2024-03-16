@@ -17,10 +17,12 @@ import { logout } from '../../redux/slices/authSlice';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-// import { useLogoutPageMutation } from '../../../redux/slices/pagesApiSlice';
+import { useLogoutMutation } from '../../redux/slices/usersApiSlice';
 
 const Sidebar = ({ active }) => {
+  const [logoutApiCall] = useLogoutMutation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const logoutHandler = async () => {
     try {
       const response = await logoutApiCall().unwrap();
@@ -35,7 +37,7 @@ const Sidebar = ({ active }) => {
     <div className="w-[80px] h-[100vh] bg-white shadow-sm border border-3 fixed top-15 left-0 z-10 overflow-x-hidden overflow-y-auto 800px:w-[250px]">
       {/* single item */}
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
-        <Link to="/page-dashboard" className="w-full flex items-center">
+        <Link to="/feed" className="w-full flex items-center">
           <IoHome size={30} color={`${active === 1 ? 'blue' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
@@ -48,7 +50,7 @@ const Sidebar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
-        <Link to="/page-subscribers" className="w-full flex items-center">
+        <Link to="/my-subscriptions" className="w-full flex items-center">
           <BiSolidPurchaseTag
             size={30}
             color={`${active === 2 ? 'blue ' : '#555'}`}
@@ -64,7 +66,7 @@ const Sidebar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
-        <Link to="/page-posts" className="w-full flex items-center">
+        <Link to="/my-followings" className="w-full flex items-center">
           <IoPeopleSharp
             size={30}
             color={`${active === 3 ? 'blue' : '#555'}`}
@@ -81,10 +83,10 @@ const Sidebar = ({ active }) => {
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Link to="/explore" className="w-full flex items-center">
-          <MdExplore size={30} color={`${active === 6 ? 'blue' : '#555'}`} />
+          <MdExplore size={30} color={`${active === 4 ? 'blue' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 5 ? 'text-blue-700' : 'text-[#555]'
+              active === 4 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
             Explore
@@ -93,7 +95,7 @@ const Sidebar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
-        <Link to="/page-messages" className="w-full flex items-center">
+        <Link to="/inbox" className="w-full flex items-center">
           <BiMessageSquareDetail
             size={30}
             color={`${active === 8 ? 'crimson' : '#555'}`}
@@ -109,7 +111,7 @@ const Sidebar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
-        <Link to="/page-settings" className="w-full flex items-center">
+        <Link to="/profile" className="w-full flex items-center">
           <CiSettings size={30} color={`${active === 11 ? 'blue' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${

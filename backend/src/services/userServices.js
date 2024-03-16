@@ -2,7 +2,7 @@ import User from '../models/usersModel.js';
 import ErrorHandler from '../utils/ErrorHandler.js';
 
 // Get user by id
-export const getUserById = async (id, res) => {
+export const getUserById = async (id, res, next) => {
   try {
     const user = await User.findById(id);
     if (user) {

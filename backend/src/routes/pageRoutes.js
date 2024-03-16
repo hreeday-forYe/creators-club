@@ -28,7 +28,6 @@ pageRouter.post('/activate-page', activatePage);
 pageRouter.post('/login-page', loginCreator);
 pageRouter.post('/logout-page', isCreator, logoutCreator);
 pageRouter.get('/page-profile', isCreator, getPageProfile);
-pageRouter.get('/get-page-info/:id', getPageInfo);
 pageRouter.put('/update-page-avatar', isCreator, updatePageAvatar);
 pageRouter.put('/update-page-info', isCreator, updatePageInfo);
 pageRouter.put('/update-cover-image', isCreator, updateCoverImage);
@@ -38,14 +37,15 @@ pageRouter.delete('/delete-page', isCreator, deleteMyPage);
 // admin routes
 pageRouter.get(
   '/get-all-pages',
-  isAuthenticated,
+  isCreator,
   authorizeRoles('Admin'),
   getAllPages
 );
 
+pageRouter.get('/:id', getPageInfo);
 pageRouter.delete(
   '/delete-page/:id',
-  isAuthenticated,
+  isCreator,
   authorizeRoles('Admin'),
   deletePageById
 );
