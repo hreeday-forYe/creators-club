@@ -65,7 +65,8 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
       });
       // console.log(post.likes);
     } catch (error) {
-      toast.error(error.data.message || error.error);
+      // toast.error(error.data.message || error.error);
+      toast.error("Can't like your own post");
     }
   };
 
@@ -84,7 +85,8 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
         userId: user._id,
       });
     } catch (error) {
-      toast.error(error?.data?.message || error.error);
+      // toast.error(error?.data?.message || error.error);
+      toast.error("Can't comment on your own post");
     }
   };
 

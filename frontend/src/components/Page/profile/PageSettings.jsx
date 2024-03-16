@@ -123,7 +123,7 @@ const PageSettings = () => {
                   src={creator?.coverImage?.url}
                   alt="coverImage"
                 />
-                <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-16 right-0">
+                {/* <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-16 right-0">
                   <input
                     type="file"
                     id="CoverImage"
@@ -132,6 +132,17 @@ const PageSettings = () => {
                   />
                   <label htmlFor="CoverImage">
                     <AiOutlineCamera />
+                  </label>
+                </div> */}
+                <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-16 right-0">
+                  <label htmlFor="CoverImage">
+                    <AiOutlineCamera />
+                    <input
+                      type="file"
+                      id="CoverImage"
+                      className="hidden"
+                      onChange={updateCoverImage}
+                    />
                   </label>
                 </div>
               </div>

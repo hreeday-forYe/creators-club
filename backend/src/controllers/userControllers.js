@@ -175,6 +175,7 @@ const logoutUser = asyncHandler(async (req, res, next) => {
 const getUserProfile = asyncHandler(async (req, res, next) => {
   try {
     const userId = req.user?._id;
+    console.log('USER PROFILE:', userId);
     getUserById(userId, res, next);
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
@@ -331,7 +332,7 @@ export const followUnfollowPage = asyncHandler(async (req, res, next) => {
   try {
     const pageToFollow = await Page.findById(req.params.id);
     const user = await User.findById(req.user._id);
-
+    console.log(pageToFollow);
     if (!pageToFollow) {
       return next(new ErrorHandler('Page not found', 400));
     }
@@ -346,6 +347,7 @@ export const followUnfollowPage = asyncHandler(async (req, res, next) => {
 
       await user.save();
       await pageToFollow.save();
+      console.log('latest user', user);
       res.status(201).json({
         success: true,
         message: 'Page Unfollowed Successfully',

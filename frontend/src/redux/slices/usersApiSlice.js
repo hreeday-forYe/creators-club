@@ -52,7 +52,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     }),
 
     updateUserAvatar: builder.mutation({
-      query: () => ({
+      query: (data) => ({
         url: `${user_url}/update-avatar`,
         method: 'PUT',
         body: data,

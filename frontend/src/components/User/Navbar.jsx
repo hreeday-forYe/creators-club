@@ -26,11 +26,13 @@ const Navbar = () => {
           <Link to={`/page-profile`}>
             <div className="flex items-center space-x-2">
               <Avatar
-                sx={{ width: 46, height: 46 }}
+                sx={{ width: 46, height: 46, backgroundColor: '#FFA500' }}
                 alt="Jack Sparrow"
-                src={user.avatar?.url}
+                src={user?.avatar?.url}
                 className="hover:animate-pulse transition duration-50"
-              ></Avatar>
+              >
+                {user?.name?.charAt(0).toUpperCase()}
+              </Avatar>
               <h5 className="text-gray-600 text-lg font-medium hover:text-gray-900 transition duration-200 capitalize ">
                 {user?.name}
               </h5>

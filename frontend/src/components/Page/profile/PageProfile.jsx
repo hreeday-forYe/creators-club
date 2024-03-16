@@ -4,6 +4,7 @@ import { useGetPageInfoQuery } from '../../../redux/slices/pagesApiSlice';
 import { useFollowUnfollowPageMutation } from '../../../redux/slices/usersApiSlice';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { setCredentials } from '../../../redux/slices/authSlice';
 const PageProfile = ({ isCreator, user }) => {
   // Getting the user details based on the id;
   const { id: pageId } = useParams();
@@ -14,7 +15,7 @@ const PageProfile = ({ isCreator, user }) => {
   // console.log(data);
   const creator = data?.creator;
   console.log(creator);
-
+  const dispatch = useDispatch();
   // getting the logged in user
   // const { authInfo } = useSelector((state) => state.auth);
   // const { user } = authInfo;
@@ -27,17 +28,19 @@ const PageProfile = ({ isCreator, user }) => {
 
   useEffect(() => {
     refetch();
-    if (creator?.followers?.includes(user._id)) {
+    if (creator?.followers?.includes(user?._id)) {
       setFollowing(true);
     } else {
       setFollowing(false);
     }
-  }, [creator]);
+  }, [creator, user]);
 
   // Follow Unfollow Page Handler
   const followUnfollowPage = async (e) => {
     try {
-      await followUnfollow({ pageId }).unwrap();
+      const res = await followUnfollow({ pageId }).unwrap();
+      console.log(res);
+      // dispatch(setCredentials({ ...res }));
       refetch();
     } catch (error) {
       toast.error(error?.data?.message || error.error);

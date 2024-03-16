@@ -29,6 +29,8 @@ import PageAllSubscribersScreen from './screens/page/PageAllSubscribersScreen';
 import PageSettingsScreen from './screens/page/PageSettingsScreen';
 import PageWithdrawMoneyScreen from './screens/page/PageWithdrawMoneyScreen';
 import SubscribePageScreen from './screens/users/SubscribePageScreen';
+import UserSubscriptionScreen from './screens/users/UserSubscriptionScreen';
+import UserFollowingsScreen from './screens/users/UserFollowingsScreen';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -57,6 +59,11 @@ const router = createBrowserRouter(
         path="/page/subscribe/:id"
         element={<SubscribePageScreen />}
       ></Route>
+      <Route
+        path="/my-subscriptions"
+        element={<UserSubscriptionScreen />}
+      ></Route>
+      <Route path="/my-followings" element={<UserFollowingsScreen />}></Route>
     </Route>
   )
 );

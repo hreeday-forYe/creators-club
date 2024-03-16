@@ -98,11 +98,11 @@ const Sidebar = ({ active }) => {
         <Link to="/inbox" className="w-full flex items-center">
           <BiMessageSquareDetail
             size={30}
-            color={`${active === 8 ? 'crimson' : '#555'}`}
+            color={`${active === 5 ? 'blue' : '#555'}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 8 ? 'text-[crimson]' : 'text-[#555]'
+              active === 5 ? 'text-blue-500' : 'text-[#555]'
             }`}
           >
             Inbox
@@ -112,10 +112,10 @@ const Sidebar = ({ active }) => {
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Link to="/profile" className="w-full flex items-center">
-          <CiSettings size={30} color={`${active === 11 ? 'blue' : '#555'}`} />
+          <CiSettings size={30} color={`${active === 6 ? 'blue' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 11 ? 'text-[blue]' : 'text-[#555]'
+              active === 6 ? 'text-[blue]' : 'text-[#555]'
             }`}
           >
             Settings

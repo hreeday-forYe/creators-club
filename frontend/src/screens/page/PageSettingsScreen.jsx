@@ -1,6 +1,6 @@
 import React from 'react';
 import DashboardHeader from '../../components/Page/Layout/DashboardHeader';
-import DashboardSideBar from '../../components/Page/Layout/DashboardSideBar';
+import DashboardSideBar from '../../components/Page/Layout/DashboardSidebar';
 import PageSettings from '../../components/Page/profile/PageSettings';
 const PageSettingsScreen = () => {
   return (

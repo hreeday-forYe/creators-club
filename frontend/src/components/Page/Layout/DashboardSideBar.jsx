@@ -24,22 +24,7 @@ const DashboardSideBar = ({ active }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [logoutApiCall] = useLogoutPageMutation();
-  // Logout Page Profile
-  // const logoutHandler = async () => {
-  //   try {
-  //     axios.defaults.withCredentials = true;
-  //     const response = await axios(`${page_url}/logout-page`, {
-  //       method: 'POST',
-  //       withCredentials: true,
-  //     });
-  //     localStorage.clear();
-  //     toast.success(response.data.message);
-  //     navigate('/');
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     toast.error(error.message);
-  //   }
-  // };
+  
 
   const logoutHandler = async () => {
     try {
