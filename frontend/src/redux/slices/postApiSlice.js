@@ -69,6 +69,14 @@ export const postApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
+
+    pagePosts: builder.query({
+      query: (pageId) => ({
+        url: `${post_url}/page/${pageId}`,
+        method: 'GET',
+      }),
+      keepUnusedDataFor: 5,
+    }),
   }),
 });
 
@@ -82,4 +90,5 @@ export const {
   useDeletePostMutation,
   usePostsOfFollowingsQuery,
   useGetMyPostsQuery,
+  usePagePostsQuery,
 } = postApiSlice;

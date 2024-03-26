@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useCreatePostMutation } from '../../redux/slices/postApiSlice';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
-import PhotosUploader from '../utils/PhotosUploader';
 import toast from 'react-hot-toast';
 import Loader from '../Loader';
 
@@ -58,7 +56,7 @@ const CreatePost = () => {
   };
   return (
     <div className="w-full p-8 flex items-center justify-center">
-      <div className="w-[90%] 800px:w-[50%] bg-white  shadow-md mt-4 h-[70vh] rounded-[4px] p-3">
+      <div className="w-[90%] 800px:w-[50%] bg-white border shadow-md mt-12 h-auto rounded-[4px] p-3">
         <h5 className="text-[30px] font-Poppins text-center">
           Create New Post
         </h5>
@@ -127,6 +125,7 @@ const CreatePost = () => {
               <input
                 type="submit"
                 value="Upload"
+                disabled={isLoading}
                 className="mt-2 cursor-pointer appearance-none text-center block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>

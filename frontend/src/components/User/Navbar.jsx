@@ -23,7 +23,7 @@ const Navbar = () => {
           </Link>
 
           {/* Space for avatar */}
-          <Link to={`/page-profile`}>
+          <Link to={`/profile`}>
             <div className="flex items-center space-x-2">
               <Avatar
                 sx={{ width: 46, height: 46, backgroundColor: '#FFA500' }}

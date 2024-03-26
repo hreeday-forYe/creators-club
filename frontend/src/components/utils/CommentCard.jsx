@@ -4,22 +4,18 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
 
-const CommentCard = ({
-  comment,
-  key,
-  isCreator,
-  user,
-  deleteCommentHandler,
-}) => {
+const CommentCard = ({ comment, isCreator, user, deleteCommentHandler }) => {
   const commentId = comment._id;
   console.log(comment._id);
   console.log(comment.user);
   return (
     <div
-      className="flex border justify-evenly items-center p-2 space-x-4"
-      key={key}
+      className="flex border mb-2 justify-start items-center p-2 space-x-4"
+      key={comment?._id}
     >
-      <Avatar></Avatar>
+      <Avatar src={comment?.user?.avatar?.url}>
+        {user?.name?.charAt(0).toUpperCase()}
+      </Avatar>
       <Typography style={{ minWidth: '6vmax' }} className="mr-2 capitalize">
         {comment?.user?.name}:
       </Typography>
@@ -27,11 +23,11 @@ const CommentCard = ({
 
       {isCreator ? (
         <Button onClick={() => deleteCommentHandler(commentId)}>
-          <FaRegTrashAlt size={25} />
+          <FaRegTrashAlt size={20} />
         </Button>
       ) : comment.user._id === user._id ? (
         <Button onClick={() => deleteCommentHandler(commentId)}>
-          <FaRegTrashAlt />
+          <FaRegTrashAlt size={20} />
         </Button>
       ) : null}
     </div>

@@ -7,14 +7,14 @@ import { useSelector } from 'react-redux';
 const LoginScreen = () => {
   const { authInfo } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  useEffect(()=>{
+  useEffect(() => {
     if (authInfo?.creator) {
       navigate('/page-dashboard');
     } else if (authInfo?.user) {
       navigate('/feed');
     }
-  })
-  
+  }, []);
+
   return (
     <div>
       <Header />

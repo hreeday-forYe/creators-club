@@ -17,23 +17,23 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { IoPeopleSharp } from 'react-icons/io5';
 import { GrWorkshop } from 'react-icons/gr';
+import { logout } from '../../../redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
+import { useLogoutPageMutation } from '../../../redux/slices/pagesApiSlice';
 const DashboardSideBar = ({ active }) => {
   const { authInfo } = useSelector((state) => state.auth);
   const { creator } = authInfo;
   const navigate = useNavigate();
-  // Logout Page Profile
+  const dispatch = useDispatch();
+  const [logoutApiCall] = useLogoutPageMutation();
+
   const logoutHandler = async () => {
     try {
-      axios.defaults.withCredentials = true;
-      const response = await axios(`${page_url}/logout-page`, {
-        method: 'POST',
-        withCredentials: true,
-      });
-      localStorage.clear();
-      toast.success(response.data.message);
+      const response = await logoutApiCall().unwrap();
+      dispatch(logout());
+      toast.success(response.message);
       navigate('/login');
     } catch (error) {
-      console.log(error.message);
       toast.error(error.message);
     }
   };

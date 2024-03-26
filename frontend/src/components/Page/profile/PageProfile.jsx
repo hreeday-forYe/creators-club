@@ -3,8 +3,10 @@ import { useParams } from 'react-router-dom';
 import { useGetPageInfoQuery } from '../../../redux/slices/pagesApiSlice';
 import { useFollowUnfollowPageMutation } from '../../../redux/slices/usersApiSlice';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCredentials } from '../../../redux/slices/authSlice';
+import GetPagePosts from '../../User/GetPagePosts';
+import Feed from '../../User/Feed';
+import GetAllPosts from '../GetAllPosts';
+import { toast } from 'react-hot-toast';
 const PageProfile = ({ isCreator, user }) => {
   // Getting the user details based on the id;
   const { id: pageId } = useParams();
@@ -15,16 +17,13 @@ const PageProfile = ({ isCreator, user }) => {
   // console.log(data);
   const creator = data?.creator;
   console.log(creator);
-  const dispatch = useDispatch();
-  // getting the logged in user
-  // const { authInfo } = useSelector((state) => state.auth);
-  // const { user } = authInfo;
-  // console.log(user);
   console.log(user);
   // Using the follow unfollow query
-  const [following, setFollowing] = useState();
+  const [following, setFollowing] = useState(
+    creator?.followers?.includes(user?._id)
+  );
   // creator?.followers?.includes(user._id)
-  const [followUnfollow] = useFollowUnfollowPageMutation();
+  const [followUnfollow, { isLoading: followLoading }] = useFollowUnfollowPageMutation();
 
   useEffect(() => {
     refetch();
@@ -38,9 +37,8 @@ const PageProfile = ({ isCreator, user }) => {
   // Follow Unfollow Page Handler
   const followUnfollowPage = async (e) => {
     try {
-      const res = await followUnfollow({ pageId }).unwrap();
-      console.log(res);
-      // dispatch(setCredentials({ ...res }));
+      await followUnfollow({ pageId }).unwrap();
+      // console.log(res);
       refetch();
     } catch (error) {
       toast.error(error?.data?.message || error.error);
@@ -122,11 +120,13 @@ const PageProfile = ({ isCreator, user }) => {
             <button
               className="bg-white text-blue-500 hover:shadow-lg shadow-md font-Roboto border-2 border-blue-500 px-10 py-2 rounded-2xl font-semibold"
               onClick={followUnfollowPage}
+              disabled={followLoading}
             >
               {following ? 'Unfollow' : 'Follow'}
             </button>
           </div>
         )}
+        {/* Profile Navigation */}
         <div className="flex justify-between items-center">
           <button className="w-full py-2 border-b-2 border-blue-400">
             <svg
@@ -143,26 +143,11 @@ const PageProfile = ({ isCreator, user }) => {
                 d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
               />
             </svg>
-            Photos
-          </button>
-          <button className="w-full py-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="mx-auto h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-              />
-            </svg>
             Posts
           </button>
         </div>
+        {/* Posts component */}
+        {isCreator && <GetAllPosts />}
         <div className="grid grid-cols-3 gap-2 my-3">
           <a
             className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
@@ -237,6 +222,8 @@ const PageProfile = ({ isCreator, user }) => {
             }}
           />
         </div>
+        {/* <GetPagePosts/> */}
+        {/* <Feed /> */}
       </div>
     </div>
   );

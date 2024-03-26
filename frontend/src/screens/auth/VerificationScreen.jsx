@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Verify from '../../components/auth/Verify';
+import Header from '../../components/Header';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+
 const VerificationScreen = () => {
   const { authInfo } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -11,9 +13,10 @@ const VerificationScreen = () => {
     } else if (authInfo?.user) {
       navigate('/feed');
     }
-  },[authInfo]);
+  }, [authInfo]);
   return (
     <>
+      <Header />
       <Verify />
     </>
   );

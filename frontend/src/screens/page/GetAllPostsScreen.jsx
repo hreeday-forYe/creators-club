@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack } from '@mui/material';
 import DashboardHeader from '../../components/Page/Layout/DashboardHeader';
-import DashboardSideBar from '../../components/Page/Layout/DashboardSideBar';
+import DashboardSideBar from '../../components/Page/Layout/DashboardSidebar.jsx';
 import GetAllPosts from '../../components/Page/GetAllPosts.jsx';
 const CreatePostScreen = () => {
   return (

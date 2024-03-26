@@ -39,12 +39,12 @@ const GetAllPosts = () => {
 
   return (
     <>
-      <div className="w-full p-3 800px:p-8">
+      <div className="w-[80vw] 800px:p-8">
         <h1 className="mb-4 text-2xl font-semibold text-center 800px:text-start">
           My Posts
         </h1>
         <div className="flex justify-center w-[100%]">
-          <div className="w-[100%] 800px:w-[800px] border  flex flex-col justify-center">
+          <div className="w-[100%] 800px:w-[800px]  flex flex-col justify-center">
             {isLoading || deleteLoading ? (
               <Loader />
             ) : !posts ? (

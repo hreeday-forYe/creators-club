@@ -39,6 +39,10 @@ export const createPost = asyncHandler(async (req, res, next) => {
       for (let i = 0; i < images.length; i++) {
         const result = await cloudinary.v2.uploader.upload(images[i], {
           folder: 'posts',
+          width: 800, // Specify the desired width
+          height: 800, // Specify the desired height
+          crop: 'fill',
+          quality: 'auto:best',
         });
 
         // updating
@@ -369,8 +373,9 @@ export const getMyPosts = asyncHandler(async (req, res, next) => {
 export const getPostsOfPage = asyncHandler(async (req, res, next) => {
   try {
     const pageId = req.params.id;
-    const userId = req.body._id;
-
+    const userId = req.user._id;
+    console.log(userId);
+    console.log(pageId);
     let isSubscribed = false;
 
     if (userId) {
@@ -393,7 +398,10 @@ export const getPostsOfPage = asyncHandler(async (req, res, next) => {
       })
       .sort({ createdAt: -1 });
 
-    res.status(200).json(posts);
+    res.status(200).json({
+      success: true,
+      posts,
+    });
   } catch (error) {
     return next(new ErrorHandler(error, 400));
   }

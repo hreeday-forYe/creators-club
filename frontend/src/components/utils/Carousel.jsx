@@ -1,29 +1,35 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
+import { CardMedia } from '@mui/material';
 // import required modules
-import { Navigation } from 'swiper/modules';
+import { Pagination } from 'swiper/modules';
 import '../../index.css';
 // Import Swiper styles
 import 'swiper/css';
-import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 const Carousel = ({ photos }) => {
   console.log(photos[0]);
   return (
     <>
       <Swiper
-        navigation={true}
-        modules={[Navigation]}
-        className="w-[100%] h-auto"
+        // className="w-[100%] h-auto"
+        style={{ width: '100%', height: 'auto' }}
+        // key={index}
+        pagination={{
+          clickable: true,
+        }}
+        modules={[Pagination]}
+        className="mySwiper"
       >
         {photos.map((photo, index) => (
           <>
             <SwiperSlide key={index}>
-              <img
-                src={photo.url}
-                alt=""
-                style={{ width: '100%', objectFit: 'cover', height: '100%' }}
-                className="w-[100%] h-[500px] object-cover"
+              <CardMedia
+                component="img"
+                className="w-[20%] h-[500px]"
+                image={photo.url}
+                alt="Photo url"
               />
             </SwiperSlide>
           </>

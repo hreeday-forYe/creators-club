@@ -1,16 +1,3 @@
-import {
-  Avatar,
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Checkbox,
-  IconButton,
-  Typography,
-} from '@mui/material';
-
 import React from 'react';
 import Post from '../utils/Post';
 import { usePostsOfFollowingsQuery } from '../../redux/slices/postApiSlice';
@@ -26,11 +13,15 @@ const Feed = () => {
   const user = authInfo.user;
   return isLoading ? (
     <Loader />
-  ) : (
-    <div className="w-full p-1 800px:p-8">
+  ) : posts[0] ? (
+    <div className="w-[80vw] 800px:w-full p-1 800px:p-8">
       {posts.map((post) => {
         return <Post post={post} user={user} refetch={refetch} />;
       })}
+    </div>
+  ) : (
+    <div className="text-2xl text-gray-600">
+      Follow some Pages to see their posts
     </div>
   );
 };

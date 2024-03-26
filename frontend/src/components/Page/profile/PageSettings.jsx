@@ -117,32 +117,25 @@ const PageSettings = () => {
             coverLoading ? (
               <Loader />
             ) : (
-              <div>
+              // place for keeping the cover image div
+              <div className="relative">
                 <img
                   className="w-[100%] h-[250px] object-cover shadow-md rounded-md"
                   src={creator?.coverImage?.url}
                   alt="coverImage"
                 />
-                {/* <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-16 right-0">
+
+                {/* Update cover image */}
+                <div className="bg-[#E3E9EE] rounded-lg flex items-center justify-center cursor-pointer absolute top-[5px] right-[5px]">
                   <input
                     type="file"
-                    id="CoverImage"
+                    id="cover"
                     className="hidden"
                     onChange={updateCoverImage}
                   />
-                  <label htmlFor="CoverImage">
-                    <AiOutlineCamera />
-                  </label>
-                </div> */}
-                <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-16 right-0">
-                  <label htmlFor="CoverImage">
-                    <AiOutlineCamera />
-                    <input
-                      type="file"
-                      id="CoverImage"
-                      className="hidden"
-                      onChange={updateCoverImage}
-                    />
+                  <label htmlFor="cover" className="flex items-center p-2">
+                    <IoCameraOutline className="mr-2" size={20} />
+                    Update Cover Image
                   </label>
                 </div>
               </div>
@@ -153,20 +146,20 @@ const PageSettings = () => {
               {coverLoading ? (
                 <Loader />
               ) : (
-                <div>
+                <div className="bg-[#E3E9EE] rounded-lg flex items-center justify-center cursor-pointer absolute top-[5px] right-[5px]">
+                  <input
+                    type="file"
+                    id="cover"
+                    className="hidden"
+                    onChange={updateCoverImage}
+                  />
                   <label
-                    htmlFor="CoverImage"
-                    className="bg-white p-2 inline-flex absolute inset-0 rounded-md  items-center space-x-2 cursor-pointer "
+                    htmlFor="cover"
+                    className="flex cursor-pointer items-center p-2"
                   >
                     <IoCameraOutline className="mr-2" size={20} />
                     Upload Cover Image
                   </label>
-                  <input
-                    id="CoverImage"
-                    type="file"
-                    className="hidden"
-                    onChange={updateCoverImage}
-                  />
                 </div>
               )}
             </div>

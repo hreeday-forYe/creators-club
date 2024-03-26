@@ -11,8 +11,7 @@ import { BsFillFileEarmarkPostFill } from 'react-icons/bs';
 import { Button } from '@mui/base';
 import { CiLogout } from 'react-icons/ci';
 import { IoHome, IoPeopleSharp } from 'react-icons/io5';
-
-// import { logout } from '../../../redux/slices/authSlice';
+import { RxAvatar } from 'react-icons/rx';
 import { logout } from '../../redux/slices/authSlice';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
@@ -112,13 +111,13 @@ const Sidebar = ({ active }) => {
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Link to="/profile" className="w-full flex items-center">
-          <CiSettings size={30} color={`${active === 6 ? 'blue' : '#555'}`} />
+          <RxAvatar size={30} color={`${active === 6 ? 'blue' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
               active === 6 ? 'text-[blue]' : 'text-[#555]'
             }`}
           >
-            Settings
+            Profile
           </h5>
         </Link>
       </div>

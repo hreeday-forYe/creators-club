@@ -12,7 +12,7 @@ import {
   Dialog,
   Input,
   Button,
-  // Box,
+  Box,
 } from '@mui/material';
 import { MdOutlineFavorite } from 'react-icons/md';
 import { LiaCommentSolid } from 'react-icons/lia';
@@ -110,7 +110,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
   return !post ? (
     <Loader />
   ) : (
-    <Card className="shadow-md mb-12 w-[100%] 800px:w-[100%] border">
+    <Card className="shadow-lg mb-12 w-[100%]">
       <CardHeader
         avatar={
           <Link to={`/page/${post?.creator?._id}`}>
@@ -129,7 +129,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
               {post?.creator?.name}
             </span>
             <span className="text-md ml-2 font-light text-gray-600">
-              just posted
+              posted
             </span>
           </div>
         }
@@ -145,15 +145,9 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
       {console.log(post.photos)}
       {post.photos && post.photos.length > 0 ? (
         <>
-          <CardMedia
-            component="img"
-            className="w-[20%] h-[500px]"
-            image={post.photos[0].url}
-            alt="Paella dish"
-          />
-          {/* <Box size={2}>
+          <div>
             <Carousel photos={post.photos} />
-          </Box> */}
+          </div>
           <CardContent>
             <h4 className="text-black font-medium">{post.title}</h4>
           </CardContent>
@@ -245,12 +239,11 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
             </Button>
           </form>
           {post.comments.length > 0 ? (
-            post.comments.map((comment, index) => {
+            post.comments.map((comment) => {
               return (
                 <>
                   <CommentCard
                     comment={comment}
-                    key={index}
                     isCreator={isCreator}
                     user={user}
                     deleteCommentHandler={deleteCommentHandler}

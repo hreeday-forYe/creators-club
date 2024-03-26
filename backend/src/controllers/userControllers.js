@@ -5,6 +5,7 @@ import ErrorHandler from '../utils/ErrorHandler.js';
 import ejs from 'ejs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cloudinary from 'cloudinary';
 import sendMail from '../utils/sendMail.js';
 import dotenv from 'dotenv';
 import { sendToken } from '../utils/jwt.js';
@@ -211,30 +212,38 @@ const socialAuth = asyncHandler(async (req, res, next) => {
 // UPDATE USER INFORMATION -- THIS FUNCTION UPDATES THE USER NAME AND EMAIL
 const updateUserInfo = asyncHandler(async (req, res, next) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, password } = req.body;
     const userId = req.user?._id;
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select('+password');
 
-    // Checking if we are actually gettting the user and the email
-    if (email && user) {
+    // Check if user exists
+    if (!user) {
+      return next(new ErrorHandler('User not found', 404));
+    }
+
+    // Verify password
+    const isPasswordValid = await user.comparePassword(password);
+    if (!isPasswordValid) {
+      return next(new ErrorHandler('Invalid password', 400));
+    }
+
+    // Update email if provided
+    if (email && email !== user.email) {
       const isEmailExist = await User.findOne({ email });
-
       if (isEmailExist) {
-        return next(new ErrorHandler('Email Already Exists', 400));
+        return next(new ErrorHandler('Email already exists', 400));
       }
-      // Changing the email here
       user.email = email;
     }
 
-    // Now if we are getting name instead of the email
-    if (name && user) {
-      // Changing the name
+    // Update name if provided
+    if (name) {
       user.name = name;
     }
 
-    // Saving the updates to the redis and database
-    await user?.save();
-
+    // Save user changes
+    await user.save();
+    delete user._doc.password;
     res.status(200).json({
       success: true,
       user,
@@ -285,7 +294,7 @@ const updateProfilePicture = asyncHandler(async (req, res, next) => {
     const { avatar } = req.body;
     const userId = req.user._id;
 
-    const user = await userModel.findById(userId);
+    const user = await User.findById(userId);
 
     if (avatar && user) {
       // If we have one avatar then call this if
@@ -305,7 +314,6 @@ const updateProfilePicture = asyncHandler(async (req, res, next) => {
       } else {
         const mycloud = await cloudinary.v2.uploader.upload(avatar, {
           folders: 'avatars',
-          width: 150,
         });
         user.avatar = {
           public_id: mycloud.public_id,
@@ -363,6 +371,15 @@ export const followUnfollowPage = asyncHandler(async (req, res, next) => {
         message: 'Page followed Successfully',
       });
     }
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+
+export const getUserFollowings = asyncHandler(async (req, res, next) => {
+  try {
+    // #TODO:  FETCH THE USER FOLLOWINGS FROM THE USER MODEL
+    const userId = req.user._id;
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }

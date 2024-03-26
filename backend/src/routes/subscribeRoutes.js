@@ -1,33 +1,44 @@
 import express from 'express';
-import { isCreator, authorizeRoles } from '../middlewares/auth.js';
 import {
-  createWithdrawRequest,
-  getAllWithdrawRequest,
-  updateWithdrawRequest,
-} from '../controllers/withdrawController.js';
+  isCreator,
+  authorizeRoles,
+  isAuthenticated,
+} from '../middlewares/auth.js';
+
+import {
+  adminAllSubscriptions,
+  cancelSubscriptions,
+  createSubscription,
+  getCreatorSubscriptions,
+  getUserSubscriptions,
+} from '../controllers/subscriptionController.js';
 
 const subscribeRouter = express.Router();
 
-// Creator Routes
 subscribeRouter.post(
-  '/create-withdraw-request',
-  isCreator,
-  createWithdrawRequest
+  '/create-subscription',
+  isAuthenticated,
+  createSubscription
 );
-
-// Admin Routes
 subscribeRouter.get(
-  '/get-all-withdraw-request',
-  isCreator,
-  authorizeRoles('Admin'),
-  getAllWithdrawRequest
+  '/user-subscriptions/:id',
+  isAuthenticated,
+  getUserSubscriptions
 );
-
-subscribeRouter.put(
-  '/update-withdraw-request/:id',
+subscribeRouter.get(
+  '/creator-subscriptions/:id',
   isCreator,
-  authorizeRoles('Admin'),
-  updateWithdrawRequest
+  getCreatorSubscriptions
 );
-
+subscribeRouter.delete(
+  '/cancel-subscriptions/:id',
+  isAuthenticated,
+  cancelSubscriptions
+);
+subscribeRouter.get(
+  '/admin-all-subscriptions',
+  isAuthenticated,
+  authorizeRoles('Admin'),
+  adminAllSubscriptions
+);
 export default subscribeRouter;
