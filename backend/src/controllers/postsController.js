@@ -39,10 +39,9 @@ export const createPost = asyncHandler(async (req, res, next) => {
       for (let i = 0; i < images.length; i++) {
         const result = await cloudinary.v2.uploader.upload(images[i], {
           folder: 'posts',
-          width: 800, // Specify the desired width
-          height: 800, // Specify the desired height
-          crop: 'fill',
+          crop: 'pad',
           quality: 'auto:best',
+          fetch_format: 'auto',
         });
 
         // updating
