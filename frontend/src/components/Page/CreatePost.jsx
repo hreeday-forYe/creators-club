@@ -31,6 +31,10 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!title) {
+      toast.error('At least caption is required');
+      return;
+    }
     const data = new FormData();
     if (photos) {
       photos.forEach((image, index) => {
@@ -117,7 +121,10 @@ const CreatePost = () => {
                 htmlFor="default-checkbox"
                 className="ms-2 text-sm font-Roboto font-medium text-gray-900"
               >
-                Private
+                Private:
+                <span className="text-sm ml-4 text-gray-500">
+                  Private Posts are visible only to subscribers
+                </span>
               </label>
             </div>
 

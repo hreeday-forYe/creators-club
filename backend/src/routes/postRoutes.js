@@ -19,13 +19,13 @@ import {
 const postRouter = express.Router();
 
 postRouter.post('/create-post', isCreator, createPost);
-postRouter.patch('/:id', isAuthenticated, likeUnlikePost); // #TODO: Make sure the creator can also like an unlike the post
+postRouter.patch('/:id', isUserOrCreator, likeUnlikePost); // #TODO: Make sure the creator can also like an unlike the post
 postRouter.put('/:id', isCreator, updatePost);
 postRouter.delete('/:id', isCreator, deletePost);
 postRouter.get('/', isAuthenticated, getPostsOfFollowing);
 postRouter.get('/my-posts', isCreator, getMyPosts);
-postRouter.put('/comment/:id', isAuthenticated, commentOnPost);
+postRouter.put('/comment/:id', isUserOrCreator, commentOnPost);
 postRouter.delete('/comment/:id', isUserOrCreator, deleteComment);
 // Checks if the user is authenticated if not then sends the public posts if user is authenticated and subscribed to user then it sends private and public posts elese public posts
-postRouter.get('/page/:id', isAuthenticated, getPostsOfPage);
+postRouter.get('/page-posts/:id', isAuthenticated, getPostsOfPage);
 export default postRouter;

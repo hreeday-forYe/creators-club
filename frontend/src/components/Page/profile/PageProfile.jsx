@@ -3,18 +3,17 @@ import { useParams } from 'react-router-dom';
 import { useGetPageInfoQuery } from '../../../redux/slices/pagesApiSlice';
 import { useFollowUnfollowPageMutation } from '../../../redux/slices/usersApiSlice';
 import { Link } from 'react-router-dom';
-import GetPagePosts from '../../User/GetPagePosts';
-import Feed from '../../User/Feed';
-import GetAllPosts from '../GetAllPosts';
+import PageProfileData from './PageProfileData';
 import { toast } from 'react-hot-toast';
-const PageProfile = ({ isCreator, user }) => {
+import GetAllPosts from '../GetAllPosts';
+
+const PageProfile = ({ user, isCreator }) => {
   // Getting the user details based on the id;
   const { id: pageId } = useParams();
-  // console.log(pageId);
 
   // Get the page Information using the Id
-  const { data, refetch } = useGetPageInfoQuery({ pageId });
-  // console.log(data);
+  const { data, refetch } = useGetPageInfoQuery(pageId);
+  console.log(data);
   const creator = data?.creator;
   console.log(creator);
   console.log(user);
@@ -22,8 +21,10 @@ const PageProfile = ({ isCreator, user }) => {
   const [following, setFollowing] = useState(
     creator?.followers?.includes(user?._id)
   );
-  // creator?.followers?.includes(user._id)
-  const [followUnfollow, { isLoading: followLoading }] = useFollowUnfollowPageMutation();
+  // const [isCreator, setIsCreator] = useState(creator?._id === user?._id);
+  // console.log(isCreator);
+  const [followUnfollow, { isLoading: followLoading }] =
+    useFollowUnfollowPageMutation();
 
   useEffect(() => {
     refetch();
@@ -38,7 +39,6 @@ const PageProfile = ({ isCreator, user }) => {
   const followUnfollowPage = async (e) => {
     try {
       await followUnfollow({ pageId }).unwrap();
-      // console.log(res);
       refetch();
     } catch (error) {
       toast.error(error?.data?.message || error.error);
@@ -53,7 +53,7 @@ const PageProfile = ({ isCreator, user }) => {
             {creator?.coverImage ? (
               <div>
                 <img
-                  className="w-[100%] h-[250px] object-fill shadow-md rounded-md"
+                  className="w-[100%] h-[250px] object-cover shadow-md rounded-md"
                   src={creator?.coverImage?.url}
                   alt="coverImage"
                 />
@@ -147,8 +147,9 @@ const PageProfile = ({ isCreator, user }) => {
           </button>
         </div>
         {/* Posts component */}
-        {isCreator && <GetAllPosts />}
-        <div className="grid grid-cols-3 gap-2 my-3">
+
+        {isCreator ? <GetAllPosts /> : <PageProfileData />}
+        {/* <div className="grid grid-cols-3 gap-2 my-3">
           <a
             className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
             href
@@ -221,16 +222,10 @@ const PageProfile = ({ isCreator, user }) => {
                 'url("https://images.pexels.com/photos/40751/running-runner-long-distance-fitness-40751.jpeg")',
             }}
           />
-        </div>
-        {/* <GetPagePosts/> */}
-        {/* <Feed /> */}
+        </div> */}
       </div>
     </div>
   );
-};
-
-PageProfile.defaultProps = {
-  isCreator: false,
 };
 
 export default PageProfile;

@@ -35,11 +35,11 @@ const Sidebar = ({ active }) => {
   return (
     <div className="w-[80px] h-[100vh] bg-white shadow-sm border border-3 fixed top-15 left-0 z-10 overflow-x-hidden overflow-y-auto 800px:w-[250px]">
       {/* single item */}
-      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+      <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Link to="/feed" className="w-full flex items-center">
           <IoHome size={30} color={`${active === 1 ? 'blue' : '#555'}`} />
           <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+            className={`hidden 800px:block pl-2 text-[16px] font-[400] ${
               active === 1 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
@@ -48,14 +48,14 @@ const Sidebar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+      <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Link to="/my-subscriptions" className="w-full flex items-center">
           <BiSolidPurchaseTag
             size={30}
             color={`${active === 2 ? 'blue ' : '#555'}`}
           />
           <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+            className={`hidden 800px:block pl-2 text-[16px] font-[400] ${
               active === 2 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
@@ -64,14 +64,14 @@ const Sidebar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+      <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Link to="/my-followings" className="w-full flex items-center">
           <IoPeopleSharp
             size={30}
             color={`${active === 3 ? 'blue' : '#555'}`}
           />
           <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+            className={`hidden 800px:block pl-2 text-[16px] font-[400] ${
               active === 3 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
@@ -80,11 +80,11 @@ const Sidebar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+      <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Link to="/explore" className="w-full flex items-center">
           <MdExplore size={30} color={`${active === 4 ? 'blue' : '#555'}`} />
           <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+            className={`hidden 800px:block pl-2 text-[16px] font-[400] ${
               active === 4 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
@@ -93,14 +93,14 @@ const Sidebar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+      <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Link to="/inbox" className="w-full flex items-center">
           <BiMessageSquareDetail
             size={30}
             color={`${active === 5 ? 'blue' : '#555'}`}
           />
           <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+            className={`hidden 800px:block pl-2 text-[16px] font-[400] ${
               active === 5 ? 'text-blue-500' : 'text-[#555]'
             }`}
           >
@@ -109,11 +109,11 @@ const Sidebar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+      <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Link to="/profile" className="w-full flex items-center">
           <RxAvatar size={30} color={`${active === 6 ? 'blue' : '#555'}`} />
           <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+            className={`hidden 800px:block pl-2 text-[16px] font-[400] ${
               active === 6 ? 'text-[blue]' : 'text-[#555]'
             }`}
           >
@@ -122,11 +122,11 @@ const Sidebar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+      <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Button onClick={logoutHandler} className="w-full flex items-center">
           <CiLogout size={30} color={`${active === 12 ? 'crimson' : '#555'}`} />
           <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+            className={`hidden 800px:block pl-2 text-[16px] font-[400] ${
               active === 12 ? 'text-[crimson]' : 'text-[#555]'
             }`}
           >

@@ -38,7 +38,8 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
   const [comment, setComment] = useState('');
   const [commentDialog, setCommentDialog] = useState(false);
 
-  const [likeUnlikePost] = useLikeUnlikePostMutation();
+  const [likeUnlikePost, { isLoading: likeLoading }] =
+    useLikeUnlikePostMutation();
   const [commentOnPost] = useCreateCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
   const postId = post?._id;
@@ -75,6 +76,9 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
     try {
       console.log('the post ID ', postId);
       console.log(comment);
+      if (!comment) {
+        toast.error('Please enter a comment...');
+      }
       await commentOnPost({ postId, comment }).unwrap();
       setComment('');
       refetch();
@@ -86,7 +90,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
       });
     } catch (error) {
       // toast.error(error?.data?.message || error.error);
-      toast.error("Can't comment on your own post");
+      // toast.error("Can't comment on your own post");
     }
   };
 
@@ -110,153 +114,162 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
   return !post ? (
     <Loader />
   ) : (
-    <Card className="shadow-lg mb-12 w-[100%]">
-      <CardHeader
-        avatar={
-          <Link to={`/page/${post?.creator?._id}`}>
-            <Avatar
-              sx={{ bgcolor: 'red' }}
-              aria-label="recipe"
-              src={post?.creator?.avatar?.url}
-            >
-              R
-            </Avatar>
-          </Link>
-        }
-        title={
-          <div>
-            <span className="text-lg font-medium capitalize">
-              {post?.creator?.name}
-            </span>
-            <span className="text-md ml-2 font-light text-gray-600">
-              posted
-            </span>
-          </div>
-        }
-        subheader={
-          <div>
-            <span>{timeAgo(post.createdAt)}</span>
-            <span className="ml-2">
-              {post.status === 'public' ? 'Public' : 'Private'}
-            </span>
-          </div>
-        }
-      />
-      {console.log(post.photos)}
-      {post.photos && post.photos.length > 0 ? (
-        <>
-          <div>
-            <Carousel photos={post.photos} />
-          </div>
-          <CardContent>
-            <h4 className="text-black font-medium">{post.title}</h4>
-          </CardContent>
-        </>
-      ) : (
-        <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            {post.title}
-          </Typography>
-        </CardContent>
-      )}
-      <CardActions className="flex space-x-4">
-        <div className="flex items-center ml-4">
-          {/* Like Section */}
-          {liked ? (
-            <MdFavorite
-              size={30}
-              onClick={() => likeUnlikeHandler(post)}
-              className="cursor-pointer text-red-600"
-            />
-          ) : (
-            <MdFavoriteBorder
-              size={30}
-              onClick={() => likeUnlikeHandler(post)}
-              className="cursor-pointer"
-            />
-          )}
-          <span className="pl-1 hidden 800px:block text-black font-medium">
-            {post.likes.length} likes
-          </span>
-        </div>
-        {/* Comment Section */}
-        <div className="flex items-center">
-          <IconButton
-            aria-label="Comments"
-            onClick={() => setCommentDialog(!commentDialog)}
-          >
-            <LiaCommentSolid size={30} className="text-black mr-2" />
-          </IconButton>
-          <form onSubmit={(e) => commentHandler(e, post)}>
-            <Input
-              type=""
-              placeholder="comment here..."
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-            />
-            <Button type="submit">
-              <FaLocationArrow size={20} className="hidden 800px:inline" />
-            </Button>
-          </form>
-        </div>
-        {isCreator && (
+    <div className="flex items-center  justify-center">
+      <Card className="shadow-lg mb-12 w-[90%] 800px:w-[80%]">
+        <CardHeader
+          avatar={
+            <Link to={`/page/${post?.creator?._id}`}>
+              <Avatar
+                sx={{ bgcolor: 'red' }}
+                aria-label="recipe"
+                src={post?.creator?.avatar?.url}
+              >
+                R
+              </Avatar>
+            </Link>
+          }
+          title={
+            <div>
+              <span className="text-lg font-medium capitalize">
+                {post?.creator?.name}
+              </span>
+              <span className="text-md ml-2 font-light text-gray-600">
+                posted
+              </span>
+            </div>
+          }
+          subheader={
+            <div>
+              <span>{timeAgo(post.createdAt)}</span>
+              <span className="ml-2">
+                {post.status === 'public' ? 'Public' : 'Private'}
+              </span>
+            </div>
+          }
+        />
+        {console.log(post.photos)}
+        {post.photos && post.photos.length > 0 ? (
           <>
-            <IconButton
-              aria-label="deletePost"
-              onClick={() => deletePost(post._id)}
-            >
-              <FaRegTrashAlt size={25} className="text-gray-700" />
-            </IconButton>
-            <IconButton
-              aria-label="updatePost"
-              onClick={() => updatePost(post._id)}
-            >
-              <FaEdit size={25} className="text-gray-700" />
-            </IconButton>
+            <div>
+              <Carousel photos={post.photos} />
+            </div>
+            <CardContent>
+              <h4 className="text-black font-medium">{post.title}</h4>
+            </CardContent>
           </>
+        ) : (
+          <CardContent>
+            <Typography variant="body2" color="text.secondary">
+              {post.title}
+            </Typography>
+          </CardContent>
         )}
-      </CardActions>
-
-      <Dialog
-        open={commentDialog}
-        onClose={() => setCommentDialog(!commentDialog)}
-      >
-        <div className=" min-w-[350px] 800px:min-w-[500px]  h-[100vh] p-2">
-          <Typography variant="h4">Comments</Typography>
-
-          <form className="flex m-6" onSubmit={(e) => commentHandler(e, post)}>
-            <input
-              type="text"
-              value={comment}
-              className="w-[100%] py-2 px-4 outline-none border rounded-md font-Roboto"
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Comment here..."
-              required
-            />
-
-            <Button type="submit" className="rounded-sm" variant="contained">
-              <FaLocationArrow size={20} />
-            </Button>
-          </form>
-          {post.comments.length > 0 ? (
-            post.comments.map((comment) => {
-              return (
-                <>
-                  <CommentCard
-                    comment={comment}
-                    isCreator={isCreator}
-                    user={user}
-                    deleteCommentHandler={deleteCommentHandler}
-                  />
-                </>
-              );
-            })
-          ) : (
-            <Typography>No comments Yet</Typography>
+        <CardActions className="flex space-x-4">
+          <div className="flex items-center ml-4">
+            {/* Like Section */}
+            {liked ? (
+              <MdFavorite
+                size={30}
+                onClick={() => likeUnlikeHandler(post)}
+                className="cursor-pointer text-red-600"
+                aria-disabled={likeLoading}
+              />
+            ) : (
+              <MdFavoriteBorder
+                size={30}
+                onClick={() => likeUnlikeHandler(post)}
+                className="cursor-pointer"
+                aria-disabled={likeLoading}
+              />
+            )}
+            <span className="pl-1 hidden 800px:block text-black font-medium">
+              {post.likes.length} likes
+            </span>
+          </div>
+          {/* Comment Section */}
+          <div className="flex items-center">
+            <IconButton
+              aria-label="Comments"
+              onClick={() => setCommentDialog(!commentDialog)}
+            >
+              <LiaCommentSolid size={30} className="text-black mr-2" />
+            </IconButton>
+            <form onSubmit={(e) => commentHandler(e, post)}>
+              <Input
+                type=""
+                placeholder="comment here..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+              <Button type="submit">
+                <FaLocationArrow size={20} className="hidden 800px:inline" />
+              </Button>
+            </form>
+          </div>
+          {isCreator && (
+            <>
+              <IconButton
+                aria-label="deletePost"
+                onClick={() => deletePost(post._id)}
+              >
+                <FaRegTrashAlt size={25} className="text-gray-700" />
+              </IconButton>
+              <IconButton
+                aria-label="updatePost"
+                onClick={() => updatePost(post._id)}
+              >
+                <FaEdit size={25} className="text-gray-700" />
+              </IconButton>
+            </>
           )}
-        </div>
-      </Dialog>
-    </Card>
+        </CardActions>
+
+        <Dialog
+          open={commentDialog}
+          onClose={() => setCommentDialog(!commentDialog)}
+        >
+          <div className=" min-w-[350px] 800px:min-w-[500px]  h-[100vh] p-2">
+            <Typography variant="h4">Comments</Typography>
+
+            <form
+              className="flex m-6"
+              onSubmit={(e) => commentHandler(e, post)}
+            >
+              <input
+                type="text"
+                value={comment}
+                className="w-[100%] py-2 px-4 outline-none border rounded-md font-Roboto"
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Comment here..."
+                required
+              />
+
+              <Button type="submit" className="rounded-sm" variant="contained">
+                <FaLocationArrow size={20} />
+              </Button>
+            </form>
+            {post.comments.length > 0 ? (
+              post.comments.map((comment) => {
+                return (
+                  <>
+                    <CommentCard
+                      comment={comment}
+                      isCreator={isCreator}
+                      user={user}
+                      deleteCommentHandler={deleteCommentHandler}
+                    />
+                  </>
+                );
+              })
+            ) : (
+              <Typography style={{ fontSize: '16px', marginLeft: '1.3rem' }}>
+                No comments Yet
+              </Typography>
+            )}
+          </div>
+        </Dialog>
+      </Card>
+    </div>
   );
 };
 

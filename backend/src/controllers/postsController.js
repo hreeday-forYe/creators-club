@@ -168,10 +168,10 @@ export const likeUnlikePost = asyncHandler(async (req, res, next) => {
 
     // checking if the user or creator is making request
     let validId;
-    if (req.user._id) {
-      validId = req.user._id;
+    if (req.user?._id) {
+      validId = req.user?._id;
     } else {
-      validId = req.creator._id;
+      validId = req.creator?._id;
     }
     if (post.likes.includes(validId)) {
       const index = post.likes.indexOf(validId);
@@ -202,10 +202,18 @@ export const commentOnPost = asyncHandler(async (req, res, next) => {
       return next(new ErrorHandler('Post not found', 400));
     }
 
+    // The valid id
+    let validId;
+    if (req.user?._id) {
+      validId = req.user?._id;
+    } else if (req.creator?._id) {
+      validId = req.creator?._id;
+    }
+    console.log(validId);
     // Checking if comment already exists
     let commentIndex = -1;
     post.comments.forEach((item, index) => {
-      if (item.user.toString() === req.user._id.toString()) {
+      if (item.user.toString() === validId.toString()) {
         commentIndex = index;
       }
     });
@@ -220,7 +228,7 @@ export const commentOnPost = asyncHandler(async (req, res, next) => {
       });
     } else {
       post.comments.push({
-        user: req.user._id,
+        user: validId,
         comment: req.body.comment,
       });
       await post.save();

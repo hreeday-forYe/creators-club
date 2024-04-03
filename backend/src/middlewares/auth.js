@@ -55,7 +55,7 @@ const isCreator = asyncHandler(async (req, res, next) => {
 
 // Middleware which should be applicable for both creator and user
 const isUserOrCreator = asyncHandler(async (req, res, next) => {
-  let token = req.cookies.jwt;
+  let token = req.cookies?.jwt;
   let creator_token = req.cookies.creator_jwt;
 
   if (token) {
@@ -74,6 +74,7 @@ const isUserOrCreator = asyncHandler(async (req, res, next) => {
     next();
   } else if (creator_token) {
     const decoded = jwt.verify(creator_token, process.env.JWT_SECRET);
+    console.log(decoded);
 
     // Getting the creator from the Page
     const creator = await Page.findById(decoded.creatorId).select('-password');
@@ -82,7 +83,7 @@ const isUserOrCreator = asyncHandler(async (req, res, next) => {
     if (!creator) {
       return next(new ErrorHandler('Creator Not Found', 400));
     }
-    console.log(creator, 'From middleware');
+    console.log(creator, 'Creator From middleware');
     req.creator = creator;
     next();
   } else {

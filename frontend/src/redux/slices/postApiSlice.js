@@ -72,7 +72,7 @@ export const postApiSlice = apiSlice.injectEndpoints({
 
     pagePosts: builder.query({
       query: (pageId) => ({
-        url: `${post_url}/page/${pageId}`,
+        url: `${post_url}/page-posts/${pageId}`,
         method: 'GET',
       }),
       keepUnusedDataFor: 5,
