@@ -7,7 +7,7 @@ export const subscriptionApiSlice = apiSlice.injectEndpoints({
       query: ({ pageId, payment_info }) => ({
         url: `${subscribe_url}/create-subscription`,
         method: 'POST',
-        body: data,
+        body: { pageId, payment_info },
       }),
     }),
     getStripePublishableKey: builder.query({
@@ -21,7 +21,7 @@ export const subscriptionApiSlice = apiSlice.injectEndpoints({
         url: `${subscribe_url}/payment`,
         method: 'POST',
         body: {
-          amount
+          amount,
         },
         invalidatesTags: ['Page'],
       }),

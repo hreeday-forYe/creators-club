@@ -14,6 +14,7 @@ import { Dialog } from '@mui/material';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckOutForm from '../../utils/CheckOutForm';
+import { TbMessage } from 'react-icons/tb';
 
 const PageProfile = ({ user, isCreator }) => {
   // Getting the user details based on the id;
@@ -28,6 +29,9 @@ const PageProfile = ({ user, isCreator }) => {
   // Using the follow unfollow query
   const [following, setFollowing] = useState(
     creator?.followers?.includes(user?._id)
+  );
+  const [subscription, setSubscription] = useState(
+    creator?.subscribers?.includes(user?._id)
   );
   // const [isCreator, setIsCreator] = useState(creator?._id === user?._id);
   // console.log(isCreator);
@@ -44,6 +48,11 @@ const PageProfile = ({ user, isCreator }) => {
   };
   useEffect(() => {
     refetch();
+    if (creator?.subscribers?.includes(user?._id)) {
+      setSubscription(true);
+    } else {
+      setSubscription(false);
+    }
     if (creator?.followers?.includes(user?._id)) {
       setFollowing(true);
     } else {
@@ -149,12 +158,23 @@ const PageProfile = ({ user, isCreator }) => {
           </div>
         ) : (
           <div className="flex justify-center gap-4 mt-6 mb-5">
-            <button
-              onClick={() => setOpenPay(!openPay)}
-              className="bg-blue-500 px-10 py-2 font-bold hover:shadow-lg rounded-2xl text-white shadow-md"
-            >
-              Subscribe for ${creator?.subscriptionCharge}
-            </button>
+            {subscription ? (
+              <button
+                className={`bg-blue-600 text-white px-4 py-2 font-semibold hover:shadow-lg rounded-xl  shadow-md flex items-center space-x-6`}
+              >
+                Message <TbMessage size={30} className="ml-2" />
+              </button>
+            ) : (
+              <button
+                onClick={() => setOpenPay(!openPay)}
+                className={`bg-blue-600 text-white px-10 py-2 font-semibold hover:shadow-lg rounded-2xl  shadow-md`}
+                disabled={subscription}
+              >
+                {subscription
+                  ? 'Subscribed'
+                  : `Subscribe for $${creator?.subscriptionCharge}`}
+              </button>
+            )}
             <button
               className="bg-white text-blue-500 hover:shadow-lg shadow-md font-Roboto border-2 border-blue-500 px-10 py-2 rounded-2xl font-semibold"
               onClick={followUnfollowPage}
@@ -192,10 +212,7 @@ const PageProfile = ({ user, isCreator }) => {
         <Dialog open={openPay} onClose={() => setOpenPay(!openPay)}>
           <div className=" min-w-[350px] 800px:min-w-[500px]  h-auto p-6">
             {stripePromise && clientSecret && (
-              <Elements
-                stripe={stripePromise}
-                options={{ clientSecret}}
-              >
+              <Elements stripe={stripePromise} options={{ clientSecret }}>
                 <CheckOutForm setOpenPay={setOpenPay} data={data} />
               </Elements>
             )}

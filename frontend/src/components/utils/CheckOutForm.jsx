@@ -7,6 +7,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useCreateSubscriptionMutation } from '../../redux/slices/subscriptionApiSlice';
 import { redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCredentials } from '../../redux/slices/authSlice';
 import { toast } from 'react-hot-toast';
 import { useProfileQuery } from '../../redux/slices/usersApiSlice';
 
@@ -18,11 +20,10 @@ const CheckOutForm = ({ setOpenPay, data }) => {
     createSubscription,
     { data: subscribeData, error, isLoading: subscribeLoading },
   ] = useCreateSubscriptionMutation();
-  const { data: user } = useProfileQuery();
+  const { data: user, refetch: userRefetch } = useProfileQuery();
   console.log(user);
   const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState(user?.name);
-  const [address, setAddress] = useState('');
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,10 +50,11 @@ const CheckOutForm = ({ setOpenPay, data }) => {
 
   useEffect(() => {
     if (subscribeData) {
-      // setLoaduser(true)
+      userRefetch();
+      dispatch(setCredentials({ ...user }));
       console.log('Subscription confirmend');
       toast.success('Subscription Successfull');
-      redirect('/page/subscribe-success');
+      // redirect('/page/subscribe-success');
     }
     if (error) {
       toast.error(error);

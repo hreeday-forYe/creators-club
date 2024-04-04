@@ -21,7 +21,7 @@ export const createSubscription = asyncHandler(async (req, res, next) => {
       if ('id' in payment_info) {
         const paymentIntentId = payment_info.id;
         const paymentIntent =
-          await stripe.paymentIntents.retrive(paymentIntentId);
+          await stripe.paymentIntents.retrieve(paymentIntentId);
         if (paymentIntent.status !== 'succeeded') {
           return next(new ErrorHandler('Payment not authorized', 400));
         }
@@ -190,11 +190,11 @@ export const newPayment = asyncHandler(async (req, res, next) => {
       shipping: {
         name: user.name,
         address: {
-          line1: "510 Townsend St",
-          postal_code: "98140",
-          city: "San Francisco",
-          state: "CA",
-          country: "US",
+          line1: '510 Townsend St',
+          postal_code: '98140',
+          city: 'San Francisco',
+          state: 'CA',
+          country: 'US',
         },
       },
       metadata: {
