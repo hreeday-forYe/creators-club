@@ -5,6 +5,7 @@ import Loader from '../Loader';
 const Rightbar = () => {
   const { data, refetch, isLoading } = useGetSuggestedPagesQuery();
   const pages = data?.pages;
+  console.log(pages);
   useEffect(() => {
     refetch();
   }, []);
@@ -16,7 +17,9 @@ const Rightbar = () => {
         {isLoading ? (
           <Loader />
         ) : (
-          pages.map((creator, index) => <SuggestedPages creator={creator} key={index} />)
+          pages.map((creator, index) => (
+            <SuggestedPages creator={creator} key={index} />
+          ))
         )}
       </div>
     </div>

@@ -31,12 +31,21 @@ const subscriptionSchema = new mongoose.Schema(
       },
     },
     expiryDate: {
-      type: String,
+      type: Date,
       required: true,
     },
   },
   { timestamps: true }
 );
+
+
+// Calculate expiry date 30 days from the startedAt date
+subscriptionSchema.pre('save', function (next) {
+  const thirtyDaysFromStart = new Date(this.startedAt);
+  thirtyDaysFromStart.setDate(thirtyDaysFromStart.getDate() + 30);
+  this.expiryDate = thirtyDaysFromStart;
+  next();
+});
 
 
 

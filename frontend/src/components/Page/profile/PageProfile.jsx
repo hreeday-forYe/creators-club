@@ -6,6 +6,14 @@ import { Link } from 'react-router-dom';
 import PageProfileData from './PageProfileData';
 import { toast } from 'react-hot-toast';
 import GetAllPosts from '../GetAllPosts';
+import {
+  useGetStripePublishableKeyQuery,
+  useCreatePaymentIntentMutation,
+} from '../../../redux/slices/subscriptionApiSlice';
+import { Dialog } from '@mui/material';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import CheckOutForm from '../../utils/CheckOutForm';
 
 const PageProfile = ({ user, isCreator }) => {
   // Getting the user details based on the id;
@@ -25,16 +33,6 @@ const PageProfile = ({ user, isCreator }) => {
   // console.log(isCreator);
   const [followUnfollow, { isLoading: followLoading }] =
     useFollowUnfollowPageMutation();
-
-  useEffect(() => {
-    refetch();
-    if (creator?.followers?.includes(user?._id)) {
-      setFollowing(true);
-    } else {
-      setFollowing(false);
-    }
-  }, [creator, user]);
-
   // Follow Unfollow Page Handler
   const followUnfollowPage = async (e) => {
     try {
@@ -44,6 +42,46 @@ const PageProfile = ({ user, isCreator }) => {
       toast.error(error?.data?.message || error.error);
     }
   };
+  useEffect(() => {
+    refetch();
+    if (creator?.followers?.includes(user?._id)) {
+      setFollowing(true);
+    } else {
+      setFollowing(false);
+    }
+  }, [creator, user]);
+
+  // Subscription handler
+  const [openPay, setOpenPay] = useState(false);
+  const { data: config, isLoading } = useGetStripePublishableKeyQuery({});
+  const [createPaymentIntent, { data: paymentIntentData }] =
+    useCreatePaymentIntentMutation();
+  const [stripePromise, setStripePromise] = useState(null);
+  const [clientSecret, setClientSecret] = useState();
+  console.log(config);
+  console.log(paymentIntentData);
+  useEffect(() => {
+    if (config) {
+      const publishablekey = config?.publishablekey;
+      console.log(publishablekey);
+      setStripePromise(loadStripe(publishablekey));
+    }
+    if (data) {
+      const amount = Math.round(creator?.subscriptionCharge);
+      createPaymentIntent(amount);
+    }
+  }, [config, data]);
+
+  useEffect(() => {
+    if (paymentIntentData) {
+      setClientSecret(paymentIntentData?.client_secret);
+    }
+  }, [paymentIntentData]);
+
+  // Handle Payment and subscription
+  // const handleSubscription = async (e) => {
+  //   setOpenPay(true);
+  // };
 
   return (
     <div className="w-[100%]">
@@ -111,12 +149,12 @@ const PageProfile = ({ user, isCreator }) => {
           </div>
         ) : (
           <div className="flex justify-center gap-4 mt-6 mb-5">
-            <Link
-              to={`/page/subscribe/${pageId}`}
+            <button
+              onClick={() => setOpenPay(!openPay)}
               className="bg-blue-500 px-10 py-2 font-bold hover:shadow-lg rounded-2xl text-white shadow-md"
             >
               Subscribe for ${creator?.subscriptionCharge}
-            </Link>
+            </button>
             <button
               className="bg-white text-blue-500 hover:shadow-lg shadow-md font-Roboto border-2 border-blue-500 px-10 py-2 rounded-2xl font-semibold"
               onClick={followUnfollowPage}
@@ -149,81 +187,21 @@ const PageProfile = ({ user, isCreator }) => {
         {/* Posts component */}
 
         {isCreator ? <GetAllPosts /> : <PageProfileData />}
-        {/* <div className="grid grid-cols-3 gap-2 my-3">
-          <a
-            className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
-            href
-            style={{
-              backgroundImage:
-                'url("https://images.pexels.com/photos/458766/pexels-photo-458766.jpeg")',
-            }}
-          />
-          <a
-            className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
-            href
-            style={{
-              backgroundImage:
-                'url("https://images.pexels.com/photos/247287/pexels-photo-247287.jpeg")',
-            }}
-          />
-          <a
-            className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
-            href
-            style={{
-              backgroundImage:
-                'url("https://images.pexels.com/photos/6169/woman-hand-girl-professional.jpg")',
-            }}
-          />
-          <a
-            className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
-            href
-            style={{
-              backgroundImage:
-                'url("https://images.pexels.com/photos/3851790/pexels-photo-3851790.jpeg")',
-            }}
-          />
-          <a
-            className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
-            href
-            style={{
-              backgroundImage:
-                'url("https://images.pexels.com/photos/3852159/pexels-photo-3852159.jpeg")',
-            }}
-          />
-          <a
-            className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
-            href
-            style={{
-              backgroundImage:
-                'url("https://images.pexels.com/photos/4491173/pexels-photo-4491173.jpeg")',
-            }}
-          />
-          <a
-            className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
-            href
-            style={{
-              backgroundImage:
-                'url("https://images.pexels.com/photos/2294354/pexels-photo-2294354.jpeg")',
-            }}
-          />
-          <a
-            className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
-            href
-            style={{
-              backgroundImage:
-                'url("https://images.pexels.com/photos/6019812/pexels-photo-6019812.jpeg")',
-            }}
-          />
-          <a
-            className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
-            href
-            style={{
-              backgroundImage:
-                'url("https://images.pexels.com/photos/40751/running-runner-long-distance-fitness-40751.jpeg")',
-            }}
-          />
-        </div> */}
       </div>
+      <>
+        <Dialog open={openPay} onClose={() => setOpenPay(!openPay)}>
+          <div className=" min-w-[350px] 800px:min-w-[500px]  h-auto p-6">
+            {stripePromise && clientSecret && (
+              <Elements
+                stripe={stripePromise}
+                options={{ clientSecret}}
+              >
+                <CheckOutForm setOpenPay={setOpenPay} data={data} />
+              </Elements>
+            )}
+          </div>
+        </Dialog>
+      </>
     </div>
   );
 };
