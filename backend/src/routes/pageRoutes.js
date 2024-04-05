@@ -12,6 +12,8 @@ import {
   getAllPages,
   deletePageById,
   deleteMyPage,
+  updateWithdrawMethod,
+  deleteWithdrawMethod,
 } from '../controllers/pageController.js';
 
 import express from 'express';
@@ -33,7 +35,8 @@ pageRouter.put('/update-page-info', isCreator, updatePageInfo);
 pageRouter.put('/update-cover-image', isCreator, updateCoverImage);
 pageRouter.post('page-social-auth', pageSocialAuth);
 pageRouter.delete('/delete-page', isCreator, deleteMyPage);
-
+pageRouter.put('/update-payment-methods', isCreator, updateWithdrawMethod);
+pageRouter.delete('/delete-withdraw-method', isCreator, deleteWithdrawMethod);
 // admin routes
 pageRouter.get(
   '/get-all-pages',

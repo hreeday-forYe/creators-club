@@ -366,6 +366,43 @@ const deleteMyPage = asyncHandler(async (req, res, next) => {
 });
 
 /* TODO: Creator WithDraw method and update withdraw method function */
+export const updateWithdrawMethod = asyncHandler(async (req, res, next) => {
+  try {
+    const { withdrawMethod } = req.body;
+    const creator = await Page.findByIdAndUpdate(req.creator._id, {
+      withdrawMethod,
+    });
+
+    res.status(201).json({
+      success: true,
+      creator,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+// Delete withdraw method
+export const deleteWithdrawMethod = asyncHandler(async (req, res, next) => {
+  try {
+    const creator = await Page.findById(req.creator._id);
+
+    if (!creator) {
+      return next(new ErrorHandler('Creator not found with this id', 400));
+    }
+
+    creator.withdrawMethod = null;
+
+    await creator.save();
+
+    res.status(201).json({
+      success: true,
+      creator,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
 
 // Get all Pages/Creators for admin
 const getAllPages = asyncHandler(async (req, res, next) => {

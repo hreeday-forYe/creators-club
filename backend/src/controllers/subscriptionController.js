@@ -17,6 +17,7 @@ const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
 export const createSubscription = asyncHandler(async (req, res, next) => {
   try {
     const { pageId, payment_info } = req.body;
+    console.log(payment_info);
     if (payment_info) {
       if ('id' in payment_info) {
         const paymentIntentId = payment_info.id;
@@ -92,12 +93,19 @@ export const createSubscription = asyncHandler(async (req, res, next) => {
       return next(new ErrorHandler(error.message, 500));
     }
 
+    // Updating the payment status of the subscription
+
     // PUSHING THE PAGE ID TO THE USER MODEL subscriptions list
     user?.subscriptions.push(page?._id);
     await user?.save();
 
     // pushing user id to the page model subscribers list
     page?.subscribers.push(user?._id);
+    if (page && page.availableBalance !== undefined) {
+      page.availableBalance +=
+        page.subscriptionCharge - page.subscriptionCharge * 0.02;
+    }
+
     await page?.save();
 
     //#TODO: Add notification for the creator
@@ -115,7 +123,7 @@ export const createSubscription = asyncHandler(async (req, res, next) => {
     const subscribe = await Subscription.create({
       subscriber: user?._id,
       creator: page?._id,
-      payment_info,
+      paymentInfo: payment_info,
       totalPrice: page?.subscriptionCharge,
     });
 

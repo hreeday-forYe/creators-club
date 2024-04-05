@@ -9,7 +9,7 @@ import sendMail from '../utils/sendMail.js';
 
 export const createWithdrawRequest = asyncHandler(async (req, res, next) => {
   try {
-    const { amount } = req.body;
+    const amount  = req.body.amount;
     const data = {
       creator: req.creator,
       amount,
@@ -18,9 +18,9 @@ export const createWithdrawRequest = asyncHandler(async (req, res, next) => {
     // Send mail to the creator Email
     try {
       await sendMail({
-        email: req.seller.email,
+        email: req.creator.email,
         subject: 'Withdraw Request',
-        message: `Hello ${req.seller.name}, Your withdraw request of ${amount}$ is processing. It will take 3days to 7days to processing! `,
+        message: `Hello ${req.creator.name}, Your withdraw request of ${amount}$ is processing. It will take 3days to 7days to processing! `,
       });
       res.status(201).json({
         success: true,

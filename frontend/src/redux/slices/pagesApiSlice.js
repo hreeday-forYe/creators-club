@@ -34,7 +34,7 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    profile: builder.query({
+    pageProfile: builder.query({
       query: () => ({
         url: `${page_url}/page-profile`,
         method: 'GET',
@@ -77,6 +77,21 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['Page'],
     }),
 
+    updateWithdrawMethod: builder.mutation({
+      query: (withdrawMethod) => ({
+        url: `${page_url}/update-payment-methods`,
+        method: 'PUT',
+        body: { withdrawMethod:  withdrawMethod  },
+      }),
+    }),
+
+    deleteWithdrawMethod: builder.mutation({
+      query: () =>({
+        url: `${page_url}/delete-withdraw-method`,
+        method: 'DELETE',
+      })
+    }),
+
     deletePage: builder.mutation({
       query: () => ({
         url: `${page_url}/delete-page`,
@@ -93,8 +108,10 @@ export const {
   useCreatePageMutation,
   useLogoutPageMutation,
   useGetPageInfoQuery,
-  useProfileQuery,
+  usePageProfileQuery,
   useUpdatePageProfileMutation,
   useUpdatePageAvatarMutation,
   useUpdateCoverImageMutation,
+  useUpdateWithdrawMethodMutation,
+  useDeleteWithdrawMethodMutation
 } = pagesApiSlice;

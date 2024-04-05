@@ -38,7 +38,6 @@ const subscriptionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
 // Calculate expiry date 30 days from the startedAt date
 subscriptionSchema.pre('save', function (next) {
   const thirtyDaysFromStart = new Date(this.startedAt);
@@ -46,8 +45,6 @@ subscriptionSchema.pre('save', function (next) {
   this.expiryDate = thirtyDaysFromStart;
   next();
 });
-
-
 
 const Subscription = mongoose.model('Subscription', subscriptionSchema);
 export default Subscription;

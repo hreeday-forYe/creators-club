@@ -9,9 +9,10 @@ import { useGetMyPostsQuery } from '../../../redux/slices/postApiSlice';
 import Button from '@mui/material/Button';
 
 import { DataGrid } from '@mui/x-data-grid';
+import { setCredentials } from '../../../redux/slices/authSlice';
 
 const DashboardHero = () => {
-  const dispatch = useDispatch();
+  
   const { authInfo } = useSelector((state) => state.auth);
   const { creator } = authInfo;
   console.log(creator);
@@ -19,6 +20,7 @@ const DashboardHero = () => {
   const availableBalance = creator?.availableBalance.toFixed(2);
   const { data, refetch: postRefetch } = useGetMyPostsQuery();
   const posts = data?.posts;
+
   useEffect(() => {
     postRefetch();
   }, [postRefetch]);
@@ -39,11 +41,6 @@ const DashboardHero = () => {
       minWidth: 130,
       flex: 0.6,
       type: 'number',
-      // cellClassName: (params) => {
-      //   return params.getValue(params.id, 'status') === 'Delivered'
-      //     ? 'greenColor'
-      //     : 'redColor';
-      // },
     },
     {
       field: 'expiryDate',
@@ -147,7 +144,7 @@ const DashboardHero = () => {
             </h3>
           </div>
           <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
-            {posts && posts.length}
+            {creator.subscribers && creator.subscribers.length}
           </h5>
           <Link to="/page-subscribers">
             <h5 className="pt-4 pl-2 text-[#077f9c]">View Subscribers</h5>
