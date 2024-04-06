@@ -87,12 +87,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: 'PUT',
       }),
     }),
-
-    loadUser: builder.query({
-      query:()=>({
-        url: `${user_url}/`
-      })
-    })
   }),
 });
 

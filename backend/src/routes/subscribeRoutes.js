@@ -23,7 +23,7 @@ subscribeRouter.post(
   createSubscription
 );
 subscribeRouter.get(
-  '/user-subscriptions/:id',
+  '/user-subscriptions',
   isAuthenticated,
   getUserSubscriptions
 );
@@ -32,7 +32,7 @@ subscribeRouter.get('/payment/stripepublishablekey', sendStripePublishableKey);
 subscribeRouter.post('/payment', isAuthenticated, newPayment);
 
 subscribeRouter.get(
-  '/creator-subscriptions/:id',
+  '/creator-subscriptions',
   isCreator,
   getCreatorSubscriptions
 );

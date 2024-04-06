@@ -1,4 +1,4 @@
-import { page_url } from '../../constants';
+import { backend_url, page_url } from '../../constants';
 import { apiSlice } from './apiSlice';
 
 export const pagesApiSlice = apiSlice.injectEndpoints({
@@ -81,15 +81,39 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
       query: (withdrawMethod) => ({
         url: `${page_url}/update-payment-methods`,
         method: 'PUT',
-        body: { withdrawMethod:  withdrawMethod  },
+        body: { withdrawMethod: withdrawMethod },
       }),
     }),
 
     deleteWithdrawMethod: builder.mutation({
-      query: () =>({
+      query: () => ({
         url: `${page_url}/delete-withdraw-method`,
         method: 'DELETE',
-      })
+      }),
+    }),
+
+    createWithdrawRequest: builder.mutation({
+      query: (amount) => ({
+        url: `${backend_url}/withdraw/create-withdraw-request`,
+        method: 'POST',
+        body: { amount: amount },
+      }),
+    }),
+
+    getAllWithdrawRequest: builder.query({
+      query: () => ({
+        url: `${backend_url}/withdraw/get-all-withdraw-request`,
+        method: 'GET',
+      }),
+      keepUnusedDataFor: 5,
+    }),
+
+    updateWithdrawRequest: builder.mutation({
+      query: ({withdrawId, pageId}) => ({
+        url: `${backend_url}/withdraw/update-withdraw-request/${withdrawId}`,
+        method: 'PUT',
+        body: { pageId: pageId },
+      }),
     }),
 
     deletePage: builder.mutation({
@@ -113,5 +137,8 @@ export const {
   useUpdatePageAvatarMutation,
   useUpdateCoverImageMutation,
   useUpdateWithdrawMethodMutation,
-  useDeleteWithdrawMethodMutation
+  useDeleteWithdrawMethodMutation,
+  useCreateWithdrawRequestMutation,
+  useGetAllWithdrawRequestQuery,
+  useUpdateWithdrawRequestMutation,
 } = pagesApiSlice;

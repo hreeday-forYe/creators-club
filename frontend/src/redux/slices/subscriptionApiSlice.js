@@ -17,7 +17,7 @@ export const subscriptionApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     createPaymentIntent: builder.mutation({
-      query: (amount, name, address) => ({
+      query: (amount) => ({
         url: `${subscribe_url}/payment`,
         method: 'POST',
         body: {
@@ -26,6 +26,22 @@ export const subscriptionApiSlice = apiSlice.injectEndpoints({
         invalidatesTags: ['Page'],
       }),
     }),
+
+    getUserSubscriptions: builder.query({
+      query: () => ({
+        url: `${subscribe_url}/user-subscriptions`,
+        method: 'GET',
+      }),
+      keepUnusedDataFor: 5,
+    }),
+
+    getCreatorSubcriptions: builder.query({
+      query: () => ({
+        url: `${subscribe_url}/creator-subscriptions`,
+        method: 'GET',
+      }),
+      keepUnusedDataFor: 5,
+    }),
   }),
 });
 
@@ -33,4 +49,6 @@ export const {
   useCreateSubscriptionMutation,
   useGetStripePublishableKeyQuery,
   useCreatePaymentIntentMutation,
+  useGetUserSubscriptionsQuery,
+  useGetCreatorSubcriptionsQuery
 } = subscriptionApiSlice;

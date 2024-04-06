@@ -94,10 +94,10 @@ const isUserOrCreator = asyncHandler(async (req, res, next) => {
 // validate the user role
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user?.role || '')) {
+    if (!roles.includes(req.creator?.role || '')) {
       return next(
         new ErrorHandler(
-          `Role: ${req.user?.role} is not allowed to access this routes`,
+          `Role: ${req.creator?.role} is not allowed to access this routes`,
           403
         )
       );

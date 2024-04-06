@@ -33,7 +33,7 @@ const Sidebar = ({ active }) => {
     }
   };
   return (
-    <div className="w-[80px] h-[100vh] bg-white shadow-sm border border-3 fixed top-15 left-0 z-10 overflow-x-hidden overflow-y-auto 800px:w-[250px]">
+    <div className="w-[80px] h-[100vh] bg-white shadow-lg border border-3 fixed top-15 left-0 z-10 overflow-x-hidden overflow-y-auto 800px:w-[250px]">
       {/* single item */}
       <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Link to="/feed" className="w-full flex items-center">

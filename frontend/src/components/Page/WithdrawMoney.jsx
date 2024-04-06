@@ -7,9 +7,11 @@ import {
   usePageProfileQuery,
   useUpdateWithdrawMethodMutation,
   useDeleteWithdrawMethodMutation,
+  useCreateWithdrawRequestMutation,
 } from '../../redux/slices/pagesApiSlice';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { setCredentials } from '../../redux/slices/authSlice';
+
 const WithdrawMoney = () => {
   const [paymentMethod, setPaymentMethod] = useState(false);
   const [open, setOpen] = useState(false);
@@ -22,6 +24,8 @@ const WithdrawMoney = () => {
   const [updateWithdrawMethod, { isLoading }] =
     useUpdateWithdrawMethodMutation();
   const [deleteWithdrawMethod] = useDeleteWithdrawMethodMutation();
+  const [createWithdrawRequest, { isLoading: withdrawLoading }] =
+    useCreateWithdrawRequestMutation();
   const [bankInfo, setBankInfo] = useState({
     bankName: '',
     bankCountry: '',
@@ -68,10 +72,32 @@ const WithdrawMoney = () => {
   };
 
   const withdrawHandler = async () => {
-    if (withdrawAmount < 10 || withdrawAmount > creator?.availableBalance) {
-      toast.error("You can't withdraw this amount!");
-    } else {
+    try {
+      if (withdrawAmount < 10 || withdrawAmount > creator?.availableBalance) {
+        toast.error("You can't withdraw this amount!");
+        return;
+      }
       const amount = withdrawAmount;
+      const withdraw = createWithdrawRequest(amount).unwrap();
+      console.log(withdraw);
+      toast.success('Withdraw money request is successful!');
+      // Update available balance in Redux store
+      dispatch(
+        setCredentials({
+          ...pageProfile,
+          creator: {
+            ...creator,
+            availableBalance: creator.availableBalance - amount,
+          },
+        })
+      );
+      // Close the popup
+      setOpen(false);
+    } catch (error) {
+      console.error('Error:', error?.data?.message || error.error);
+      toast.error(
+        'An error occurred while processing your request. Please try again later.'
+      );
     }
   };
 
@@ -100,7 +126,7 @@ const WithdrawMoney = () => {
         <h1 className="text-2xl font-semibold">WithDraw Your Money</h1>
         <div className="w-full bg-white h-[50vh] rounded flex items-center justify-center flex-col">
           <h5 className="text-[20px] pb-4">
-            Available Balance: ${creator?.availableBalance}
+            Available Balance: ${creator?.availableBalance.toFixed(2)}
           </h5>
           <div
             className={`${styles.button} text-white !h-[42px] !rounded`}

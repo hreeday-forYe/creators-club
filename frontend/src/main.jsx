@@ -18,7 +18,6 @@ import PageDashboardScreen from './screens/page/PageDashboardScreen';
 import UserFeedScreen from './screens/users/UserFeedScreen';
 import UserProfileScreen from './screens/users/UserProfileScreen';
 import PageProfileScreen from './screens/page/PageProfileScreen';
-import AdminDashboardScreen from './screens/admin/AdminDashboardScreen';
 // import CreatePost from './components/main/CreatePost';
 
 import { Provider } from 'react-redux';
@@ -31,6 +30,12 @@ import PageWithdrawMoneyScreen from './screens/page/PageWithdrawMoneyScreen';
 import SubscribePageScreen from './screens/users/SubscribePageScreen';
 import UserSubscriptionScreen from './screens/users/UserSubscriptionScreen';
 import UserFollowingsScreen from './screens/users/UserFollowingsScreen';
+
+// ADMIN SCREENS 
+import AdminDashboardScreen from './screens/admin/AdminDashboardScreen';
+import AdminWithdrawRequestScreen from './screens/admin/AdminWithdrawRequestScreen'
+
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -64,6 +69,7 @@ const router = createBrowserRouter(
         element={<UserSubscriptionScreen />}
       ></Route>
       <Route path="/my-followings" element={<UserFollowingsScreen />}></Route>
+      <Route path='/admin-withdraw-request' element={<AdminWithdrawRequestScreen/>}></Route>
     </Route>
   )
 );

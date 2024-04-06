@@ -20,7 +20,7 @@ import { GrWorkshop } from 'react-icons/gr';
 import { logout } from '../../../redux/slices/authSlice';
 import { useDispatch } from 'react-redux';
 import { useLogoutPageMutation } from '../../../redux/slices/pagesApiSlice';
-const DashboardSideBar = ({ active }) => {
+const AdminSidebar = ({ active }) => {
   const { authInfo } = useSelector((state) => state.auth);
   const { creator } = authInfo;
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ const DashboardSideBar = ({ active }) => {
     }
   };
   return (
-    <div className="w-full h-[90vh] bg-white shadow-sm border border-3 sticky top-0 left-0 z-10">
+    <div className="w-[80px] h-[100vh] bg-white shadow-sm border border-3 fixed top-15 left-0 z-10 overflow-y-auto 800px:w-[250px]">
       {/* single item */}
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Link to="/admin-dashboard" className="w-full flex items-center">
@@ -87,10 +87,10 @@ const DashboardSideBar = ({ active }) => {
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Link to="/all-creators" className="w-full flex items-center">
-          <GrWorkshop size={30} color={`${active === 3 ? 'blue' : '#555'}`} />
+          <GrWorkshop size={30} color={`${active === 4 ? 'blue' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 3 ? 'text-blue-700' : 'text-[#555]'
+              active === 4 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
             All Creators
@@ -102,11 +102,11 @@ const DashboardSideBar = ({ active }) => {
         <Link to="/all-users" className="w-full flex items-center">
           <IoPeopleSharp
             size={30}
-            color={`${active === 3 ? 'blue' : '#555'}`}
+            color={`${active === 5 ? 'blue' : '#555'}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 3 ? 'text-blue-700' : 'text-[#555]'
+              active === 5 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
             All Users
@@ -118,11 +118,11 @@ const DashboardSideBar = ({ active }) => {
         <Link to="/admin-withdraw-request" className="w-full flex items-center">
           <CiMoneyBill
             size={30}
-            color={`${active === 7 ? 'crimson' : '#555'}`}
+            color={`${active === 6 ? 'blue' : '#555'}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 7 ? 'text-[crimson]' : 'text-[#555]'
+              active === 6 ? 'text-blue-700' : 'text-[#555]'
             }`}
           >
             Withdraw Request
@@ -180,4 +180,4 @@ const DashboardSideBar = ({ active }) => {
   );
 };
 
-export default DashboardSideBar;
+export default AdminSidebar;

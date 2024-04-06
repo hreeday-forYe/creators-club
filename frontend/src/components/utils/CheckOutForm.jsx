@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setCredentials } from '../../redux/slices/authSlice';
 import { toast } from 'react-hot-toast';
 import { useProfileQuery } from '../../redux/slices/usersApiSlice';
+import Loader from '../Loader';
 
 const CheckOutForm = ({ setOpenPay, data }) => {
   const stripe = useStripe();
@@ -52,8 +53,9 @@ const CheckOutForm = ({ setOpenPay, data }) => {
     if (subscribeData) {
       userRefetch();
       dispatch(setCredentials({ ...user }));
-      console.log('Subscription confirmend');
-      toast.success('Subscription Successfull');
+      setOpenPay(false);
+      // console.log('Subscription confirmend');
+      toast.success('Subscription Successfull..');
       // redirect('/page/subscribe-success');
     }
     if (error) {
@@ -65,6 +67,7 @@ const CheckOutForm = ({ setOpenPay, data }) => {
       <form id="payment-form" onSubmit={handleSubmit}>
         <LinkAuthenticationElement id="link-authentication-element" />
         <PaymentElement id="payment-element" className="mt-2" />
+        {isLoading || (subscribeLoading && <Loader />)}
         <button
           disabled={isLoading || !stripe || !elements}
           className="border p-2 rounded-md font-Roboto font-medium text-lg mt-4 bg-blue-600 hover:bg-blue-900 transition duration-200 text-white"

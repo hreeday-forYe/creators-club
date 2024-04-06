@@ -4,6 +4,7 @@ const GetPageSubscribers = () => {
   return (
     <div className="w-full p-8">
       <h1>All Subscribers</h1>
+      
     </div>
   );
 };

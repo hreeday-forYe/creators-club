@@ -119,12 +119,32 @@ export const createSubscription = asyncHandler(async (req, res, next) => {
       })
     */
 
+    // Calculate expiry date 30 days from the startedAt date
+    const startedAt = new Date();
+    const thirtyDaysFromStart = new Date(startedAt);
+    thirtyDaysFromStart.setDate(thirtyDaysFromStart.getDate() + 30);
+    const expiryDate = thirtyDaysFromStart;
+
+    // Format dates to human-readable form
+    const startedAtFormatted = startedAt.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+    const expiryDateFormatted = expiryDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
     // new subscription
     const subscribe = await Subscription.create({
       subscriber: user?._id,
       creator: page?._id,
       paymentInfo: payment_info,
       totalPrice: page?.subscriptionCharge,
+      startedAt: startedAtFormatted,
+      expiryDate: expiryDateFormatted,
     });
 
     res.status(201).json({
@@ -141,6 +161,25 @@ export const createSubscription = asyncHandler(async (req, res, next) => {
 export const getUserSubscriptions = asyncHandler(async (req, res, next) => {
   try {
     // user subscriptions for getting the user subscriptioins in detail
+    const userId = req.user._id;
+    const subscriptions = await Subscription.find({ subscriber: userId })
+      .populate({
+        path: 'creator',
+        select: 'name avatar description',
+      })
+      .exec();
+
+    if (!subscriptions) {
+      return res.status(404).json({
+        success: false,
+        message: 'No subscriptions found for this user.',
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: 'User subscriptions retrieved successfully.',
+      subscriptions,
+    })
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
