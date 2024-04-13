@@ -23,6 +23,7 @@ const PageSettings = () => {
   const [address, setAddress] = useState('');
   const [subscriptionCharge, setSubscriptionCharge] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState(0);
+  const [email, setEmail] = useState('')
   // redux hooks
   const dispatch = useDispatch();
   const [updatePageProfile, { isLoading: updateLoading }] =
@@ -38,12 +39,14 @@ const PageSettings = () => {
     setAddress(creator.address);
     setPhoneNumber(creator.phoneNumber);
     setSubscriptionCharge(creator.subscriptionCharge);
+    setEmail(creator.email)
   }, [
     creator.name,
     creator.description,
     creator.address,
     creator.phoneNumber,
     creator.subscriptionCharge,
+    creator.email
   ]);
 
   // Update Functions
@@ -201,6 +204,20 @@ const PageSettings = () => {
         >
           <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
             <div className="w-full pl-[3%]">
+              <label className="block pb-2">Page Email</label>
+            </div>
+            <input
+              type="email"
+              placeholder={`Choose your Page email`}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+              required
+              disabled
+            />
+          </div>
+          <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
+            <div className="w-full pl-[3%]">
               <label className="block pb-2">Page Name</label>
             </div>
             <input
@@ -272,7 +289,7 @@ const PageSettings = () => {
             <input
               type="submit"
               value="Update Page"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+              className={`${styles.input} !w-[95%] mb-4 800px:mb-0 bg-blue-600 text-white`}
               required
               readOnly
             />

@@ -37,7 +37,7 @@ subscribeRouter.get(
   getCreatorSubscriptions
 );
 subscribeRouter.delete(
-  '/cancel-subscriptions/:id',
+  '/cancel-subscription',
   isAuthenticated,
   cancelSubscriptions
 );

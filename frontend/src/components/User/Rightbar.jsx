@@ -5,10 +5,10 @@ import Loader from '../Loader';
 const Rightbar = () => {
   const { data, refetch, isLoading } = useGetSuggestedPagesQuery();
   const pages = data?.pages;
-  console.log(pages);
+  // console.log(pages);
   useEffect(() => {
     refetch();
-  }, []);
+  }, [data]);
 
   return (
     <div className="mt-4">

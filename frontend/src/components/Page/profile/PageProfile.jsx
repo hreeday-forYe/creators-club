@@ -67,12 +67,12 @@ const PageProfile = ({ user, isCreator }) => {
     useCreatePaymentIntentMutation();
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState();
-  console.log(config);
-  console.log(paymentIntentData);
+  // console.log(config);
+  // console.log(paymentIntentData);
   useEffect(() => {
     if (config) {
       const publishablekey = config?.publishablekey;
-      console.log(publishablekey);
+      // console.log(publishablekey);
       setStripePromise(loadStripe(publishablekey));
     }
     if (data) {
@@ -180,7 +180,7 @@ const PageProfile = ({ user, isCreator }) => {
               onClick={followUnfollowPage}
               disabled={followLoading}
             >
-              {following ? 'Unfollow' : 'Follow'}
+              {following ? 'Following' : 'Follow'}
             </button>
           </div>
         )}
@@ -213,7 +213,7 @@ const PageProfile = ({ user, isCreator }) => {
           <div className=" min-w-[350px] 800px:min-w-[500px]  h-auto p-6">
             {stripePromise && clientSecret && (
               <Elements stripe={stripePromise} options={{ clientSecret }}>
-                <CheckOutForm setOpenPay={setOpenPay} data={data} />
+                <CheckOutForm setOpenPay={setOpenPay} data={data} userData={user} />
               </Elements>
             )}
           </div>

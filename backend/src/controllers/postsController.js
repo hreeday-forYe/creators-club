@@ -6,12 +6,13 @@ import Page from '../models/pagesModel.js';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
 import ErrorHandler from '../utils/ErrorHandler.js';
 import User from '../models/usersModel.js';
+import Notification from '../models/notificationsModel.js';
 
 // Create Post
 export const createPost = asyncHandler(async (req, res, next) => {
   try {
     const page = await Page.findById(req.creator._id);
-    console.log(page);
+    // console.log(page);
     if (!page) {
       return next(new ErrorHandler('Page Id is invalid!', 400));
     }
@@ -27,7 +28,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
     if (title && photos) {
       // Converting the image to the array if only one image is provided
       let images = [];
-      console.log('I am here');
+      // console.log('I am here');
       if (typeof req.body.photos === 'string') {
         images.push(req.body.photos);
       } else {
@@ -50,7 +51,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
           url: result.secure_url,
         });
       }
-      console.log('image upload successfull');
+      // console.log('image upload successfull');
       // Creating the Post
       post = await Post.create({
         creator: page._id,
@@ -59,7 +60,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
         status,
       });
     } else if (title && video) {
-      console.log('or this one video');
+      // console.log('or this one video');
       post = await Post.create({
         creator: page._id,
         title,
@@ -72,7 +73,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
         title,
         status,
       });
-      console.log('this one after post in title');
+      // console.log('this one after post in title');
     }
     page.posts.push(post._id);
     await page.save();
@@ -124,11 +125,11 @@ export const getAllPosts = asyncHandler(async (req, res, next) => {
 export const deletePost = asyncHandler(async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
-    console.log(post);
+    // console.log(post);
     if (!post) {
       return next(new ErrorHandler('Post is not found with this id', 400));
     }
-    console.log(post.creator.toString(), req.creator._id.toString());
+    // console.log(post.creator.toString(), req.creator._id.toString());
     if (post.creator.toString() !== req.creator._id.toString()) {
       return next(new ErrorHandler('UnAuthorized Creator', 400));
     }
@@ -185,6 +186,17 @@ export const likeUnlikePost = asyncHandler(async (req, res, next) => {
     } else {
       post.likes.push(validId);
       await post.save();
+      // Create Notification
+      if (validId !== post?.creator) {
+        await Notification.create({
+          from: validId,
+          to: post?.creator,
+          title: 'New Like',
+          message: `New like on your post: ${post?.title}`,
+          hold: post?._id,
+        });
+      }
+
       return res.status(201).json({
         success: true,
         message: 'Post liked Successfully',
@@ -209,7 +221,7 @@ export const commentOnPost = asyncHandler(async (req, res, next) => {
     } else if (req.creator?._id) {
       validId = req.creator?._id;
     }
-    console.log(validId);
+    // console.log(validId);
     // Checking if comment already exists
     let commentIndex = -1;
     post.comments.forEach((item, index) => {
@@ -217,7 +229,7 @@ export const commentOnPost = asyncHandler(async (req, res, next) => {
         commentIndex = index;
       }
     });
-    console.log('comment: ', req.body.comment);
+    // console.log('comment: ', req.body.comment);
     // Updating the comment from the body
     if (commentIndex !== -1) {
       post.comments[commentIndex].comment = req.body.comment;
@@ -232,6 +244,17 @@ export const commentOnPost = asyncHandler(async (req, res, next) => {
         comment: req.body.comment,
       });
       await post.save();
+      // Create Notification
+      if (validId !== post?.creator) {
+        await Notification.create({
+          from: validId,
+          to: post?.creator,
+          title: 'New Comment',
+          message: `New comment on your post: ${post?.title}`,
+          hold: post?._id,
+        });
+      }
+      // send response
       res.status(201).json({
         success: true,
         messsage: 'Comment Added',
@@ -257,10 +280,6 @@ export const deleteComment = asyncHandler(async (req, res, next) => {
       validId = req.creator._id;
     } else {
       return next(new ErrorHandler('validation error in line 245', 400));
-    }
-
-    if (validId) {
-      console.log(validId);
     }
 
     // if else for post owner and comment owner
@@ -381,8 +400,8 @@ export const getPostsOfPage = asyncHandler(async (req, res, next) => {
   try {
     const pageId = req.params.id;
     const userId = req.user._id;
-    console.log(userId);
-    console.log(pageId);
+    // console.log(userId);
+    // console.log(pageId);
     let isSubscribed = false;
 
     if (userId) {

@@ -14,7 +14,7 @@ const UserSubscriptionScreen = () => {
         <div className="w-full mt-12 800px:w-[50vw]">
           <UserSubscriptions />
         </div>
-        <div className="hidden w-[25vw] border 800px:block">
+        <div className="hidden w-[25vw] 800px:block">
           <Rightbar />
         </div>
       </div>

@@ -12,6 +12,7 @@ import {
   updateProfilePicture,
   updateUserInfo,
   updateUserPassword,
+  getUserFollowings
 } from '../controllers/userControllers.js';
 import { isAuthenticated } from '../middlewares/auth.js';
 
@@ -27,6 +28,7 @@ userRouter.put('/update-user-info', isAuthenticated, updateUserInfo);
 userRouter.put('/update-password', isAuthenticated, updateUserPassword);
 userRouter.put('/update-avatar', isAuthenticated, updateProfilePicture);
 userRouter.get('/suggested-pages', isAuthenticated, getSuggestedPage);
+userRouter.get('/my-followings', isAuthenticated, getUserFollowings)
 userRouter.get('/:id', isAuthenticated, getUser);
 userRouter.put('/follow/:id', isAuthenticated, followUnfollowPage);
 export default userRouter;

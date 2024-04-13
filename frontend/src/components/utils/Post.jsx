@@ -30,8 +30,8 @@ import Loader from '../Loader';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 
 import socketIO from 'socket.io-client';
-import { socket_server_url } from '../../constants';
-const socketId = socketIO(socket_server_url, { transports: ['websocket'] });
+import { server } from '../../constants';
+const socketId = socketIO(server, { transports: ['websocket'] });
 
 const Post = ({ post, isCreator, deletePost, refetch, user }) => {
   const [liked, setLiked] = useState(false);
@@ -59,15 +59,18 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
       await likeUnlikePost(post._id).unwrap();
       setLiked(!liked);
       refetch();
-      socketId.emit('notification', {
-        title: 'liked your post',
-        message: `${user.name} just liked your post`,
-        userId: user._id,
-      });
+      if (post.likes.includes(user._id)) {
+        socketId.emit('notification', {
+          title: 'liked your post',
+          message: `${user.name} just liked your post`,
+          from: user._id,
+          to: post.creator,
+        });
+      }
       // console.log(post.likes);
     } catch (error) {
-      // toast.error(error.data.message || error.error);
-      toast.error("Can't like your own post");
+      toast.error(error.data.message || error.error);
+      // toast.error("Can't like your own post");
     }
   };
 
@@ -114,7 +117,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
   return !post ? (
     <Loader />
   ) : (
-    <div className="flex items-center  justify-center">
+    <div className="flex items-center  justify-center" key={post._id}>
       <Card className="shadow-lg mb-12 w-[90%] 800px:w-[80%]">
         <CardHeader
           avatar={
@@ -147,11 +150,11 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
             </div>
           }
         />
-        {console.log(post.photos)}
+        {/* {console.log(post.photos)} */}
         {post.photos && post.photos.length > 0 ? (
           <>
             <div>
-              <Carousel photos={post.photos} />
+              <Carousel photos={post.photos} key={post._id} />
             </div>
             <CardContent>
               <h4 className="text-black font-medium">{post.title}</h4>
@@ -194,15 +197,29 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
             >
               <LiaCommentSolid size={30} className="text-black mr-2" />
             </IconButton>
-            <form onSubmit={(e) => commentHandler(e, post)}>
+            <form
+              onSubmit={(e) => commentHandler(e, post)}
+              className="800px:block hidden"
+            >
               <Input
                 type=""
-                placeholder="comment here..."
+                placeholder="Comment here..."
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
               />
-              <Button type="submit">
-                <FaLocationArrow size={20} className="hidden 800px:inline" />
+              <Button
+                type="submit"
+                variant="success"
+                sx={{
+                  textTransform: 'capitalize',
+                  fontSize: '15px',
+                  color: '#0080FE',
+                  padding: 0,
+                  fontWeight: 'normal',
+                  marginLeft: -5,
+                }}
+              >
+                post
               </Button>
             </form>
           </div>
@@ -255,6 +272,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
                     <CommentCard
                       comment={comment}
                       isCreator={isCreator}
+                      key={comment._id}
                       user={user}
                       deleteCommentHandler={deleteCommentHandler}
                     />

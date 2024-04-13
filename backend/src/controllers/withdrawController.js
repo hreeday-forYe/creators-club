@@ -13,13 +13,13 @@ import ejs from 'ejs';
 export const createWithdrawRequest = asyncHandler(async (req, res, next) => {
   try {
     const amount = req.body.amount;
-    console.log('THis is amount', amount);
+    // console.log('THis is amount', amount);
     const data = {
       creator: req.creator,
       amount,
     };
-    console.log(req.creator.email);
-    console.log(req.creator.name);
+    // console.log(req.creator.email);
+    // console.log(req.creator.name);
     // Send mail to the creator Email
 
     // getting the current directory
@@ -99,9 +99,9 @@ export const getAllWithdrawRequest = asyncHandler(async (req, res, next) => {
 export const updateWithdrawRequest = asyncHandler(async (req, res, next) => {
   try {
     const pageId = req.body.pageId;
-    console.log('the req body 1 ', req.body);
-    console.log('Page ID', pageId);
-    console.log('Withdraw ID', req.params.id);
+    // console.log('the req body 1 ', req.body);
+    // console.log('Page ID', pageId);
+    // console.log('Withdraw ID', req.params.id);
 
     const withdraw = await Withdraw.findByIdAndUpdate(
       req.params.id,

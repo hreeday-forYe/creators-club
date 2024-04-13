@@ -116,6 +116,14 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    getCreatorsNotifications: builder.query({
+      query: () =>({
+        url: `${backend_url}/notification/get-creator-notifications`,
+        method: 'GET'
+      }),
+      keepUnusedDataFor: 5,
+    }),
+
     deletePage: builder.mutation({
       query: () => ({
         url: `${page_url}/delete-page`,
@@ -141,4 +149,5 @@ export const {
   useCreateWithdrawRequestMutation,
   useGetAllWithdrawRequestQuery,
   useUpdateWithdrawRequestMutation,
+  useGetCreatorsNotificationsQuery
 } = pagesApiSlice;

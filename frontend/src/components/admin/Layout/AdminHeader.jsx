@@ -5,11 +5,12 @@ import { FiPackage, FiShoppingBag } from 'react-icons/fi';
 import { MdOutlineLocalOffer } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Avatar } from '@mui/material';
 
 const AdminHeader = () => {
   const { authInfo } = useSelector((state) => state.auth);
   console.log(authInfo);
-  const creator = authInfo.creator;
+  const creator = authInfo.user;
   console.log(creator);
 
   return (
@@ -56,11 +57,15 @@ const AdminHeader = () => {
               className="mx-5 cursor-pointer"
             />
           </Link> */}
-          <img
-            src={`${creator?.avatar?.url}`}
-            alt=""
+          {/* <img
+            src={`${creator?.avatar?.url || 'Hello'}`}
+            alt="Hello"
             className="w-[50px] h-[50px] rounded-full object-cover"
-          />
+          /> */}
+          <Avatar alt="Cindy Baker" src={`${creator?.avatar?.url}`} >
+            {!creator?.avatar && 'A'}
+          </Avatar>
+          <span className='text-lg ml-2 font-semibold'>Admin</span>
         </div>
       </div>
     </div>

@@ -5,25 +5,37 @@ import { Link } from 'react-router-dom';
 import { MdBorderClear } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetMyPostsQuery } from '../../../redux/slices/postApiSlice';
+import { usePageProfileQuery } from '../../../redux/slices/pagesApiSlice';
 // import {useGetMySubscriptions} from '../../../redux/slices/subscriptionApiSlice.js'
 import Button from '@mui/material/Button';
 
 import { DataGrid } from '@mui/x-data-grid';
 import { setCredentials } from '../../../redux/slices/authSlice';
+import { useGetCreatorSubcriptionsQuery } from '../../../redux/slices/subscriptionApiSlice';
 
 const DashboardHero = () => {
-  
   const { authInfo } = useSelector((state) => state.auth);
   const { creator } = authInfo;
-  console.log(creator);
+  // console.log(creator);
 
   const availableBalance = creator?.availableBalance.toFixed(2);
   const { data, refetch: postRefetch } = useGetMyPostsQuery();
   const posts = data?.posts;
 
+  const { data: loadPage } = usePageProfileQuery();
+  const loadCreator = loadPage?.creator;
+  const { data: getSubscriptions, refetch: subscrptionRefetch } =
+    useGetCreatorSubcriptionsQuery();
+  // console.log(getSubscriptions);
+
+  const subscriptions = getSubscriptions?.subscriptions;
+
+  // console.log(subscriptions);
+
   useEffect(() => {
     postRefetch();
-  }, [postRefetch]);
+    subscrptionRefetch();
+  }, [postRefetch, subscrptionRefetch]);
   const columns = [
     { field: 'id', headerName: 'Subscription ID', minWidth: 150, flex: 0.8 },
 
@@ -81,14 +93,25 @@ const DashboardHero = () => {
 
   const row = [];
 
-  posts &&
-    posts.forEach((post, index) => {
-      console.log(post);
+  const formatDate = (date) => {
+    const formattedExpiryDate = new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+    return formattedExpiryDate;
+  };
+
+  subscriptions &&
+    subscriptions.forEach((subscription, index) => {
+      // console.log(subscription);
       row.push({
-        id: post._id,
+        id: subscription._id,
+        subscriberName: subscription?.subscriber?.name,
+        startedDate: formatDate(subscription.startedAt),
         // itemsQty: item.cart.reduce((acc, item) => acc + item.qty, 0),
-        total: 'US$ ' + availableBalance,
-        status: post.status,
+        total: 'US$ ' + subscription.totalPrice,
+        expiryDate: formatDate(subscription.expiryDate),
       });
     });
 
@@ -127,7 +150,7 @@ const DashboardHero = () => {
             </h3>
           </div>
           <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
-            ${availableBalance}
+            ${loadCreator?.availableBalance}
           </h5>
           <Link to="/page-withdraw-money">
             <h5 className="pt-4 pl-[2] text-[#077f9c]">Withdraw Money</h5>
@@ -144,7 +167,7 @@ const DashboardHero = () => {
             </h3>
           </div>
           <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
-            {creator.subscribers && creator.subscribers.length}
+            {subscriptions && subscriptions.length}
           </h5>
           <Link to="/page-subscribers">
             <h5 className="pt-4 pl-2 text-[#077f9c]">View Subscribers</h5>

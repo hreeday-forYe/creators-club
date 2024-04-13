@@ -141,23 +141,6 @@ const DashboardSideBar = ({ active }) => {
         </Link>
       </div>
 
-      {creator && creator.role === 'Admin' && (
-        <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
-          <Link to="/admin-dashboard" className="w-full flex items-center">
-            <MdOutlineAdminPanelSettings
-              size={30}
-              color={`${active === 8 ? 'crimson' : '#555'}`}
-            />
-            <h5
-              className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-                active === 8 ? 'text-[crimson]' : 'text-[#555]'
-              }`}
-            >
-              Admin Dashboard
-            </h5>
-          </Link>
-        </div>
-      )}
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Link to="/page-settings" className="w-full flex items-center">

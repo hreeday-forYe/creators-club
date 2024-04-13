@@ -87,6 +87,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: 'PUT',
       }),
     }),
+
+    getUserFollowings: builder.query({
+      query: () => ({
+        url: `${user_url}/my-followings`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -103,4 +110,5 @@ export const {
   useGetUserByIdQuery,
   useGetSuggestedPagesQuery,
   useFollowUnfollowPageMutation,
+  useGetUserFollowingsQuery,
 } = usersApiSlice;

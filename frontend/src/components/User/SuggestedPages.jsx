@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 const SuggestedPages = ({ creator, index }) => {
-  console.log(creator);
+  // console.log(creator);
   return (
     <Link to={`/page/${creator._id}`}>
       <div className="max-w-xs sm:max-w-sm lg:max-w-md mt-4">
@@ -31,12 +31,12 @@ const SuggestedPages = ({ creator, index }) => {
               {(creator.description && creator.description) || ''}
             </p>
             <div className="mt-4">
-              <Link
-                to="/page/:id"
+              <span
+                href={`/page/${creator._id}`}
                 className="text-blue-500 hover:text-blue-700 font-medium"
               >
                 View More
-              </Link>
+              </span>
             </div>
           </div>
         </div>

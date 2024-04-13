@@ -25,7 +25,7 @@ const isAuthenticated = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new ErrorHandler('User not found', 400));
   }
-  console.log(user);
+  // console.log(user);
   req.user = user;
   next();
 });
@@ -48,7 +48,7 @@ const isCreator = asyncHandler(async (req, res, next) => {
   if (!creator) {
     return next(new ErrorHandler('Creator Not Found', 400));
   }
-  console.log(creator);
+  // console.log(creator);
   req.creator = creator;
   next();
 });
@@ -69,12 +69,12 @@ const isUserOrCreator = asyncHandler(async (req, res, next) => {
     if (!user) {
       return next(new ErrorHandler('User not found', 400));
     }
-    console.log(user, 'From middleware');
+    // console.log(user, 'From middleware');
     req.user = user;
     next();
   } else if (creator_token) {
     const decoded = jwt.verify(creator_token, process.env.JWT_SECRET);
-    console.log(decoded);
+    // console.log(decoded);
 
     // Getting the creator from the Page
     const creator = await Page.findById(decoded.creatorId).select('-password');
@@ -83,7 +83,7 @@ const isUserOrCreator = asyncHandler(async (req, res, next) => {
     if (!creator) {
       return next(new ErrorHandler('Creator Not Found', 400));
     }
-    console.log(creator, 'Creator From middleware');
+    // console.log(creator, 'Creator From middleware');
     req.creator = creator;
     next();
   } else {
@@ -94,10 +94,10 @@ const isUserOrCreator = asyncHandler(async (req, res, next) => {
 // validate the user role
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.creator?.role || '')) {
+    if (!roles.includes(req.user?.role || '')) {
       return next(
         new ErrorHandler(
-          `Role: ${req.creator?.role} is not allowed to access this routes`,
+          `Role: ${req.user?.role} is not allowed to access this routes`,
           403
         )
       );

@@ -13,7 +13,11 @@ import { toast } from 'react-hot-toast';
 import { useProfileQuery } from '../../redux/slices/usersApiSlice';
 import Loader from '../Loader';
 
-const CheckOutForm = ({ setOpenPay, data }) => {
+import socketIO from 'socket.io-client';
+import { server } from '../../constants';
+const socketId = socketIO(server, { transports: ['websocket'] });
+
+const CheckOutForm = ({ setOpenPay, data, userData }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState('');
@@ -25,6 +29,7 @@ const CheckOutForm = ({ setOpenPay, data }) => {
   console.log(user);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  console.log(userData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +59,14 @@ const CheckOutForm = ({ setOpenPay, data }) => {
       userRefetch();
       dispatch(setCredentials({ ...user }));
       setOpenPay(false);
+      // Socket server connection
+      socketId.emit('notification', {
+        title: 'New Subscription',
+        message: `You have a new Subscription from ${userData.name}`,
+        from: userData._id,
+        to: data.creator._id,
+      });
+
       // console.log('Subscription confirmend');
       toast.success('Subscription Successfull..');
       // redirect('/page/subscribe-success');
@@ -61,7 +74,7 @@ const CheckOutForm = ({ setOpenPay, data }) => {
     if (error) {
       toast.error(error);
     }
-  }, [subscribeData, error]);
+  }, [subscribeData, error, userData]);
   return (
     <>
       <form id="payment-form" onSubmit={handleSubmit}>

@@ -12,6 +12,7 @@ import { sendToken } from '../utils/jwt.js';
 import { getUserById } from '../services/userServices.js';
 import createActivationToken from '../utils/activation.js';
 import Page from '../models/pagesModel.js';
+import Notification from '../models/notificationsModel.js';
 dotenv.config();
 
 /*
@@ -86,8 +87,8 @@ const activateUser = asyncHandler(async (req, res, next) => {
 
     const newUser = jwt.verify(activation_token, process.env.ACTIVATION_SECRET);
 
-    console.log(newUser);
-    console.log(newUser.activationCode);
+    // console.log(newUser);
+    // console.log(newUser.activationCode);
     if (newUser.activationCode !== activation_code) {
       return next(new ErrorHandler('Invalid activation Code', 400));
     }
@@ -176,7 +177,7 @@ const logoutUser = asyncHandler(async (req, res, next) => {
 const getUserProfile = asyncHandler(async (req, res, next) => {
   try {
     const userId = req.user?._id;
-    console.log('USER PROFILE:', userId);
+    // console.log('USER PROFILE:', userId);
     getUserById(userId, res, next);
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
@@ -264,7 +265,7 @@ const updateUserPassword = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.user?._id).select('+password');
 
     // When the user has created the account with the social account they cannot change the password
-    console.log(user);
+    // console.log(user);
 
     if (user?.password === undefined) {
       return next(new ErrorHandler('Invalid User', 400));
@@ -340,7 +341,7 @@ export const followUnfollowPage = asyncHandler(async (req, res, next) => {
   try {
     const pageToFollow = await Page.findById(req.params.id);
     const user = await User.findById(req.user._id);
-    console.log(pageToFollow);
+    // console.log(pageToFollow);
     if (!pageToFollow) {
       return next(new ErrorHandler('Page not found', 400));
     }
@@ -355,7 +356,7 @@ export const followUnfollowPage = asyncHandler(async (req, res, next) => {
 
       await user.save();
       await pageToFollow.save();
-      console.log('latest user', user);
+      // console.log('latest user', user);
       res.status(201).json({
         success: true,
         message: 'Page Unfollowed Successfully',
@@ -365,6 +366,14 @@ export const followUnfollowPage = asyncHandler(async (req, res, next) => {
       pageToFollow.followers.push(user._id);
       await user.save();
       await pageToFollow.save();
+
+      // Create Notification
+      await Notification.create({
+        from: user._id,
+        to: pageToFollow._id,
+        title: 'New Following',
+        message: `${user.name} started following your page`,
+      });
 
       res.status(201).json({
         success: true,
@@ -378,8 +387,23 @@ export const followUnfollowPage = asyncHandler(async (req, res, next) => {
 
 export const getUserFollowings = asyncHandler(async (req, res, next) => {
   try {
-    // #TODO:  FETCH THE USER FOLLOWINGS FROM THE USER MODEL
     const userId = req.user._id;
+
+    // Fetch the user's followings and populate additional information
+    const user = await User.findById(userId).populate(
+      'following',
+      'name avatar description followers'
+    );
+
+    // Extract the followings from the user object
+    const followings = user.following;
+    // console.log('FOLLOwings: ', followings);
+
+    res.status(200).json({
+      success: true,
+      message: 'Followings retrieved successfully',
+      followings: followings,
+    });
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
@@ -392,7 +416,7 @@ export const getSuggestedPage = asyncHandler(async (req, res, next) => {
     let pages;
     if (req.user) {
       const userId = req.user._id;
-      console.log('USERID ', userId);
+      // console.log('USERID ', userId);
       const user = await User.findById(userId);
 
       // Getting the followed and subscribed page id
@@ -404,7 +428,7 @@ export const getSuggestedPage = asyncHandler(async (req, res, next) => {
       pages = await Page.find();
     }
 
-    console.log(pages);
+    // console.log(pages);
     res.status(200).json({
       success: true,
       pages,

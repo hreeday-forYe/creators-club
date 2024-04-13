@@ -3,13 +3,15 @@ import { Outlet } from 'react-router-dom';
 import Header from './components/Header';
 import { Toaster } from 'react-hot-toast';
 import socketIO from 'socket.io-client';
-import { socket_server_url } from './constants';
+import { server } from './constants';
 
-const socketId = socketIO(socket_server_url, { transports: ['websocket'] });
+const socketId = socketIO(server, { transports: ['websocket'] });
 
 const App = () => {
+  
   useEffect(() => {
-    socketId.on('connection', () => {});
+    socketId.on('connection', () => {
+    });
   }, []);
   return (
     <>

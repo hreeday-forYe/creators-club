@@ -73,11 +73,11 @@ const createPage = asyncHandler(async (req, res, next) => {
         activationToken: activationToken.token,
       });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return next(new ErrorHandler(err.message, 400));
     }
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return next(new ErrorHandler(err.message, 400));
   }
 });
@@ -90,14 +90,14 @@ const activatePage = asyncHandler(async (req, res, next) => {
       activation_token,
       process.env.ACTIVATION_SECRET
     );
-    console.log(newCreator);
-    console.log(newCreator.activationCode);
+    // console.log(newCreator);
+    // console.log(newCreator.activationCode);
 
     if (newCreator.activationCode !== activation_code) {
       return next(new ErrorHandler('Invalid activation Code', 400));
     }
 
-    console.log(newCreator.hasOwnProperty('creator'));
+    // console.log(newCreator.hasOwnProperty('creator'));
 
     const { name, email, password, avatar, address, phoneNumber } =
       newCreator.userdata;
@@ -128,7 +128,7 @@ const activatePage = asyncHandler(async (req, res, next) => {
 
 // Login Creator Function: which logins the creator to the site
 const loginCreator = asyncHandler(async (req, res, next) => {
-  console.log('loginPage');
+  // console.log('loginPage');
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -183,7 +183,7 @@ const logoutCreator = asyncHandler(async (req, res, next) => {
       message: 'Creator logged out Successfully',
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return next(new ErrorHandler(error.message, 400));
   }
 });

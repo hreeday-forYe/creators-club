@@ -35,9 +35,19 @@ const Login = () => {
     } else if (selectedOption === 'subscriber') {
       try {
         const response = await login({ email, password }).unwrap();
-        dispatch(setCredentials({ ...response }));
-        toast.success('User Logged In Success');
-        navigate('/feed');
+        console.log(response);
+        const user = response?.user;
+        if (user && user.role === 'Admin') {
+          dispatch(setCredentials({ ...response }));
+          toast.success('Howdy admin');
+          navigate('/admin-dashboard')
+
+        }
+        else{
+          dispatch(setCredentials({ ...response }));
+          toast.success('User Logged In Success');
+          navigate('/feed');
+        }
       } catch (error) {
         toast.error(error?.data?.message || error.error);
       }
@@ -124,7 +134,7 @@ const Login = () => {
                   htmlFor="bordered-radio-1"
                   className="w-full py-4 ms-2 text-sm font-normal text-gray-600 "
                 >
-                  I'm a Subscriber
+                  I'm a User
                 </label>
               </div>
               <div className="flex items-center ps-4 mt-2 border border-gray-200 cursor-pointer rounded">

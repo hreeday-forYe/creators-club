@@ -1,5 +1,9 @@
 import express from 'express';
-import { isCreator, authorizeRoles } from '../middlewares/auth.js';
+import {
+  isCreator,
+  authorizeRoles,
+  isAuthenticated,
+} from '../middlewares/auth.js';
 import {
   createWithdrawRequest,
   getAllWithdrawRequest,
@@ -8,7 +12,7 @@ import {
 
 const withdrawRouter = express.Router();
 
-// Creator Routes 
+// Creator Routes
 withdrawRouter.post(
   '/create-withdraw-request',
   isCreator,
@@ -18,16 +22,16 @@ withdrawRouter.post(
 // Admin Routes
 withdrawRouter.get(
   '/get-all-withdraw-request',
-  isCreator,
+  isAuthenticated,
   authorizeRoles('Admin'),
   getAllWithdrawRequest
 );
 
 withdrawRouter.put(
   '/update-withdraw-request/:id',
-  isCreator,
+  isAuthenticated,
   authorizeRoles('Admin'),
   updateWithdrawRequest
 );
 
-export default withdrawRouter
+export default withdrawRouter;

@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import ejs from 'ejs';
 import sendMail from '../utils/sendMail.js';
+import Notification from '../models/notificationsModel.js';
 import dotenv from 'dotenv';
 dotenv.config();
 import stripePackage from 'stripe';
@@ -17,7 +18,7 @@ const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
 export const createSubscription = asyncHandler(async (req, res, next) => {
   try {
     const { pageId, payment_info } = req.body;
-    console.log(payment_info);
+    // console.log(payment_info);
     if (payment_info) {
       if ('id' in payment_info) {
         const paymentIntentId = payment_info.id;
@@ -108,17 +109,6 @@ export const createSubscription = asyncHandler(async (req, res, next) => {
 
     await page?.save();
 
-    //#TODO: Add notification for the creator
-    // DUMMY DATA
-    /* 
-      await Notification.create({
-        user: user?._id,
-        creator: page?._id,
-        title: "New subscription"
-        message: "You have new Subscription from ${user?.name}"
-      })
-    */
-
     // Calculate expiry date 30 days from the startedAt date
     const startedAt = new Date();
     const thirtyDaysFromStart = new Date(startedAt);
@@ -145,6 +135,16 @@ export const createSubscription = asyncHandler(async (req, res, next) => {
       totalPrice: page?.subscriptionCharge,
       startedAt: startedAtFormatted,
       expiryDate: expiryDateFormatted,
+    });
+
+    //#TODO: Add notification for the creator
+    // DUMMY DATA
+
+    await Notification.create({
+      from: user?._id,
+      to: page?._id,
+      title: 'New subscription',
+      message: `You have new Subscription from ${user?.name}`,
     });
 
     res.status(201).json({
@@ -179,7 +179,7 @@ export const getUserSubscriptions = asyncHandler(async (req, res, next) => {
       success: true,
       message: 'User subscriptions retrieved successfully.',
       subscriptions,
-    })
+    });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
@@ -189,6 +189,27 @@ export const getUserSubscriptions = asyncHandler(async (req, res, next) => {
 export const getCreatorSubscriptions = asyncHandler(async (req, res, next) => {
   try {
     // Creator subscribers list of all the users who are subscribed to creators
+    const creatorId = req.creator._id;
+    // console.log(creatorId);
+    const subscriptions = await Subscription.find({ creator: creatorId })
+      .populate({
+        path: 'subscriber',
+        select: 'name',
+      })
+      .exec();
+
+    if (!subscriptions) {
+      return res.status(404).json({
+        success: false,
+        message: 'No subscriptions found for this Creator.',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Creator subscriptions retrieved successfully.',
+      subscriptions,
+    });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
@@ -197,7 +218,94 @@ export const getCreatorSubscriptions = asyncHandler(async (req, res, next) => {
 // cancel subscriptions for user ROUTE: /cancel-subscriptions/:subscriptionsID
 export const cancelSubscriptions = asyncHandler(async (req, res, next) => {
   try {
-    // LOGIC TO CANCEL THE SUBSCRIPTIONS STATUS REMOVE THE USER FROM SUBSCRIBER LIST of creator and remove the
+    const subscription = await Subscription.findById(req.body.id);
+    // console.log(subscription);
+
+    if (!subscription) {
+      return next(new ErrorHandler('Subscription of id not found', 400));
+    }
+
+    // Get the userId and pageId
+    const userId = subscription.subscriber;
+    const pageId = subscription.creator;
+
+    // Find the related user and page documents
+    const user = await User.findById(userId);
+    const page = await Page.findById(pageId);
+
+    if (!user || !page) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'User or Creator not found' });
+    }
+
+    // template for the cancelled Subscriptioin email
+
+    const mailData = {
+      user: {
+        name: user?.name,
+      },
+      order: {
+        _id: page._id.toString().slice(0, 6),
+        creatorName: page.name,
+        price: page.subscriptionCharge,
+        date: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+      },
+    };
+
+    // getting the current directory
+    const __filename = fileURLToPath(import.meta.url);
+    const currentDirectory = path.dirname(__filename);
+
+    const mailPath = path.join(
+      currentDirectory,
+      '../mails/cancelSubscription.ejs'
+    );
+
+    // console.log('This is the mailPath', mailPath);
+    const html = await ejs.renderFile(mailPath, mailData);
+
+    // Sending the mail to the user for his subscription
+    try {
+      if (user) {
+        await sendMail({
+          email: user.email,
+          subject: 'Subscription Cancelled',
+          template: 'cancelSubscription.ejs',
+          data: mailData,
+        });
+      }
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+
+    user.subscriptions.pull(pageId);
+    page.subscribers.pull(userId);
+
+    page.availableBalance -= subscription.totalPrice;
+
+    // create Notification
+    await Notification.create({
+      from: user._id,
+      to: page._id,
+      title: 'Cancelled Subscription',
+      message: `${user.name} cancelled their subscription`,
+    });
+
+    // Save the changes to both the user and page documents
+    await user.save();
+    await page.save();
+
+    // Delete the subscription document
+    await Subscription.deleteOne({ _id: subscription._id });
+
+    res
+      .status(200)
+      .json({ success: true, message: 'Subscription canceled successfully' });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
@@ -228,7 +336,7 @@ export const sendStripePublishableKey = asyncHandler(async (req, res) => {
 // New Payment
 export const newPayment = asyncHandler(async (req, res, next) => {
   try {
-    console.log('AMOUNT:', req.body.amount);
+    // console.log('AMOUNT:', req.body.amount);
     const user = await User.findById(req.user._id);
     const myPayment = await stripe.paymentIntents.create({
       amount: req.body.amount,

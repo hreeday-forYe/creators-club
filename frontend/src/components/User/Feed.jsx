@@ -6,20 +6,21 @@ import { useSelector } from 'react-redux';
 
 const Feed = () => {
   const { data, isLoading, refetch } = usePostsOfFollowingsQuery();
+  // console.log(data);
   const posts = data?.posts;
-  console.log(posts);
+  // console.log(posts);
   const { authInfo } = useSelector((state) => state.auth);
-  console.log(authInfo);
+  // console.log(authInfo);
   const user = authInfo.user;
   useEffect(() => {
     refetch();
   }, []);
   return isLoading ? (
     <Loader />
-  ) : posts[0] ? (
+  ) : posts ? (
     <div className="w-[80vw] 800px:w-full p-1 800px:p-4">
-      {posts.map((post) => {
-        return <Post post={post} user={user} refetch={refetch} />;
+      {posts.map((post, index) => {
+        return <Post post={post} user={user} refetch={refetch} key={index} />;
       })}
     </div>
   ) : (

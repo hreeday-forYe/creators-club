@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import { useGetUserSubscriptionsQuery } from '../../redux/slices/subscriptionApiSlice';
+import React, { useEffect, useState } from 'react';
+import {
+  useGetUserSubscriptionsQuery,
+  useCancelSubcriptionsMutation,
+} from '../../redux/slices/subscriptionApiSlice';
 import { Link } from 'react-router-dom';
-import { Dialog } from '@mui/material';
+import { Dialog, Avatar } from '@mui/material';
+import { toast } from 'react-hot-toast';
 import Loader from '../Loader';
 const UserSubscriptions = () => {
   // Get the user Subscriptions Creators
-  const { data: subscriptions, isLoading } = useGetUserSubscriptionsQuery();
-  console.log(subscriptions);
+  const {
+    data: subscriptions,
+    isLoading,
+    refetch,
+  } = useGetUserSubscriptionsQuery();
+  // console.log(subscriptions);
   const userSubscriptions = subscriptions?.subscriptions;
-  console.log(userSubscriptions);
+  // console.log(userSubscriptions);
   const formatDate = (date) => {
     const formattedExpiryDate = new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -18,13 +26,22 @@ const UserSubscriptions = () => {
     return formattedExpiryDate;
   };
 
+  const [cancelSubscription, { isLoading: cancelLoading }] =
+    useCancelSubcriptionsMutation();
   const [open, setOpen] = useState(false);
 
-  const handleSubmit = (subscriptionId, pageId) => {
-    const confirm = confirm(
-      'Are you Sure You want to cancel the subscription? '
-    );
+  const handleSubmit = async (subscriptionId) => {
+    if (window.confirm('Are you sure want to Cancel this subsription?')) {
+      try {
+        await cancelSubscription(subscriptionId);
+        toast.success('Subscription Cancelled successfully');
+        refetch();
+      } catch (error) {
+        toast.error(error.message || error.error);
+      }
+    }
   };
+
   return (
     <div>
       <h1 className="font-Roboto text-xl">User Subscriptions</h1>
@@ -39,20 +56,22 @@ const UserSubscriptions = () => {
           content
         </p>
       )}
-      <div className="border mr-4 800px:ml-0 mt-4">
+      {cancelLoading && <Loader />}
+      <div className="mr-4 800px:ml-0 mt-4">
         {isLoading && <Loader />}
         {userSubscriptions ? (
           userSubscriptions.map((subscription) => (
             <div
-              className="w-[100%] bg-white shadow-md rounded-lg overflow-hidden"
+              className="w-[100%] bg-white shadow-sm rounded-lg border-b mb-4 overflow-hidden"
               key={subscription._id}
             >
               <div className="p-4">
                 <div className="flex items-start">
-                  <img
-                    className="w-12 h-12 rounded-full mr-4 object-cover"
-                    src={subscription.creator.avatar.url}
-                    alt="Avatar"
+                  <Avatar
+                    sx={{ width: 45, height: 45, backgroundColor: '#FFA500' }}
+                    alt="Jack Sparrow"
+                    src={subscription?.creator?.avatar?.url}
+                    className="hover:animate-pulse transition duration-50 mr-2"
                   />
                   <div>
                     <p className="font-semibold text-gray-800">
@@ -75,7 +94,7 @@ const UserSubscriptions = () => {
                     Profile
                   </Link>
                   <button
-                    onClick={() => setOpen(!open)}
+                    onClick={(e) => handleSubmit(subscription._id)}
                     className="text-red-500 font-semibold rounded-md border-red-500 border-2 p-2"
                   >
                     Cancel Subscription
@@ -102,7 +121,10 @@ const UserSubscriptions = () => {
                 will also lose access to creator's private posts
               </p>
               <div className="flex items-center justify-center gap-12 mt-4">
-                <button className="bg-red-500 p-2 text-white rounded-md hover:shadow-2xl hover:bg-red-700 transition duration-300">
+                <button
+                  className="bg-red-500 p-2 text-white rounded-md hover:shadow-2xl hover:bg-red-700 transition duration-300"
+                  onClick={() => setConfirm(true)}
+                >
                   I'm Sure
                 </button>
                 <button

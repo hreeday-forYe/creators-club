@@ -42,6 +42,16 @@ export const subscriptionApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
+
+    cancelSubcriptions: builder.mutation({
+      query: (id) => ({
+        url: `${subscribe_url}/cancel-subscription`,
+        method: 'DELETE',
+        body: {
+          id: id,
+        },
+      }),
+    }),
   }),
 });
 
@@ -50,5 +60,6 @@ export const {
   useGetStripePublishableKeyQuery,
   useCreatePaymentIntentMutation,
   useGetUserSubscriptionsQuery,
-  useGetCreatorSubcriptionsQuery
+  useGetCreatorSubcriptionsQuery,
+  useCancelSubcriptionsMutation,
 } = subscriptionApiSlice;

@@ -9,7 +9,7 @@ import '../../index.css';
 import 'swiper/css';
 import 'swiper/css/pagination';
 const Carousel = ({ photos }) => {
-  console.log(photos[0]);
+  // console.log(photos[0]);
   return (
     <>
       <Swiper
@@ -21,6 +21,7 @@ const Carousel = ({ photos }) => {
         }}
         modules={[Pagination]}
         className="mySwiper"
+        // key={index}
       >
         {photos.map((photo, index) => (
           <>

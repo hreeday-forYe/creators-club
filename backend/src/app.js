@@ -9,6 +9,7 @@ import pageRouter from './routes/pageRoutes.js';
 import postRouter from './routes/postRoutes.js';
 import withdrawRouter from './routes/withdrawRoutes.js';
 import subscribeRouter from './routes/subscribeRoutes.js';
+import notificationRouter from './routes/notificationRoutes.js';
 const app = express();
 
 // Configuring accepting the json
@@ -45,6 +46,7 @@ app.use('/api/v1/page', pageRouter);
 app.use('/api/v1/post', postRouter);
 app.use('/api/v1/subscribe', subscribeRouter);
 app.use('/api/v1/withdraw', withdrawRouter);
+app.use('/api/v1/notification', notificationRouter);
 
 // TEST ROUTES
 app.get('/test', (req, res, next) => {

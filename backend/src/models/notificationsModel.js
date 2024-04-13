@@ -1,13 +1,35 @@
 import mongoose from 'mongoose';
 
-const notificationSchema = new mongoose.Schema({
-  user: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
-  recipients: [mongoose.Types.ObjectId],
-  url: { type: String },
-  text: String,
-  content: String,
-  image: String,
-  isRead: { type: Boolean, default: false },
-});
+const notificationSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    message: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      required: true,
+      default: 'unread',
+    },
+    from: {
+      type: String,
+      required: true,
+    },
+    to: {
+      type: String,
+      required: true,
+    },
+    hold: {
+      type: String,
+    },
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('Notify', notificationSchema);
+const Notification = mongoose.model('Notification', notificationSchema);
+
+export default Notification;

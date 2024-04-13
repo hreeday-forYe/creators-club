@@ -20,9 +20,9 @@ const UserProfile = () => {
   const user = data?.user;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState();
-  const [oldPassword, setOldPassword] = useState();
-  const [newPassword, setNewPassword] = useState();
+  const [password, setPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [avatar, setAvatar] = useState(null);
   const [passwordDialog, setPasswordDialog] = useState(false);
   const dispatch = useDispatch();
@@ -89,7 +89,7 @@ const UserProfile = () => {
     refetch();
     setName(user?.name);
     setEmail(user?.email);
-    setPassword('')
+    setPassword('');
   }, [user]);
 
   return (
@@ -173,20 +173,6 @@ const UserProfile = () => {
         >
           <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
             <div className="w-full pl-[3%]">
-              <label className="block pb-2">Full Name:</label>
-            </div>
-            <input
-              type="name"
-              placeholder={`Choose your Page Name`}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-              required
-            />
-          </div>
-
-          <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
-            <div className="w-full pl-[3%]">
               <label className="block pb-2">Email Address</label>
             </div>
             <input
@@ -194,6 +180,20 @@ const UserProfile = () => {
               placeholder={'Enter your address'}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className={`${styles.input} !w-[95%] mb-4 800px:mb-0 border-2`}
+              required
+              disabled
+            />
+          </div>
+          <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
+            <div className="w-full pl-[3%]">
+              <label className="block pb-2">Full Name:</label>
+            </div>
+            <input
+              type="name"
+              placeholder={`Choose your Name`}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
               required
             />
