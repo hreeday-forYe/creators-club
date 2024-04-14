@@ -26,10 +26,10 @@ const CheckOutForm = ({ setOpenPay, data, userData }) => {
     { data: subscribeData, error, isLoading: subscribeLoading },
   ] = useCreateSubscriptionMutation();
   const { data: user, refetch: userRefetch } = useProfileQuery();
-  console.log(user);
+  // console.log(user);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  console.log(userData);
+  // console.log(userData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

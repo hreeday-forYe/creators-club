@@ -3,10 +3,15 @@ import {
   useGetUserSubscriptionsQuery,
   useCancelSubcriptionsMutation,
 } from '../../redux/slices/subscriptionApiSlice';
+import { useProfileQuery } from '../../redux/slices/usersApiSlice';
 import { Link } from 'react-router-dom';
 import { Dialog, Avatar } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import Loader from '../Loader';
+import socketIO from 'socket.io-client';
+import { server } from '../../constants';
+const socketId = socketIO(server, { transports: ['websocket'] });
+
 const UserSubscriptions = () => {
   // Get the user Subscriptions Creators
   const {
@@ -17,6 +22,9 @@ const UserSubscriptions = () => {
   // console.log(subscriptions);
   const userSubscriptions = subscriptions?.subscriptions;
   // console.log(userSubscriptions);
+
+  const { data: user, isLoading: userLoading } = useProfileQuery();
+  // console.log(user);
   const formatDate = (date) => {
     const formattedExpiryDate = new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -35,6 +43,12 @@ const UserSubscriptions = () => {
       try {
         await cancelSubscription(subscriptionId);
         toast.success('Subscription Cancelled successfully');
+        socketId.emit('notification', {
+          title: 'subscription Cancellation',
+          message: `${user?.user?.name} just liked your post`,
+          from: user?.user?._id,
+          to: userSubscriptions.creator._id,
+        });
         refetch();
       } catch (error) {
         toast.error(error.message || error.error);

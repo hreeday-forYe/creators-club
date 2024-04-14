@@ -15,6 +15,9 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckOutForm from '../../utils/CheckOutForm';
 import { TbMessage } from 'react-icons/tb';
+import socketIO from 'socket.io-client';
+import { server } from '../../../constants';
+const socketId = socketIO(server, { transports: ['websocket'] });
 
 const PageProfile = ({ user, isCreator }) => {
   // Getting the user details based on the id;
@@ -22,10 +25,10 @@ const PageProfile = ({ user, isCreator }) => {
 
   // Get the page Information using the Id
   const { data, refetch } = useGetPageInfoQuery(pageId);
-  console.log(data);
+  // console.log(data);
   const creator = data?.creator;
-  console.log(creator);
-  console.log(user);
+  // console.log(creator);
+  // console.log(user);
   // Using the follow unfollow query
   const [following, setFollowing] = useState(
     creator?.followers?.includes(user?._id)
@@ -41,6 +44,14 @@ const PageProfile = ({ user, isCreator }) => {
   const followUnfollowPage = async (e) => {
     try {
       await followUnfollow({ pageId }).unwrap();
+      if (!creator.followers.includes(user._id)) {
+        socketId.emit('notification', {
+          title: 'New following',
+          message: `You have a new following from ${user.name}`,
+          from: user._id,
+          to: creator._id,
+        });
+      }
       refetch();
     } catch (error) {
       toast.error(error?.data?.message || error.error);
@@ -213,7 +224,11 @@ const PageProfile = ({ user, isCreator }) => {
           <div className=" min-w-[350px] 800px:min-w-[500px]  h-auto p-6">
             {stripePromise && clientSecret && (
               <Elements stripe={stripePromise} options={{ clientSecret }}>
-                <CheckOutForm setOpenPay={setOpenPay} data={data} userData={user} />
+                <CheckOutForm
+                  setOpenPay={setOpenPay}
+                  data={data}
+                  userData={user}
+                />
               </Elements>
             )}
           </div>

@@ -188,11 +188,13 @@ export const likeUnlikePost = asyncHandler(async (req, res, next) => {
       await post.save();
       // Create Notification
       if (validId !== post?.creator) {
+        const user = await User.findById(validId);
+
         await Notification.create({
           from: validId,
           to: post?.creator,
           title: 'New Like',
-          message: `New like on your post: ${post?.title}`,
+          message: `${user.name} liked on your post: ${post?.title}`,
           hold: post?._id,
         });
       }
@@ -246,11 +248,12 @@ export const commentOnPost = asyncHandler(async (req, res, next) => {
       await post.save();
       // Create Notification
       if (validId !== post?.creator) {
+        const user = await User.findById(validId);
         await Notification.create({
           from: validId,
           to: post?.creator,
           title: 'New Comment',
-          message: `New comment on your post: ${post?.title}`,
+          message: `${user.name} commented on your post: ${post?.title}`,
           hold: post?._id,
         });
       }

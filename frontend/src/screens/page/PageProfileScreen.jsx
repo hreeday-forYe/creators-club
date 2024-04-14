@@ -8,7 +8,7 @@ import Sidebar from '../../components/User/Sidebar';
 import { useParams } from 'react-router-dom';
 const PageProfileScreen = () => {
   const { authInfo } = useSelector((state) => state.auth);
-  console.log(authInfo);
+  // console.log(authInfo);
   const { id: pageId } = useParams();
   const [isCreator, setIsCreator] = useState(false);
   useEffect(() => {

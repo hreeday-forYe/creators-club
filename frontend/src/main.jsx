@@ -9,31 +9,40 @@ import {
   Router,
   RouterProvider,
 } from 'react-router-dom';
+
+// Anyone Routes
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/auth/LoginScreen';
 import RegisterScreen from './screens/auth/RegisterScreen';
 import CreatePageScreen from './screens/auth/CreatePageScreen';
 import VerificationScreen from './screens/auth/VerificationScreen';
-import PageDashboardScreen from './screens/page/PageDashboardScreen';
-import UserFeedScreen from './screens/users/UserFeedScreen';
-import UserProfileScreen from './screens/users/UserProfileScreen';
-import PageProfileScreen from './screens/page/PageProfileScreen';
-// import CreatePost from './components/main/CreatePost';
 
-import { Provider } from 'react-redux';
-import store from './redux/store';
+// Creator Routes
+import PageDashboardScreen from './screens/page/PageDashboardScreen';
+import PageProfileScreen from './screens/page/PageProfileScreen';
 import CreatePostScreen from './screens/page/CreatePostScreen';
 import GetAllPostsScreen from './screens/page/GetAllPostsScreen';
 import PageAllSubscribersScreen from './screens/page/PageAllSubscribersScreen';
 import PageSettingsScreen from './screens/page/PageSettingsScreen';
 import PageWithdrawMoneyScreen from './screens/page/PageWithdrawMoneyScreen';
-import SubscribePageScreen from './screens/users/SubscribePageScreen';
+
+// User Routes
+import UserFeedScreen from './screens/users/UserFeedScreen';
+import UserProfileScreen from './screens/users/UserProfileScreen';
 import UserSubscriptionScreen from './screens/users/UserSubscriptionScreen';
 import UserFollowingsScreen from './screens/users/UserFollowingsScreen';
+import ExploreScreen from './screens/ExploreScreen';
+
+
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 // ADMIN SCREENS 
 import AdminDashboardScreen from './screens/admin/AdminDashboardScreen';
 import AdminWithdrawRequestScreen from './screens/admin/AdminWithdrawRequestScreen'
+
+
+
 
 
 const router = createBrowserRouter(
@@ -60,14 +69,12 @@ const router = createBrowserRouter(
         element={<PageWithdrawMoneyScreen />}
       ></Route>
       <Route path="/page/:id" element={<PageProfileScreen />}></Route>
-      <Route
-        path="/page/subscribe/:id"
-        element={<SubscribePageScreen />}
-      ></Route>
+      
       <Route
         path="/my-subscriptions"
         element={<UserSubscriptionScreen />}
       ></Route>
+      <Route path='/explore' element={<ExploreScreen/>}></Route>
       <Route path="/my-followings" element={<UserFollowingsScreen />}></Route>
       <Route path='/admin-withdraw-request' element={<AdminWithdrawRequestScreen/>}></Route>
     </Route>

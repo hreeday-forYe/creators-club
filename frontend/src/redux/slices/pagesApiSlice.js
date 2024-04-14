@@ -109,7 +109,7 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
     }),
 
     updateWithdrawRequest: builder.mutation({
-      query: ({withdrawId, pageId}) => ({
+      query: ({ withdrawId, pageId }) => ({
         url: `${backend_url}/withdraw/update-withdraw-request/${withdrawId}`,
         method: 'PUT',
         body: { pageId: pageId },
@@ -117,13 +117,19 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
     }),
 
     getCreatorsNotifications: builder.query({
-      query: () =>({
+      query: () => ({
         url: `${backend_url}/notification/get-creator-notifications`,
-        method: 'GET'
+        method: 'GET',
       }),
       keepUnusedDataFor: 5,
     }),
 
+    updateCreatorsNotifications: builder.mutation({
+      query: ({ id }) => ({
+        url: `${backend_url}/notification/update-creator-notifications/${id}`,
+        method: 'PUT',
+      }),
+    }),
     deletePage: builder.mutation({
       query: () => ({
         url: `${page_url}/delete-page`,
@@ -149,5 +155,6 @@ export const {
   useCreateWithdrawRequestMutation,
   useGetAllWithdrawRequestQuery,
   useUpdateWithdrawRequestMutation,
-  useGetCreatorsNotificationsQuery
+  useGetCreatorsNotificationsQuery,
+  useUpdateCreatorsNotificationsMutation
 } = pagesApiSlice;

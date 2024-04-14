@@ -38,7 +38,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
   const [comment, setComment] = useState('');
   const [commentDialog, setCommentDialog] = useState(false);
 
-  const [likeUnlikePost, { isLoading: likeLoading }] =
+  const [likeUnlikePost, { isLoading: likeLoading, isSuccess }] =
     useLikeUnlikePostMutation();
   const [commentOnPost] = useCreateCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
@@ -50,23 +50,28 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
     } else {
       setLiked(false);
     }
-  }, [post]);
-  // console.log(user);
-  // console.log(post.comments);
-  // console.log(user._id);
-  const likeUnlikeHandler = async (post) => {
-    try {
-      await likeUnlikePost(post._id).unwrap();
-      setLiked(!liked);
-      refetch();
+    if (isSuccess) {
       if (post.likes.includes(user._id)) {
         socketId.emit('notification', {
           title: 'liked your post',
           message: `${user.name} just liked your post`,
           from: user._id,
-          to: post.creator,
+          to: post.creator._id,
         });
       }
+      refetch();
+    }
+  }, [post, isSuccess]);
+
+  
+  // console.log(user);
+  // console.log(post.creator);
+  // console.log(user._id);
+  const likeUnlikeHandler = async (post) => {
+    try {
+      await likeUnlikePost(post._id).unwrap();
+      setLiked(!liked);
+
       // console.log(post.likes);
     } catch (error) {
       toast.error(error.data.message || error.error);

@@ -6,26 +6,27 @@ import Post from '../../utils/Post';
 import Loader from '../../Loader';
 const PageProfileData = () => {
   const { id: pageId } = useParams();
-  console.log(pageId);
+  // console.log(pageId);
   const { data, isLoading, refetch } = usePagePostsQuery(pageId);
   let posts = data?.posts;
-  console.log(posts);
+  // console.log(posts);
   const { authInfo } = useSelector((state) => state.auth);
-  console.log(authInfo);
+  // console.log(authInfo);
   const user = authInfo?.user;
   return (
     <div className="w-[80vw] 800px:p-8 flex flex-col items-center">
-      {/* <h1 className="mb-4 text-2xl font-semibold text-center 800px:text-start">
-        Page Posts
-      </h1> */}
-      {isLoading ? (
-        <Loader />
-      ) : (
+      {isLoading && <Loader />}
+
+      {posts?.length > 0 ? (
         <div className=" w-full 800px:w-[55vw]">
-          {posts.map((post) => {
-            return <Post post={post} refetch={refetch} user={user} />;
+          {posts.map((post, index) => {
+            return (
+              <Post post={post} refetch={refetch} user={user} key={index} />
+            );
           })}
         </div>
+      ) : (
+        <p className="font-medium text-gray-500 text-lg">User has no posts</p>
       )}
     </div>
   );

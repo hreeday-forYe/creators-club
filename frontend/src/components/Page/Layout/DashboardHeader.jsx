@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar, Dialog } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { IoNotificationsOutline } from 'react-icons/io5';
-import { useGetCreatorsNotificationsQuery } from '../../../redux/slices/pagesApiSlice';
+import {
+  useGetCreatorsNotificationsQuery,
+  useUpdateCreatorsNotificationsMutation,
+} from '../../../redux/slices/pagesApiSlice';
 import { formatDistanceToNow, format } from 'date-fns';
 import socketIO from 'socket.io-client';
 import { socket_server_url } from '../../../constants';
+import notification from '../../../assets/notification.mp3';
 const socketId = socketIO(socket_server_url, { transports: ['websocket'] });
 
 const DashboardHeader = () => {
@@ -20,8 +24,41 @@ const DashboardHeader = () => {
   // Handle Notifications
   const { data, refetch, isLoading } = useGetCreatorsNotificationsQuery();
 
-  const notifications = data?.notifications;
-  console.log(notifications);
+  const [updateNotificationStatus, { isSuccess }] =
+    useUpdateCreatorsNotificationsMutation();
+
+  const [notifications, setNotifications] = useState([]);
+  // console.log(notifications);
+
+  const [audio] = useState(new Audio(notification));
+
+  const playerNotificationSound = () => {
+    audio.play();
+  };
+
+  useEffect(() => {
+    if (data) {
+      setNotifications(
+        data.notifications.filter((item) => item.status === 'unread')
+      );
+    }
+    audio.load();
+    if (isSuccess) {
+      refetch();
+    }
+  }, [data, isSuccess]);
+
+  useEffect(() => {
+    socketId.on('newNotification', (data) => {
+      refetch();
+      playerNotificationSound();
+    });
+  }, []);
+
+  //  handle notification status
+  const changeNotificationStatus = async (id) => {
+    await updateNotificationStatus({ id }).unwrap();
+  };
 
   // format date and time
   const timeAgo = (getDate) => {
@@ -46,7 +83,7 @@ const DashboardHeader = () => {
           >
             <IoNotificationsOutline size={30} />
             <span className="absolute -top-2 -right-2 bg-blue-500 font-medium rounded-full w-[20px] h-[20px] text-[12px] flex items-center justify-center text-white">
-              {notifications.length}
+              {notifications?.length}
             </span>
           </div>
           {open && (
@@ -59,7 +96,12 @@ const DashboardHeader = () => {
                   <div className="border-b-2 border-gray-300" key={index}>
                     <div className="w-full flex items-center justify-between p-2">
                       <p className="font-medium">{notification?.title}</p>
-                      <p className="cursor-pointer hover:text-blue-500 text-blue-900">
+                      <p
+                        className="cursor-pointer hover:text-blue-500 text-blue-900"
+                        onClick={() =>
+                          changeNotificationStatus(notification._id)
+                        }
+                      >
                         Mark as read
                       </p>
                     </div>
