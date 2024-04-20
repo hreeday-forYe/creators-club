@@ -38,34 +38,39 @@ const UserSubscriptions = () => {
     useCancelSubcriptionsMutation();
   const [open, setOpen] = useState(false);
 
-  const handleSubmit = async (subscriptionId) => {
+  const handleSubmit = async (subscription) => {
     if (window.confirm('Are you sure want to Cancel this subsription?')) {
       try {
-        await cancelSubscription(subscriptionId);
+        await cancelSubscription(subscription._id);
         toast.success('Subscription Cancelled successfully');
         socketId.emit('notification', {
           title: 'subscription Cancellation',
           message: `${user?.user?.name} just liked your post`,
           from: user?.user?._id,
-          to: userSubscriptions.creator._id,
+          to: subscription?.creator._id,
         });
+        // Cannot read properties of undefined (reading '_id')
         refetch();
       } catch (error) {
         toast.error(error.message || error.error);
       }
     }
   };
+  useEffect(()=>{
+    window.scrollTo(0, 0);
+  },[])
 
   return (
     <div>
       <h1 className="font-Roboto text-xl">User Subscriptions</h1>
-      {userSubscriptions ? (
+      {userSubscriptions && userSubscriptions.length > 0 ? (
         <p className="text-gray-600 mt-2 text-sm">
           You're subscribed to these creators exclusively, you can also view
           their private posts along with public ones
         </p>
       ) : (
-        <p>
+        <p className='text-gray-600 mt-2 text-sm'>
+          You haven't subscribed to any creators just yet,
           Subscribe to some users to view their private posts and support their
           content
         </p>
@@ -108,10 +113,10 @@ const UserSubscriptions = () => {
                     Profile
                   </Link>
                   <button
-                    onClick={(e) => handleSubmit(subscription._id)}
-                    className="text-red-500 font-semibold rounded-md border-red-500 border-2 p-2"
+                    onClick={(e) => handleSubmit(subscription)}
+                    className="text-red-500 font-semibold rounded-md  border-red-500 border-2 p-2"
                   >
-                    Cancel Subscription
+                    Cancel subscription
                   </button>
                 </div>
               </div>

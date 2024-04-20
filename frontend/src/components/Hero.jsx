@@ -8,19 +8,19 @@ import hero from '../assets/hero.png';
 const Hero = () => {
   const notify = () => toast.success('Here is your toast.');
   return (
-    <section className="bg-white">
+    <section className="bg-[#E8EDFB]">
       <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
         <div className="mr-auto place-self-center lg:col-span-7">
-          <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl">
-            Make money directly from what you do
+          <h1 className="max-w-2xl mb-4 text-4xl font-semibold font-Poppins tracking-tight leading-none md:text-5xl xl:text-6xl">
+            Make money directly from your content
           </h1>
-          <p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl">
+          <p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 font-Poppins md:text-lg lg:text-xl">
             Creators Club empowers content creators and influencers start their
             own subscription page and turn their passion into income.
           </p>
           <Link
             to={'/create-page'}
-            className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-blue-700 transition duration-200 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
+            className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-blue-600 transition duration-200 hover:bg-blue-800 hover:scale-105 focus:ring-4 focus:ring-blue-300 font-Poppins"
           >
             Create Your Page
             <svg
@@ -38,13 +38,35 @@ const Hero = () => {
           </Link>
           <Link
             to={'/explore'}
-            className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-900 border transition duration-200 border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100"
+            className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-blue-600 border-blue-600 border-2 transition duration-200 hover:scale-105 hover:shadow-md rounded-lg focus:ring-4 font-Poppins  focus:ring-gray-100"
           >
             Explore Creators
           </Link>
         </div>
         <div className="sm:w-50% lg:mt-0 lg:col-span-5 lg:flex">
           <img src={hero} alt="hero" />
+        </div>
+      </div>
+      <div className=" rounded-lg shadow-md p-6 mb-8">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="p-4 border border-gray-200 rounded-lg">
+            <h3 className="text-lg font-semibold mb-2">Create Your Page</h3>
+            <p className="text-gray-600">
+              Start your own subscription page and monetize your content.
+            </p>
+          </div>
+          <div className="p-4 border border-gray-200 rounded-lg">
+            <h3 className="text-lg font-semibold mb-2">Explore Creators</h3>
+            <p className="text-gray-600">
+              Discover a variety of creators and their content.
+            </p>
+          </div>
+          <div className="p-4 border border-gray-200 rounded-lg">
+            <h3 className="text-lg font-semibold mb-2">Earn Money</h3>
+            <p className="text-gray-600">
+              Turn your passion into income with Creators Club.
+            </p>
+          </div>
         </div>
       </div>
     </section>

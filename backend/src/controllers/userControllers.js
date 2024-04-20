@@ -35,8 +35,9 @@ const registerUser = asyncHandler(async (req, res, next) => {
       return next(new ErrorHandler('Name cannot be empty', 400));
     }
     const isEmailExist = await User.findOne({ email });
+    const isPageExist = await Page.findOne({ email });
 
-    if (isEmailExist) {
+    if (isEmailExist || isPageExist) {
       return next(new ErrorHandler('Email already exists', 400));
     }
     // putting the destructured object variable in one object known as user
@@ -96,8 +97,9 @@ const activateUser = asyncHandler(async (req, res, next) => {
     const { name, email, password } = newUser?.userdata;
 
     const existUser = await User.findOne({ email });
+    const existPage = await Page.findOne({ email });
 
-    if (existUser) {
+    if (existUser || existPage) {
       return next(new ErrorHandler('Email already exits', 400));
     }
 

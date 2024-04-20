@@ -11,6 +11,7 @@ import Notification from '../models/notificationsModel.js';
 import dotenv from 'dotenv';
 dotenv.config();
 import stripePackage from 'stripe';
+import cron from 'node-cron'
 const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
 
 // Create SUBSCRIPTION FUNCTION  USER
@@ -288,6 +289,10 @@ export const cancelSubscriptions = asyncHandler(async (req, res, next) => {
 
     page.availableBalance -= subscription.totalPrice;
 
+    if(page.availableBalance < 0){
+      page.availableBalance = 0
+    }
+
     // create Notification
     await Notification.create({
       from: user._id,
@@ -365,5 +370,95 @@ export const newPayment = asyncHandler(async (req, res, next) => {
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+
+
+// Cron job to handle subscription expiry
+cron.schedule('0 0 0 * * *', async () => {
+  try {
+    // Get the current date
+    const currentDate = new Date();
+
+    // Find subscriptions that have expiryDate less than or equal to the current date
+    const expiredSubscriptions = await Subscription.find({
+      expiryDate: { $lte: currentDate },
+    });
+
+    // Iterate through expired subscriptions
+    for (const subscription of expiredSubscriptions) {
+      // Remove the subscription from the user's subscriptions array
+      const user = await User.findById(subscription.subscriber._id);
+      const page = await Page.findById(subscription.creator._id);
+      
+      // Removing the subscriptions and subscribers
+      user.subscriptions.pull(page._id);
+      page.subscribers.pull(user._id);
+      await user.save();
+      await creator.save();
+
+          // template for the expiry subscriptions email
+    const mailData = {
+      user: {
+        name: user?.name,
+      },
+      order: {
+        _id: page._id.toString().slice(0, 6),
+        creatorName: page.name,
+        price: page.subscriptionCharge,
+        date: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+      },
+    };
+
+    // getting the current directory
+    const __filename = fileURLToPath(import.meta.url);
+    const currentDirectory = path.dirname(__filename);
+
+    const mailPath = path.join(
+      currentDirectory,
+      '../mails/expirySubscriptions.ejs'
+    );
+
+    // console.log('This is the mailPath', mailPath);
+    const html = await ejs.renderFile(mailPath, mailData);
+
+
+      // Create mail for the user 
+    try {
+      if (user) {
+        await sendMail({
+          email: user.email,
+          subject: 'Subscription Expired',
+          template: 'expirySubscriptions.ejs',
+          data: mailData,
+        });
+      }
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+
+
+
+      // Create notification for the creator
+      await Notification.create({
+        from: user._id,
+        to: page._id,
+        title: 'Subscription Expired',
+        message: `${user.name}'s subscription has expired`,
+      });
+
+      // Delete the subscription document
+    await Subscription.deleteOne({ _id: subscription._id });
+    }
+
+    console.log('Expired subscriptions handled successfully');
+  } catch (error) {
+    console.error('Error handling expired subscriptions:', error);
+    
   }
 });

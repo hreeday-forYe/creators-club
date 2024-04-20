@@ -128,12 +128,12 @@ const CreatePost = () => {
               </label>
             </div>
 
-            <div className="mt-4">
+            <div className="mt-8">
               <input
                 type="submit"
                 value="Upload"
                 disabled={isLoading}
-                className="mt-2 cursor-pointer appearance-none text-center block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-4 cursor-pointer appearance-none text-center block px-3 h-[35px] border border-gray-300 bg-blue-600 text-white rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm hover:bg-blue-800 trasnsition duration-500"
               />
             </div>
           </div>

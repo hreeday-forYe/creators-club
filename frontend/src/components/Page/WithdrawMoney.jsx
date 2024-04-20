@@ -123,7 +123,7 @@ const WithdrawMoney = () => {
   return (
     <div className="w-full p-3 800px:p-8">
       <div className="w-full h-[70vh] p-8">
-        <h1 className="text-2xl font-semibold">WithDraw Your Money</h1>
+        <h1 className="text-2xl font-normal font-Poppins">Withdraw Your Money</h1>
         <div className="w-full bg-white h-[50vh] rounded flex items-center justify-center flex-col">
           <h5 className="text-[20px] pb-4">
             Available Balance: ${creator?.availableBalance.toFixed(2)}

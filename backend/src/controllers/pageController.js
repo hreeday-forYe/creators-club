@@ -19,9 +19,10 @@ const createPage = asyncHandler(async (req, res, next) => {
   try {
     const { email, name, password, address, phoneNumber } = req.body;
     const hasCreatorEmail = await Page.findOne({ email });
+    const hasUserEmail = await User.findOne({ email });
     const hasCreatorName = await Page.findOne({ name });
-    if (hasCreatorEmail) {
-      return next(new ErrorHandler('Page email already Exists', 400));
+    if (hasCreatorEmail || hasUserEmail) {
+      return next(new ErrorHandler('Email already Exists', 400));
     }
 
     if (hasCreatorName) {
@@ -103,9 +104,10 @@ const activatePage = asyncHandler(async (req, res, next) => {
       newCreator.userdata;
 
     let creator = await Page.findOne({ email });
+    let user = await User.findOne({ email });
 
-    if (creator) {
-      return next(new ErrorHandler('Page already exists', 400));
+    if (creator || user) {
+      return next(new ErrorHandler('Email already exists', 400));
     }
 
     creator = await Page.create({

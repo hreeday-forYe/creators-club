@@ -30,12 +30,13 @@ const UserFollowings = () => {
 
   useEffect(() => {
     refetch();
+    window.scrollTo(0, 0);
   }, [followings]);
   return (
     <div>
       <h1 className="font-Roboto text-xl">User Followings</h1>
       {isLoading && <Loader />}
-      {followings ? (
+      {followings && followings.length > 0 ? (
         <p className="text-gray-600 mt-2 text-sm">
           You have followed the below creators you can view their public posts
         </p>

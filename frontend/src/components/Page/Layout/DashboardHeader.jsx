@@ -49,9 +49,9 @@ const DashboardHeader = () => {
   }, [data, isSuccess]);
 
   useEffect(() => {
-    socketId.on('newNotification', (data) => {
-      refetch();
+    socketId.on('newNotification', async (data) => {
       playerNotificationSound();
+      await refetch();
     });
   }, []);
 

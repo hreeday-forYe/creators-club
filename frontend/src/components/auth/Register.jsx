@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import styles from '../../styles/styles';
 import { Link, useNavigate } from 'react-router-dom';
@@ -50,12 +50,15 @@ const Register = () => {
       toast.error(error.data.message || error.error);
     }
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return isLoading ? (
     <Loader />
   ) : (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 mt-10">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 text-center text-2xl font-bold font-Poppins text-gray-900">
           Register as a new user
         </h2>
       </div>
@@ -149,17 +152,17 @@ const Register = () => {
                 Sign In
               </Link>
             </div>
-            <div className="flex items-center justify-center mb-2">
-              <h4>OR</h4>
-            </div>
-            <div className={`flex items-center justify-center`}>
-              <h4>Are you a Creator?</h4>
-              <Link
-                to={'/create-page'}
-                className=" font-normal p-2 rounded-lg text-blue-600 "
-              >
-                Register Your Page
-              </Link>
+            <div className="flex items-center flex-col justify-center ">
+              <h4>Or</h4>
+              <div className='flex items-center'>
+                <h4>Are you a Creator?</h4>
+                <Link
+                  to={'/create-page'}
+                  className=" font-normal p-2 rounded-lg text-blue-600 "
+                >
+                  Register Your Page
+                </Link>
+              </div>
             </div>
           </form>
         </div>

@@ -96,18 +96,7 @@ const DashboardSideBar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
-        <Link to="/explore" className="w-full flex items-center">
-          <MdExplore size={30} color={`${active === 6 ? 'blue' : '#555'}`} />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 5 ? 'text-blue-700' : 'text-[#555]'
-            }`}
-          >
-            Explore
-          </h5>
-        </Link>
-      </div>
+      
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Link to="/page-withdraw-money" className="w-full flex items-center">

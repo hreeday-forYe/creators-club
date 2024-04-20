@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import styles from '../../styles/styles';
 import { Link, useNavigate } from 'react-router-dom';
@@ -40,10 +40,8 @@ const Login = () => {
         if (user && user.role === 'Admin') {
           dispatch(setCredentials({ ...response }));
           toast.success('Howdy admin');
-          navigate('/admin-dashboard')
-
-        }
-        else{
+          navigate('/admin-dashboard');
+        } else {
           dispatch(setCredentials({ ...response }));
           toast.success('User Logged In Success');
           navigate('/feed');
@@ -54,10 +52,14 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 mt-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md ">
-        <h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-2 text-center text-2xl font-bold text-gray-900">
           Login to your Page or Account
         </h2>
       </div>

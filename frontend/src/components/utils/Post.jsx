@@ -51,13 +51,16 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
       setLiked(false);
     }
     if (isSuccess) {
+      if(!isCreator){
       if (post.likes.includes(user._id)) {
-        socketId.emit('notification', {
-          title: 'liked your post',
-          message: `${user.name} just liked your post`,
-          from: user._id,
-          to: post.creator._id,
-        });
+        
+          socketId.emit('notification', {
+            title: 'liked your post',
+            message: `${user.name} just liked your post`,
+            from: user._id,
+            to: post.creator._id,
+          });
+        }
       }
       refetch();
     }
@@ -90,12 +93,14 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
       await commentOnPost({ postId, comment }).unwrap();
       setComment('');
       refetch();
+      if(!isCreator){
+        socketId.emit('notification', {
+          title: 'Comment on your post',
+          message: `${user.name} just commented on your post`,
+          userId: user._id,
+        });
+      }
       toast.success('comment added ');
-      socketId.emit('notification', {
-        title: 'Comment on your post',
-        message: `${user.name} just commented on your post`,
-        userId: user._id,
-      });
     } catch (error) {
       // toast.error(error?.data?.message || error.error);
       // toast.error("Can't comment on your own post");

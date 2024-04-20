@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 import { Box } from '@mui/material';
 const GetAllPosts = () => {
   const { data, isLoading, error, refetch } = useGetMyPostsQuery();
-  console.log(data);
+  // console.log(data);
   const posts = data?.posts;
   const { authInfo } = useSelector((state) => state.auth);
   const creator = authInfo?.creator;
@@ -40,7 +40,7 @@ const GetAllPosts = () => {
   return (
     <>
       <div className="w-[80vw] 800px:p-8">
-        <h1 className="mb-4 text-2xl font-semibold text-center 800px:text-start">
+        <h1 className="mb-4 text-[22px] font-medium font-Poppins text-center 800px:text-start">
           My Posts
         </h1>
         <div className="flex justify-center w-[100%]">

@@ -26,7 +26,7 @@ const PageProfileData = () => {
           })}
         </div>
       ) : (
-        <p className="font-medium text-gray-500 text-lg">User has no posts</p>
+        <p className="font-medium text-gray-500 text-lg">Creator has no Public posts</p>
       )}
     </div>
   );

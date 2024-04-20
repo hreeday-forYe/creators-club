@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  scroll-behavior: smooth;
+}
 /* chrome safari edge and opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -13,6 +16,31 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
+/* For Webkit-based browsers (Chrome, Safari, etc.) */
+/* You can customize these styles according to your preference */
+::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f0f7ff; /* Background color of the scrollbar track */
+  border-color: #cfe0f7;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #D1DCFC; /* Color of the scrollbar thumb */
+  border-color: #3068c8;
+  border-radius: 10px; /* Rounded corners of the scrollbar thumb */
+}
+
+/* For Firefox */
+/* You can customize these styles according to your preference */
+/* Set the scrollbar width and color */
+/* Note: Not supported in Safari */
+/* You may need to use -moz prefix for older versions of Firefox */
+scrollbar-width: thin;
+scrollbar-color: #888 #f1f1f1;
 
 .swiper {
   width: 80%;

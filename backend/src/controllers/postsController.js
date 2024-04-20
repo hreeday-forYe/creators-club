@@ -40,9 +40,8 @@ export const createPost = asyncHandler(async (req, res, next) => {
       for (let i = 0; i < images.length; i++) {
         const result = await cloudinary.v2.uploader.upload(images[i], {
           folder: 'posts',
-          crop: 'pad',
           quality: 'auto:best',
-          fetch_format: 'auto',
+          height: 800
         });
 
         // updating
@@ -194,7 +193,7 @@ export const likeUnlikePost = asyncHandler(async (req, res, next) => {
           from: validId,
           to: post?.creator,
           title: 'New Like',
-          message: `${user.name} liked on your post: ${post?.title}`,
+          message: `${user?.name} liked on your post: ${post?.title}`,
           hold: post?._id,
         });
       }

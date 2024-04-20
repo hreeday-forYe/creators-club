@@ -14,18 +14,22 @@ const Feed = () => {
   const user = authInfo.user;
   useEffect(() => {
     refetch();
+    window.scrollTo(0, 0);
   }, []);
-  return isLoading ? (
-    <Loader />
-  ) : posts ? (
-    <div className="w-[80vw] 800px:w-full p-1 800px:p-4">
-      {posts.map((post, index) => {
-        return <Post post={post} user={user} refetch={refetch} key={index} />;
-      })}
-    </div>
-  ) : (
-    <div className="text-2xl text-gray-600">
-      Follow some Pages to see their posts
+  return (
+    <div>
+      {isLoading && <Loader />}
+      {posts && posts.length > 0 ? (
+        <div className="w-[80vw] 800px:w-full p-1 800px:p-4">
+          {posts.map((post, index) => (
+            <Post post={post} user={user} refetch={refetch} key={index} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-2xl text-gray-600 mt-6">
+          Follow some Pages to see their posts
+        </div>
+      )}
     </div>
   );
 };

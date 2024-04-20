@@ -81,15 +81,16 @@ const PageProfile = ({ user, isCreator }) => {
   // console.log(config);
   // console.log(paymentIntentData);
   useEffect(() => {
-    if (config) {
+    if (config && data?.creator && data?.creator.subscriptionCharge) {
       const publishablekey = config?.publishablekey;
       // console.log(publishablekey);
       setStripePromise(loadStripe(publishablekey));
+      if (data) {
+        const amount = Math.round(creator?.subscriptionCharge);
+        createPaymentIntent(amount);
+      }
     }
-    if (data) {
-      const amount = Math.round(creator?.subscriptionCharge);
-      createPaymentIntent(amount);
-    }
+    
   }, [config, data]);
 
   useEffect(() => {

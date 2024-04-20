@@ -80,7 +80,7 @@ const DashboardHero = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/dashboard/order/${params.id}`}>
+            <Link to={`/page-subscribers`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -150,7 +150,7 @@ const DashboardHero = () => {
             </h3>
           </div>
           <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
-            ${loadCreator?.availableBalance}
+            ${loadCreator?.availableBalance.toFixed(2)}
           </h5>
           <Link to="/page-withdraw-money">
             <h5 className="pt-4 pl-[2] text-[#077f9c]">Withdraw Money</h5>
