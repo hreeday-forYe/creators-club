@@ -51,9 +51,8 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
       setLiked(false);
     }
     if (isSuccess) {
-      if(!isCreator){
-      if (post.likes.includes(user._id)) {
-        
+      if (!isCreator) {
+        if (post.likes.includes(user._id)) {
           socketId.emit('notification', {
             title: 'liked your post',
             message: `${user.name} just liked your post`,
@@ -66,7 +65,6 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
     }
   }, [post, isSuccess]);
 
-  
   // console.log(user);
   // console.log(post.creator);
   // console.log(user._id);
@@ -93,7 +91,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
       await commentOnPost({ postId, comment }).unwrap();
       setComment('');
       refetch();
-      if(!isCreator){
+      if (!isCreator) {
         socketId.emit('notification', {
           title: 'Comment on your post',
           message: `${user.name} just commented on your post`,
@@ -241,12 +239,12 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
               >
                 <FaRegTrashAlt size={25} className="text-gray-700" />
               </IconButton>
-              <IconButton
+              {/* <IconButton
                 aria-label="updatePost"
                 onClick={() => updatePost(post._id)}
               >
                 <FaEdit size={25} className="text-gray-700" />
-              </IconButton>
+              </IconButton> */}
             </>
           )}
         </CardActions>
@@ -256,7 +254,9 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
           onClose={() => setCommentDialog(!commentDialog)}
         >
           <div className=" min-w-[350px] 800px:min-w-[500px]  h-[100vh] p-2">
-            <Typography variant="h4">Comments</Typography>
+            <h2 className="text-2xl text-center border-b-2 font-Poppins">
+              Comments
+            </h2>
 
             <form
               className="flex m-6"
@@ -271,9 +271,23 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
                 required
               />
 
-              <Button type="submit" className="rounded-sm" variant="contained">
-                <FaLocationArrow size={20} />
+              {/* <Button type="submit" className="rounded-sm" variant="contained"> */}
+              {/* <FaLocationArrow size={20} /> */}
+              <Button
+                type="submit"
+                variant="success"
+                sx={{
+                  textTransform: 'capitalize',
+                  fontSize: '17px',
+                  color: '#0080FE',
+                  padding: 0,
+                  fontWeight: 'normal',
+                  marginLeft: -7,
+                }}
+              >
+                post
               </Button>
+              {/* </Button> */}
             </form>
             {post.comments.length > 0 ? (
               post.comments.map((comment) => {
@@ -285,6 +299,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
                       key={comment._id}
                       user={user}
                       deleteCommentHandler={deleteCommentHandler}
+                      creatorId={post.creator._id}
                     />
                   </>
                 );

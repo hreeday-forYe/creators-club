@@ -8,10 +8,11 @@ import { IoMdMenu } from 'react-icons/io';
 import { FaXmark } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import logo from '../assets/logo.png';
 const Header = () => {
   let Links = [
     { name: 'HOME', link: '/' },
-    { name: 'WHO IS IT FOR?', link: '/' },
+    { name: 'WHO IS IT FOR?', link: '#whoisitfor' },
     { name: 'CREATORS', link: '/' },
     { name: 'LOGIN', link: '/login' },
   ];
@@ -39,7 +40,7 @@ const Header = () => {
         <div className="font-semibold text-2xl cursor-pointer font-Poppins flex items-center gap-1">
           {/* <BookOpenIcon className="w-7 h-7 text-blue-600" /> */}
           <Link to={'/'}>
-            <span>Creators Club</span>
+            <img src={logo} className='w-56' />
           </Link>
         </div>
         {/* Menu icon */}

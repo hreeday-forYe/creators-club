@@ -37,9 +37,9 @@ const Login = () => {
         const response = await login({ email, password }).unwrap();
         console.log(response);
         const user = response?.user;
-        if (user && user.role === 'Admin') {
+        if (user && user?.role === 'Admin') {
           dispatch(setCredentials({ ...response }));
-          toast.success('Howdy admin');
+          toast.success('Welcome Admin');
           navigate('/admin-dashboard');
         } else {
           dispatch(setCredentials({ ...response }));
@@ -57,7 +57,7 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 mt-8">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 mt-4">
       <div className="sm:mx-auto sm:w-full sm:max-w-md ">
         <h2 className="mt-2 text-center text-2xl font-bold text-gray-900">
           Login to your Page or Account

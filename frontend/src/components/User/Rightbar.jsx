@@ -5,7 +5,7 @@ import Loader from '../Loader';
 const Rightbar = () => {
   const { data, refetch, isLoading } = useGetSuggestedPagesQuery();
   const pages = data?.pages;
-  console.log(data);
+  // console.log(data);
   useEffect(() => {
     refetch();
   }, [data]);

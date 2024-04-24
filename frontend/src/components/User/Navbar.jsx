@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { IoNotificationsOutline } from 'react-icons/io5';
 import { Avatar } from '@mui/material';
+import logo from '../../assets/logo.png'
 import { useSelector } from 'react-redux';
 const Navbar = () => {
   const { authInfo } = useSelector((state) => state.auth);
@@ -11,7 +12,8 @@ const Navbar = () => {
       <div>
         <Link to="/feed">
           {/* <img src="" alt="Creators Club Logo" /> */}
-          <h6 className="text-black font-medium text-xl">Creators Club</h6>
+          {/* <h6 className="text-black font-medium text-xl">Creators Club</h6> */}
+          <img src={logo} className='w-52' alt="" />
         </Link>
       </div>
       <div className="flex items-center">

@@ -10,8 +10,6 @@ const postSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      minlength: 4,
-      maxlength: 225,
     },
     description: {
       type: String,
@@ -53,6 +51,10 @@ const postSchema = new mongoose.Schema(
       enum: ['public', 'private'],
       default: 'public',
       required: true,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import { InputLabel, Input, FormHelperText } from '@mui/material';
+import { FaScrewdriverWrench } from 'react-icons/fa6';
+import { MdExplore } from 'react-icons/md';
 import hero from '../assets/hero.png';
+import svg1 from '../assets/svg1.png'
+import svg2 from '../assets/svg2.png'
+import svg3 from '../assets/svg3.png'
 const Hero = () => {
   const notify = () => toast.success('Here is your toast.');
   return (
@@ -47,21 +49,27 @@ const Hero = () => {
           <img src={hero} alt="hero" />
         </div>
       </div>
-      <div className=" rounded-lg shadow-md p-6 mb-8">
+      <div className=" rounded-lg p-6 mb-8">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="p-4 border border-gray-200 rounded-lg">
-            <h3 className="text-lg font-semibold mb-2">Create Your Page</h3>
+          <div className="p-4 border flex flex-col items-center  border-gray-200 rounded-lg">
+            {/* <FaScrewdriverWrench size={30} className="text-blue-600" /> */}
+            <img src={svg3} alt="" />
+
+            <h3 className="text-lg font-semibold my-2">Custom Content</h3>
             <p className="text-gray-600">
-              Start your own subscription page and monetize your content.
+              Create a custom content for subscribers only
             </p>
           </div>
-          <div className="p-4 border border-gray-200 rounded-lg">
+          <div className="p-4 border border-gray-200 flex flex-col items-center rounded-lg">
+            <img src={svg1} alt="" />
             <h3 className="text-lg font-semibold mb-2">Explore Creators</h3>
             <p className="text-gray-600">
               Discover a variety of creators and their content.
             </p>
           </div>
-          <div className="p-4 border border-gray-200 rounded-lg">
+          <div className="p-4 border border-gray-200 rounded-lg flex flex-col items-center">
+          <img src={svg2} alt="" />
+
             <h3 className="text-lg font-semibold mb-2">Earn Money</h3>
             <p className="text-gray-600">
               Turn your passion into income with Creators Club.

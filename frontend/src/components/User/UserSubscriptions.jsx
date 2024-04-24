@@ -37,9 +37,11 @@ const UserSubscriptions = () => {
   const [cancelSubscription, { isLoading: cancelLoading }] =
     useCancelSubcriptionsMutation();
   const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState(false);
 
   const handleSubmit = async (subscription) => {
-    if (window.confirm('Are you sure want to Cancel this subsription?')) {
+    // setOpen(true);
+    if (window.confirm('Are you Sure You want to cancel the subscription? ')) {
       try {
         await cancelSubscription(subscription._id);
         toast.success('Subscription Cancelled successfully');
@@ -49,16 +51,15 @@ const UserSubscriptions = () => {
           from: user?.user?._id,
           to: subscription?.creator._id,
         });
-        // Cannot read properties of undefined (reading '_id')
         refetch();
       } catch (error) {
         toast.error(error.message || error.error);
       }
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     window.scrollTo(0, 0);
-  },[])
+  }, []);
 
   return (
     <div>
@@ -69,10 +70,9 @@ const UserSubscriptions = () => {
           their private posts along with public ones
         </p>
       ) : (
-        <p className='text-gray-600 mt-2 text-sm'>
-          You haven't subscribed to any creators just yet,
-          Subscribe to some users to view their private posts and support their
-          content
+        <p className="text-gray-600 mt-2 text-sm">
+          You haven't subscribed to any creators just yet, Subscribe to some
+          users to view their private posts and support their content
         </p>
       )}
       {cancelLoading && <Loader />}
@@ -130,7 +130,7 @@ const UserSubscriptions = () => {
           </p>
         )}
         {
-          <Dialog open={open} onClose={() => setOpen(!open)}>
+          <Dialog open={open} onClose={() => setOpen(false)}>
             <div className="min-w-[350px] 800px:min-w-[500px] p-6">
               <p className="text-center text-lg">
                 Are you sure you want to cancel the Subscription?

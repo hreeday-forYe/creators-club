@@ -41,7 +41,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
         const result = await cloudinary.v2.uploader.upload(images[i], {
           folder: 'posts',
           quality: 'auto:best',
-          height: 800
+          height: 800,
         });
 
         // updating
@@ -352,7 +352,11 @@ export const getPostsOfFollowing = asyncHandler(async (req, res, next) => {
 
     const posts = await Post.find({
       $or: [
-        { creator: { $in: user.following }, status: 'public' },
+        {
+          creator: { $in: user.following },
+          status: 'public',
+          // isVerified: true,
+        },
         {
           creator: { $in: user.subscriptions },
           status: { $in: ['public', 'private'] },

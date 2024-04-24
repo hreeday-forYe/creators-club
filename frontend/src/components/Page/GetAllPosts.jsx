@@ -45,10 +45,15 @@ const GetAllPosts = () => {
         </h1>
         <div className="flex justify-center w-[100%]">
           <div className="w-[100%] 800px:w-[800px]  flex flex-col justify-center">
-            {isLoading || deleteLoading ? (
+            {/* {isLoading || deleteLoading ? (
               <Loader />
-            ) : !posts ? (
-              <h4>You have no posts yet</h4>
+            ) : } */}
+            {(isLoading || deleteLoading) && <Loader />}
+
+            
+
+            {posts && posts.length < 0 ? (
+              <h4>You have zero Posts</h4>
             ) : (
               posts &&
               posts.map((post, index) => {

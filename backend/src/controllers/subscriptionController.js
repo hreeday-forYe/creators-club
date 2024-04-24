@@ -11,7 +11,8 @@ import Notification from '../models/notificationsModel.js';
 import dotenv from 'dotenv';
 dotenv.config();
 import stripePackage from 'stripe';
-import cron from 'node-cron'
+import { differenceInDays } from 'date-fns';
+import cron from 'node-cron';
 const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
 
 // Create SUBSCRIPTION FUNCTION  USER
@@ -287,10 +288,19 @@ export const cancelSubscriptions = asyncHandler(async (req, res, next) => {
     user.subscriptions.pull(pageId);
     page.subscribers.pull(userId);
 
-    page.availableBalance -= subscription.totalPrice;
-
-    if(page.availableBalance < 0){
-      page.availableBalance = 0
+    // Ensure that availableBalance never goes below 0
+    const daysSinceSubscription = differenceInDays(
+      new Date(),
+      subscription.startedAt
+    );
+    if (daysSinceSubscription < 7) {
+      // Calculate 50% of subscription total price
+      const refundFee = subscription.totalPrice * 0.5;
+      if (page.availableBalance - refundFee < 0) {
+        page.availableBalance = 0;
+      } else {
+        page.availableBalance -= refundFee;
+      }
     }
 
     // create Notification
@@ -373,8 +383,6 @@ export const newPayment = asyncHandler(async (req, res, next) => {
   }
 });
 
-
-
 // Cron job to handle subscription expiry
 cron.schedule('0 0 0 * * *', async () => {
   try {
@@ -391,58 +399,55 @@ cron.schedule('0 0 0 * * *', async () => {
       // Remove the subscription from the user's subscriptions array
       const user = await User.findById(subscription.subscriber._id);
       const page = await Page.findById(subscription.creator._id);
-      
+
       // Removing the subscriptions and subscribers
       user.subscriptions.pull(page._id);
       page.subscribers.pull(user._id);
       await user.save();
       await creator.save();
 
-          // template for the expiry subscriptions email
-    const mailData = {
-      user: {
-        name: user?.name,
-      },
-      order: {
-        _id: page._id.toString().slice(0, 6),
-        creatorName: page.name,
-        price: page.subscriptionCharge,
-        date: new Date().toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        }),
-      },
-    };
+      // template for the expiry subscriptions email
+      const mailData = {
+        user: {
+          name: user?.name,
+        },
+        order: {
+          _id: page._id.toString().slice(0, 6),
+          creatorName: page.name,
+          price: page.subscriptionCharge,
+          date: new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }),
+        },
+      };
 
-    // getting the current directory
-    const __filename = fileURLToPath(import.meta.url);
-    const currentDirectory = path.dirname(__filename);
+      // getting the current directory
+      const __filename = fileURLToPath(import.meta.url);
+      const currentDirectory = path.dirname(__filename);
 
-    const mailPath = path.join(
-      currentDirectory,
-      '../mails/expirySubscriptions.ejs'
-    );
+      const mailPath = path.join(
+        currentDirectory,
+        '../mails/expirySubscriptions.ejs'
+      );
 
-    // console.log('This is the mailPath', mailPath);
-    const html = await ejs.renderFile(mailPath, mailData);
+      // console.log('This is the mailPath', mailPath);
+      const html = await ejs.renderFile(mailPath, mailData);
 
-
-      // Create mail for the user 
-    try {
-      if (user) {
-        await sendMail({
-          email: user.email,
-          subject: 'Subscription Expired',
-          template: 'expirySubscriptions.ejs',
-          data: mailData,
-        });
+      // Create mail for the user
+      try {
+        if (user) {
+          await sendMail({
+            email: user.email,
+            subject: 'Subscription Expired',
+            template: 'expirySubscriptions.ejs',
+            data: mailData,
+          });
+        }
+      } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
       }
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
-    }
-
-
 
       // Create notification for the creator
       await Notification.create({
@@ -453,12 +458,11 @@ cron.schedule('0 0 0 * * *', async () => {
       });
 
       // Delete the subscription document
-    await Subscription.deleteOne({ _id: subscription._id });
+      await Subscription.deleteOne({ _id: subscription._id });
     }
 
     console.log('Expired subscriptions handled successfully');
   } catch (error) {
     console.error('Error handling expired subscriptions:', error);
-    
   }
 });

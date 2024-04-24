@@ -10,7 +10,7 @@ const GetPageSubscribers = () => {
   } = useGetCreatorSubcriptionsQuery();
   const subscriptions = data?.subscriptions
   const columns = [
-    { field: 'id', headerName: 'Subscription ID', minWidth: 150, flex: 0.8 },
+    { field: 'id', headerName: 'Subscription ID', minWidth: 150, flex: 0.6 },
 
     {
       field: 'subscriberName',
@@ -19,7 +19,6 @@ const GetPageSubscribers = () => {
       minWidth: 130,
       flex: 0.6,
     },
-
     {
       field: 'startedDate',
       headerName: 'Started Date',
@@ -93,6 +92,7 @@ const GetPageSubscribers = () => {
       <div className="w-full min-h-[45vh] bg-white rounded">
         <DataGrid
           rows={row ? row : 'No Subscriptions'}
+          className='text-center'
           columns={columns}
           pageSize={10}
           disableSelectionOnClick

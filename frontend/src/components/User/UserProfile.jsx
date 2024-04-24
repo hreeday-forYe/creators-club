@@ -16,7 +16,7 @@ import { setCredentials } from '../../redux/slices/authSlice';
 import Loader from '../Loader';
 const UserProfile = () => {
   const { data, isLoading, refetch } = useProfileQuery();
-  console.log(data);
+  // console.log(data);
   const user = data?.user;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');

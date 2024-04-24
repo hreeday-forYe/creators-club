@@ -11,6 +11,7 @@ import { formatDistanceToNow, format } from 'date-fns';
 import socketIO from 'socket.io-client';
 import { socket_server_url } from '../../../constants';
 import notification from '../../../assets/notification.mp3';
+import logo from '../../../assets/logo.png'
 const socketId = socketIO(socket_server_url, { transports: ['websocket'] });
 
 const DashboardHeader = () => {
@@ -71,8 +72,7 @@ const DashboardHeader = () => {
     <div className="w-full h-[65px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
         <Link to="/page-dashboard">
-          {/* <img src="" alt="Creators Club Logo" /> */}
-          <h6 className="text-black font-medium text-xl">Creators Club</h6>
+          <img src={logo} className='w-52' alt="Creators Club Logo" />
         </Link>
       </div>
       <div className="flex items-center">

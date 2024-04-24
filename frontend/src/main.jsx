@@ -33,30 +33,42 @@ import UserSubscriptionScreen from './screens/users/UserSubscriptionScreen';
 import UserFollowingsScreen from './screens/users/UserFollowingsScreen';
 import ExploreScreen from './screens/ExploreScreen';
 
-
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
-// ADMIN SCREENS 
+// ADMIN SCREENS
 import AdminDashboardScreen from './screens/admin/AdminDashboardScreen';
-import AdminWithdrawRequestScreen from './screens/admin/AdminWithdrawRequestScreen'
+import AdminWithdrawRequestScreen from './screens/admin/AdminWithdrawRequestScreen';
 
-
-
-
+// Protect middlewares
+import PrivateRoute from './routes/PrivateRoute';
+import PagePrivateRoute from './routes/PagePrivateRoute';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomeScreen />}></Route>
+      {/* Anyone routes */}
       <Route path="/register" element={<RegisterScreen />}></Route>
       <Route path="/create-page" element={<CreatePageScreen />}></Route>
       <Route path="/verification" element={<VerificationScreen />}></Route>
       <Route path="/login" element={<LoginScreen />}></Route>
-      <Route path="/page-dashboard" element={<PageDashboardScreen />}></Route>
+
+      {/* registered users */}
+      {/* <Route path="" element={<PrivateRoute />}> */}
       <Route path="/feed" element={<UserFeedScreen />}></Route>
+      <Route
+        path="/my-subscriptions"
+        element={<UserSubscriptionScreen />}
+      ></Route>
+      <Route path="/explore" element={<ExploreScreen />}></Route>
+      <Route path="/my-followings" element={<UserFollowingsScreen />}></Route>
       <Route path="/profile" element={<UserProfileScreen />}></Route>
-      <Route path="/admin-dashboard" element={<AdminDashboardScreen />}></Route>
+      {/* </Route> */}
+
+      {/* Registered Creators */}
+      {/* <Route path="" element={<PagePrivateRoute />}> */}
+      <Route path="/page-dashboard" element={<PageDashboardScreen />}></Route>
       <Route path="/create-post" element={<CreatePostScreen />}></Route>
       <Route path="/page-posts" element={<GetAllPostsScreen />}></Route>
       <Route
@@ -68,15 +80,15 @@ const router = createBrowserRouter(
         path="/page-withdraw-money"
         element={<PageWithdrawMoneyScreen />}
       ></Route>
+      {/* </Route> */}
+      {/* Admin User protect middleware */}
+      <Route path="/admin-dashboard" element={<AdminDashboardScreen />}></Route>
       <Route path="/page/:id" element={<PageProfileScreen />}></Route>
-      
+
       <Route
-        path="/my-subscriptions"
-        element={<UserSubscriptionScreen />}
+        path="/admin-withdraw-request"
+        element={<AdminWithdrawRequestScreen />}
       ></Route>
-      <Route path='/explore' element={<ExploreScreen/>}></Route>
-      <Route path="/my-followings" element={<UserFollowingsScreen />}></Route>
-      <Route path='/admin-withdraw-request' element={<AdminWithdrawRequestScreen/>}></Route>
     </Route>
   )
 );
