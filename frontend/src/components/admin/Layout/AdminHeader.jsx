@@ -6,6 +6,7 @@ import { MdOutlineLocalOffer } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Avatar } from '@mui/material';
+import logo from '../../../assets/logo.png';
 
 const AdminHeader = () => {
   const { authInfo } = useSelector((state) => state.auth);
@@ -17,11 +18,7 @@ const AdminHeader = () => {
     <div className="w-full h-[65px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
         <Link to="/admin-dashboard">
-          {/* <img
-            src="https://shopo.quomodothemes.website/assets/images/logo.svg"
-            alt=""
-          /> */}
-          <h6 className="text-black font-medium text-xl">Creators Club</h6>
+          <img src={logo} className="w-52" alt="Creators Club Logo" />
         </Link>
       </div>
       <div className="flex items-center">
@@ -62,10 +59,10 @@ const AdminHeader = () => {
             alt="Hello"
             className="w-[50px] h-[50px] rounded-full object-cover"
           /> */}
-          <Avatar alt="Cindy Baker" src={`${creator?.avatar?.url}`} >
+          <Avatar alt="Cindy Baker" src={`${creator?.avatar?.url}`}>
             {!creator?.avatar && 'A'}
           </Avatar>
-          <span className='text-lg ml-2 font-semibold'>Admin</span>
+          <span className="text-lg ml-2 font-semibold">Admin</span>
         </div>
       </div>
     </div>

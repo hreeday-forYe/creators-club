@@ -83,8 +83,8 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
   const commentHandler = async (e) => {
     e.preventDefault();
     try {
-      console.log('the post ID ', postId);
-      console.log(comment);
+      // console.log('the post ID ', postId);
+      // console.log(comment);
       if (!comment) {
         toast.error('Please enter a comment...');
       }
@@ -159,6 +159,21 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
           }
         />
         {/* {console.log(post.photos)} */}
+        {post.video && (
+          <>
+            <div>
+              <video
+                controls
+                className="w-full h-[500px] object-contain  rounded-md m-2"
+              >
+                <source src={post.video.url} />
+              </video>
+            </div>
+            {/* <CardContent>
+              <h4 className="text-black font-medium">{post.title}</h4>
+            </CardContent> */}
+          </>
+        )}
         {post.photos && post.photos.length > 0 ? (
           <>
             <div>
@@ -170,9 +185,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
           </>
         ) : (
           <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              {post.title}
-            </Typography>
+            <h4 className="text-black font-medium">{post.title}</h4>
           </CardContent>
         )}
         <CardActions className="flex space-x-4">

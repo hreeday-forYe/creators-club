@@ -6,16 +6,16 @@ import { useNavigate } from 'react-router-dom';
 const RegisterScreen = () => {
   const { authInfo } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  useEffect(()=>{
+  useEffect(() => {
     if (authInfo?.creator) {
       navigate('/page-dashboard');
     } else if (authInfo?.user) {
       navigate('/feed');
     }
-  })
+  });
   return (
     <>
-      <Header />
+      <Header/>
       <Register />
     </>
   );

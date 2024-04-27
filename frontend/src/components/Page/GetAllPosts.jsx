@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 import { Box } from '@mui/material';
 const GetAllPosts = () => {
   const { data, isLoading, error, refetch } = useGetMyPostsQuery();
-  // console.log(data);
+  console.log(data);
   const posts = data?.posts;
   const { authInfo } = useSelector((state) => state.auth);
   const creator = authInfo?.creator;
@@ -50,13 +50,11 @@ const GetAllPosts = () => {
             ) : } */}
             {(isLoading || deleteLoading) && <Loader />}
 
-            
-
             {posts && posts.length < 0 ? (
               <h4>You have zero Posts</h4>
             ) : (
               posts &&
-              posts.map((post, index) => {
+              posts.map((post) => {
                 return (
                   <Post
                     post={post}
@@ -64,7 +62,6 @@ const GetAllPosts = () => {
                     deletePost={deletePostHandler}
                     refetch={refetch}
                     user={creator}
-                    key={index}
                   />
                 );
               })

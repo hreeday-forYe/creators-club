@@ -74,7 +74,7 @@ const CheckOutForm = ({ setOpenPay, data, userData }) => {
     if (error) {
       toast.error(error);
     }
-  }, [subscribeData, error, userData]);
+  }, [subscribeData, error]);
   return (
     <>
       <form id="payment-form" onSubmit={handleSubmit}>

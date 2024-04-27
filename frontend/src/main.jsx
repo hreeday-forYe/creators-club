@@ -76,6 +76,7 @@ const router = createBrowserRouter(
         element={<PageAllSubscribersScreen />}
       ></Route>
       <Route path="/page-settings" element={<PageSettingsScreen />}></Route>
+      <Route path="/page-messages" element={<ExploreScreen />}></Route>
       <Route
         path="/page-withdraw-money"
         element={<PageWithdrawMoneyScreen />}

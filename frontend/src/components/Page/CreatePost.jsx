@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCreatePostMutation } from '../../redux/slices/postApiSlice';
-import { AiOutlinePlusCircle } from 'react-icons/ai';
 import toast from 'react-hot-toast';
 import Loader from '../Loader';
+import addphoto from '../../assets/post/addphoto.svg';
+import addvideo from '../../assets/post/addvideo.svg';
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const CreatePost = () => {
   const [photos, setPhotos] = useState([]);
   const [postStatus, setStatus] = useState(false);
   const [createPost, { isLoading }] = useCreatePostMutation();
-
+  const [video, setVideo] = useState(null);
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
 
@@ -29,6 +30,16 @@ const CreatePost = () => {
     });
   };
 
+  const handleVideoChange = (e) => {
+    const file = e.target.files[0];
+    setVideo(null);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setVideo(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title) {
@@ -41,6 +52,12 @@ const CreatePost = () => {
         data.append(`photos[${index}]`, image);
       });
     }
+
+    console.log(video);
+    if (video) {
+      data.append('video', video);
+    }
+
     let status;
     if (postStatus) {
       status = 'private';
@@ -49,9 +66,9 @@ const CreatePost = () => {
     }
 
     data.append('title', title);
-
+    console.log(data);
     try {
-      await createPost({ title, photos, status });
+      await createPost({ title, photos, status, video });
       toast.success('Post Created Successfully');
       navigate('/page-posts');
     } catch (error) {
@@ -61,7 +78,7 @@ const CreatePost = () => {
   return (
     <div className="w-full p-8 flex items-center justify-center">
       <div className="w-[90%] 800px:w-[50%] bg-white border shadow-md mt-12 h-auto rounded-[4px] p-3">
-        <h5 className="text-[30px] font-Poppins text-center">
+        <h5 className="text-[25px] text-gray-500 font-Poppins text-center">
           Create New Post
         </h5>
         {isLoading && <Loader />}
@@ -81,31 +98,67 @@ const CreatePost = () => {
               placeholder="Your Status...."
             />
           </div>
+          <div>
+            <div className={`${video ? 'hidden' : 'block mt-4'}`}>
+              <label className="pb-2">Upload Images</label>
+              <input
+                type="file"
+                name="photos"
+                id="upload"
+                className="hidden"
+                multiple
+                disabled={video ? true : false}
+                onChange={handleImageChange}
+                accept=".jpg,.png"
+              />
 
-          <div className="mt-4">
-            <label className="pb-2">Upload Images</label>
-            <input
-              type="file"
-              name="photos"
-              id="upload"
-              className="hidden"
-              multiple
-              onChange={handleImageChange}
-            />
+              <div className="w-full flex items-center flex-wrap">
+                <label htmlFor="upload" className="flex gap-1 items-center">
+                  {/* <AiOutlinePlusCircle
+                    size={30}
+                    className="mt-3"
+                    color="#555"
+                  /> */}
+                  <img src={addphoto} className="w-10 text-gray-400" alt="" />
+                </label>
+                {photos &&
+                  photos.map((i) => (
+                    <img
+                      src={i}
+                      key={i}
+                      alt=""
+                      className="h-[120px] w-[120px] object-cover m-2"
+                    />
+                  ))}
+              </div>
+            </div>
+            <br />
+            <div className={`${photos.length ? 'hidden' : 'block'}`}>
+              <label className="pb-2">Upload Video</label>
 
-            <div className="w-full flex items-center flex-wrap">
-              <label htmlFor="upload">
-                <AiOutlinePlusCircle size={30} className="mt-3" color="#555" />
-              </label>
-              {photos &&
-                photos.map((i) => (
-                  <img
-                    src={i}
-                    key={i}
-                    alt=""
-                    className="h-[120px] w-[120px] object-cover m-2"
-                  />
-                ))}
+              <input
+                type="file"
+                name="video"
+                id="video-upload"
+                className="hidden"
+                onChange={handleVideoChange}
+                disabled={photos.length > 0}
+                accept=".mov,.mp4"
+              />
+              <div className="w-full flex items-center flex-wrap">
+                <label htmlFor="video-upload">
+                  <img src={addvideo} className="w-10 text-gray-400" alt="" />
+                </label>
+                {video && (
+                  <video
+                    controls
+                    className="h-[250px] w-[200px] object-cover rounded-md m-2"
+                  >
+                    <source src={video} type={video.type} />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+              </div>
             </div>
             <br />
             <div className="flex items-center mb-4">

@@ -8,7 +8,7 @@ import { useGetMyPostsQuery } from '../../../redux/slices/postApiSlice';
 import { usePageProfileQuery } from '../../../redux/slices/pagesApiSlice';
 // import {useGetMySubscriptions} from '../../../redux/slices/subscriptionApiSlice.js'
 import Button from '@mui/material/Button';
-
+import { BiPurchaseTag } from 'react-icons/bi';
 import { DataGrid } from '@mui/x-data-grid';
 import { setCredentials } from '../../../redux/slices/authSlice';
 import { useGetCreatorSubcriptionsQuery } from '../../../redux/slices/subscriptionApiSlice';
@@ -159,7 +159,7 @@ const DashboardHero = () => {
 
         <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">
-            <MdBorderClear size={30} className="mr-2" fill="#00000085" />
+            <BiPurchaseTag size={30} className="mr-2" fill="#00000085" />
             <h3
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >

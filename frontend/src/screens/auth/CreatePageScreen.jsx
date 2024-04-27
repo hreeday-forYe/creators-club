@@ -14,12 +14,10 @@ const CreatePageScreen = () => {
     }
   });
   return (
-    <div>
-      <Header />
-      <div className="mt-8">
-        <CreatePage />
-      </div>
-    </div>
+    <>
+      <Header/>
+      <CreatePage />
+    </>
   );
 };
 

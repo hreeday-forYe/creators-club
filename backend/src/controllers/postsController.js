@@ -12,7 +12,6 @@ import Notification from '../models/notificationsModel.js';
 export const createPost = asyncHandler(async (req, res, next) => {
   try {
     const page = await Page.findById(req.creator._id);
-    // console.log(page);
     if (!page) {
       return next(new ErrorHandler('Page Id is invalid!', 400));
     }
@@ -22,13 +21,12 @@ export const createPost = asyncHandler(async (req, res, next) => {
       return next(new ErrorHandler('Post title is required', 400));
     }
 
-    let post; // undefined variable for creating the post
+    let post;
 
     // checking if the images are in from of arrary or string
-    if (title && photos) {
+    if (title && photos.length > 0) {
       // Converting the image to the array if only one image is provided
       let images = [];
-      // console.log('I am here');
       if (typeof req.body.photos === 'string') {
         images.push(req.body.photos);
       } else {
@@ -41,7 +39,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
         const result = await cloudinary.v2.uploader.upload(images[i], {
           folder: 'posts',
           quality: 'auto:best',
-          height: 800,
+          height: 600,
         });
 
         // updating
@@ -50,7 +48,6 @@ export const createPost = asyncHandler(async (req, res, next) => {
           url: result.secure_url,
         });
       }
-      // console.log('image upload successfull');
       // Creating the Post
       post = await Post.create({
         creator: page._id,
@@ -58,22 +55,36 @@ export const createPost = asyncHandler(async (req, res, next) => {
         photos: imagesLinks,
         status,
       });
+      await post.save();
     } else if (title && video) {
-      // console.log('or this one video');
+      console.log('video file path');
+      // upload video to the cloudinary
+      const result = await cloudinary.v2.uploader.upload(video, {
+        resource_type: 'video',
+        folder: 'posts',
+        quality: 'auto:best',
+      });
+      const videoLink = {
+        public_id: result.public_id,
+        url: result.secure_url,
+      };
       post = await Post.create({
         creator: page._id,
         title,
+        video: videoLink,
         status,
       });
-      page.posts.push(post._id);
+      console.log('post with vidoe was created');
+      // page.posts.push(post._id);
     } else {
+      console.log('nothing exists here');
       post = await Post.create({
         creator: page._id,
         title,
         status,
       });
-      // console.log('this one after post in title');
     }
+    console.log('THe post I uploaded', post);
     page.posts.push(post._id);
     await page.save();
     res.status(201).json({
@@ -124,7 +135,7 @@ export const getAllPosts = asyncHandler(async (req, res, next) => {
 export const deletePost = asyncHandler(async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
-    // console.log(post);
+    console.log('POST TO BE DELETED', post);
     if (!post) {
       return next(new ErrorHandler('Post is not found with this id', 400));
     }
@@ -133,12 +144,21 @@ export const deletePost = asyncHandler(async (req, res, next) => {
       return next(new ErrorHandler('UnAuthorized Creator', 400));
     }
 
-    for (let i = 0; i < post.photos.length; i++) {
-      const result = await cloudinary.v2.uploader.destroy(
-        post.photos[i].public_id
+    if (post.photos && post.photos.length > 0) {
+      for (let i = 0; i < post.photos.length; i++) {
+        const result = await cloudinary.v2.uploader.destroy(
+          post.photos[i].public_id
+        );
+      }
+    }
+
+    if (post.video && post.video.public_id) {
+      const videoResult = await cloudinary.v2.uploader.destroy(
+        post.video.public_id
       );
     }
 
+    console.log(post._id);
     await Post.deleteOne(post._id);
 
     // Now deleting the post from the creator post array
@@ -153,6 +173,7 @@ export const deletePost = asyncHandler(async (req, res, next) => {
       message: 'Post Deleted Successfully',
     });
   } catch (error) {
+    console.log(error);
     return next(new ErrorHandler(error, 400));
   }
 });

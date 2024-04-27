@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 const LoginScreen = () => {
   return (
     <div>
-      {/* <Header /> */}
+      <Header />
       <Login />
     </div>
   );

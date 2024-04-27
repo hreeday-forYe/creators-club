@@ -6,7 +6,7 @@ import pinterest from '../assets/images/icon-pinterest.svg';
 import logo from '../assets/logo.png'
 const Footer = () => {
   return (
-    <footer className="bg-gray-900">
+    <footer className="bg-gray-900 font-Poppins">
       <div className="container max-w-6xl py-10 mx-auto">
         {/* Footer Flex Container */}
         <div className="flex flex-col items-center mb-8 space-y-6 md:flex-row md:space-y-0 md:justify-between md:items-start">

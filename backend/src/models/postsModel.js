@@ -27,8 +27,10 @@ const postSchema = new mongoose.Schema(
         },
       },
     ],
+
     video: {
-      type: String,
+      public_id: String,
+      url: String,
     },
 
     likes: [
