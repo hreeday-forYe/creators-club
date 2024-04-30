@@ -10,6 +10,7 @@ const GetAllPosts = () => {
   const { data, isLoading, error, refetch } = useGetMyPostsQuery();
   console.log(data);
   const posts = data?.posts;
+
   const { authInfo } = useSelector((state) => state.auth);
   const creator = authInfo?.creator;
 

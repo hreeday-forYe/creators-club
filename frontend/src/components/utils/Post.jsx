@@ -24,7 +24,10 @@ import CommentCard from './CommentCard';
 import { FaLocationArrow, FaEdit } from 'react-icons/fa';
 import { useLikeUnlikePostMutation } from '../../redux/slices/postApiSlice';
 import { useCreateCommentMutation } from '../../redux/slices/postApiSlice';
-import { useDeleteCommentMutation } from '../../redux/slices/postApiSlice';
+import {
+  useDeleteCommentMutation,
+  useAdminApprovePostMutation,
+} from '../../redux/slices/postApiSlice';
 import toast from 'react-hot-toast';
 import Loader from '../Loader';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
@@ -42,6 +45,7 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
     useLikeUnlikePostMutation();
   const [commentOnPost] = useCreateCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
+  const [approvePost] = useAdminApprovePostMutation();
   const postId = post?._id;
 
   useEffect(() => {
@@ -102,6 +106,24 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
     } catch (error) {
       // toast.error(error?.data?.message || error.error);
       // toast.error("Can't comment on your own post");
+    }
+  };
+
+  // Approve Post -----ADMIN ONLY
+  const adminApprovePost = async () => {
+    if (window.confirm('Are you sure you want to approve this post? ')) {
+      try {
+        await approvePost(post._id).unwrap();
+        refetch();
+        socketId.emit('notification', {
+          title: 'Post Approved',
+          message: `you post was approved by admin`,
+          userId: user._id,
+        });
+        toast.success('Post Approved');
+      } catch (error) {
+        toast.error(error.error);
+      }
     }
   };
 
@@ -180,12 +202,14 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
               <Carousel photos={post.photos} key={post._id} />
             </div>
             <CardContent>
-              <h4 className="text-black font-medium">{post.title}</h4>
+              <h4 className="text-black font-medium capitalize">
+                {post.title}
+              </h4>
             </CardContent>
           </>
         ) : (
           <CardContent>
-            <h4 className="text-black font-medium">{post.title}</h4>
+            <h4 className="text-black font-medium capitalize">{post.title}</h4>
           </CardContent>
         )}
         <CardActions className="flex space-x-4">
@@ -260,13 +284,39 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
               </IconButton> */}
             </>
           )}
+          {isCreator && user.role === 'Admin' && !post.isVerified && (
+            <>
+              <button className="flex items-center" onClick={adminApprovePost}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="w-8 h-8 hover:text-green-600 transition duration-150 text-green-400"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+                <span className="text-sm text-gray-500 hover:text-gray-700">
+                  Approve
+                </span>
+              </button>
+            </>
+          )}
         </CardActions>
 
         <Dialog
           open={commentDialog}
           onClose={() => setCommentDialog(!commentDialog)}
         >
-          <div className=" min-w-[350px] 800px:min-w-[500px]  h-[100vh] p-2">
+          <div
+            className=" min-w-[350px] 800px:min-w-[500px]  h-[100vh] p-2"
+            key={post._id}
+          >
             <h2 className="text-2xl text-center border-b-2 font-Poppins">
               Comments
             </h2>

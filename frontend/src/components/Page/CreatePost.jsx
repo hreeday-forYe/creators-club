@@ -69,7 +69,7 @@ const CreatePost = () => {
     console.log(data);
     try {
       await createPost({ title, photos, status, video });
-      toast.success('Post Created Successfully');
+      toast.success('Post sent for approval');
       navigate('/page-posts');
     } catch (error) {
       toast.error(error?.data?.message || error.error);

@@ -86,7 +86,7 @@ const GetPageSubscribers = () => {
   };
   return (
     <div className="w-full p-8">
-      <h1 className="text-[22px] mb-4 font-normal font-Poppins">
+      <h1 className="text-[22px] mb-4 font-normal text-center md:text-left font-Poppins">
         Page Subscriptions
       </h1>
       <div className="w-full min-h-[45vh] bg-white rounded">

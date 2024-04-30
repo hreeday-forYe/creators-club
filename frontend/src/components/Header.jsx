@@ -1,9 +1,4 @@
 import React, { useState } from 'react';
-// import {
-//   BookOpenIcon,
-//   Bars3BottomRightIcon,
-//   XMarkIcon,
-// } from '@heroicons/react/24/solid';
 import { IoMdMenu } from 'react-icons/io';
 import { FaXmark } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
@@ -40,7 +35,7 @@ const Header = () => {
         <div className="font-semibold text-2xl cursor-pointer font-Poppins flex items-center gap-1">
           {/* <BookOpenIcon className="w-7 h-7 text-blue-600" /> */}
           <Link to={'/'}>
-            <img src={logo} className='w-56' />
+            <img src={logo} className="w-56" />
           </Link>
         </div>
         {/* Menu icon */}

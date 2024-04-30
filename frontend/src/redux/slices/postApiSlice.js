@@ -77,6 +77,30 @@ export const postApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
+
+    adminAllPosts: builder.query({
+      query: () => ({
+        url: `${post_url}/admin-all-posts`,
+        method: 'GET',
+      }),
+      keepUnusedDataFor: 5,
+    }),
+
+    adminApprovePost: builder.mutation({
+      query: (postId) => ({
+        url: `${post_url}/approve/${postId}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['Post'],
+    }),
+
+    adminDeletePost: builder.mutation({
+      query: (postId) => ({
+        url: `${post_url}/admin-post-delete/${postId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Post'],
+    }),
   }),
 });
 
@@ -91,4 +115,7 @@ export const {
   usePostsOfFollowingsQuery,
   useGetMyPostsQuery,
   usePagePostsQuery,
+  useAdminAllPostsQuery,
+  useAdminApprovePostMutation,
+  useAdminDeletePostMutation,
 } = postApiSlice;

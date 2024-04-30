@@ -1,7 +1,9 @@
-import React from 'react';
+import React from 'react'
 
 const AdminDashboardMain = () => {
-  return <div className="w-full p-8">Hello Admin</div>;
-};
+  return (
+    <div className='w-full p-8'>AdminDashboardMain</div>
+  )
+}
 
-export default AdminDashboardMain;
+export default AdminDashboardMain

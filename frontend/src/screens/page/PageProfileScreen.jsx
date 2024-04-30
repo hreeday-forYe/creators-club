@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PageProfile from '../../components/Page/profile/PageProfile';
 import DashboardHeader from '../../components/Page/Layout/DashboardHeader';
 import DashboardSideBar from '../../components/Page/Layout/DashboardSidebar';
+import AdminHeader from '../../components/admin/Layout/AdminHeader';
+import AdminSidebar from '../../components/admin/Layout/AdminSidebar';
 import Navbar from '../../components/User/Navbar';
 import { useSelector } from 'react-redux';
 import Sidebar from '../../components/User/Sidebar';
@@ -17,10 +19,10 @@ const PageProfileScreen = () => {
         setIsCreator(true);
       }
     }
-  }, [authInfo]);
+  }, [authInfo, pageId]);
   return (
     <div>
-      {authInfo.creator ? (
+      {authInfo?.creator ? ( // Check if authInfo has a creator
         <>
           <DashboardHeader />
           <div className="flex w-full">
@@ -28,6 +30,19 @@ const PageProfileScreen = () => {
               <DashboardSideBar />
             </div>
             <PageProfile isCreator={isCreator} user={authInfo.creator} />
+          </div>
+        </>
+      ) : authInfo?.user && authInfo.user.role === 'Admin' ? ( // Check if authInfo has a user with role 'ADMIN'
+        <>
+          <AdminHeader />
+          <div className="flex w-full">
+            <div className="w-[80px] 800px:w-[330px]">
+              <AdminSidebar active={4} />
+            </div>
+            <PageProfile
+              isCreator={isCreator}
+              user={authInfo.user}
+            ></PageProfile>
           </div>
         </>
       ) : (

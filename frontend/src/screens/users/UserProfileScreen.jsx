@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import UserProfile from '../../components/User/UserProfile';
 import Navbar from '../../components/User/Navbar';
 import Sidebar from '../../components/User/Sidebar';
 import Rightbar from '../../components/User/Rightbar';
 const UserProfileScreen = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <div>

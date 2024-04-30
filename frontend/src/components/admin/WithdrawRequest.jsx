@@ -121,8 +121,8 @@ const WithdrawRequest = () => {
     });
 
   return (
-    <div className="w-full p-8">
-      <h1 className="text-2xl mb-4 font-normal">All Withdraw Requests</h1>
+    <div className="w-full pl-24 md:p-8">
+      <h1 className="text-2xl mb-4 font-normal text-center md:text-left">All Withdraw Requests</h1>
       <div className="w-full flex items-center pt-5 justify-center">
         <div className="w-[95%] bg-white">
           <DataGrid

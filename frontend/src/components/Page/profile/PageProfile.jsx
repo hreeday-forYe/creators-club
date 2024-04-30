@@ -90,7 +90,6 @@ const PageProfile = ({ user, isCreator }) => {
         createPaymentIntent(amount);
       }
     }
-    
   }, [config, data]);
 
   useEffect(() => {
@@ -167,6 +166,17 @@ const PageProfile = ({ user, isCreator }) => {
             >
               Edit Profile
             </Link>
+          </div>
+        ) : user?.role === 'Admin' ? (
+          // Render specific logic for admin
+          <div className="flex justify-center gap-4 mt-6 mb-5">
+            {/* <Link
+              className="bg-white text-blue-500 hover:shadow-lg shadow-md font-Roboto border-2 border-blue-500 px-10 py-2 rounded-2xl font-semibold"
+              to={'/admin-page-settings'}
+            >
+              Edit Profile
+            </Link> */}
+            
           </div>
         ) : (
           <div className="flex justify-center gap-4 mt-6 mb-5">

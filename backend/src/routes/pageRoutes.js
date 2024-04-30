@@ -40,7 +40,7 @@ pageRouter.delete('/delete-withdraw-method', isCreator, deleteWithdrawMethod);
 // admin routes
 pageRouter.get(
   '/get-all-pages',
-  isCreator,
+  isAuthenticated,
   authorizeRoles('Admin'),
   getAllPages
 );

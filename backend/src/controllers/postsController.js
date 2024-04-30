@@ -376,11 +376,12 @@ export const getPostsOfFollowing = asyncHandler(async (req, res, next) => {
         {
           creator: { $in: user.following },
           status: 'public',
-          // isVerified: true,
+          isVerified: true,
         },
         {
           creator: { $in: user.subscriptions },
           status: { $in: ['public', 'private'] },
+          isVerified: true,
         },
       ],
     })
@@ -443,6 +444,7 @@ export const getPostsOfPage = asyncHandler(async (req, res, next) => {
     const posts = await Post.find({
       creator: pageId,
       status: isSubscribed ? { $in: ['public', 'private'] } : 'public',
+      isVerified: true,
     })
       .populate('creator', 'name avatar')
       .populate({
@@ -460,12 +462,21 @@ export const getPostsOfPage = asyncHandler(async (req, res, next) => {
   }
 });
 
+// ---------------------------- ADMIN FUNCTIONALITIES ------------------------------ //
+
 // Get all posts of any page for admin
 export const adminAllPosts = asyncHandler(async (req, res, next) => {
   try {
-    const posts = await Post.find().sort({
-      createdAt: -1,
-    });
+    const posts = await Post.find()
+      .sort({
+        createdAt: -1,
+      })
+      .populate('creator', 'name avatar')
+      .populate({
+        path: 'comments.user', // Specify path to populate
+        select: 'name avatar', // Select fields to populate
+      })
+      .sort({ createdAt: -1 });
     res.status(201).json({
       success: true,
       posts,
@@ -474,3 +485,63 @@ export const adminAllPosts = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 500));
   }
 });
+
+// Approve post for admin
+export const approvePost = asyncHandler(async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    // console.log(post);
+    if (!post) {
+      return next(new ErrorHandler('post not found with the id', 400));
+    }
+    post.isVerified = true;
+    await post.save();
+
+    await Notification.create({
+      from: req.user._id,
+      to: post?.creator,
+      title: 'Post Approved',
+      message: `Your post: ${post?.title} has been approved by Admin`,
+      hold: post?._id,
+    });
+
+    // Respond with success message
+    res.status(201).json({
+      success: true,
+      message: 'Post approved successfully',
+      post,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+// DELETE POST FOR ADMIN
+export const adminDeletePost = asyncHandler(async (req, res, next) => {
+  try {
+    const postId = req.params.id;
+
+    // Find the post by ID and delete
+    const deletedPost = await Post.findByIdAndDelete(postId);
+
+    if (!deletedPost) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Post not found' });
+    }
+    // Make notification for the creator
+    await Notification.create({
+      from: req.user._id,
+      to: deletedPost?.creator,
+      title: 'Post Deleted',
+      message: `Your post: ${deletedPost?.title} violated our guidelines. It has been removed by Admin`,
+    });
+    // Respond with success message
+    res
+      .status(200)
+      .json({ success: true, message: 'Post deleted successfully' });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+

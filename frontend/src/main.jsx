@@ -43,7 +43,9 @@ import AdminWithdrawRequestScreen from './screens/admin/AdminWithdrawRequestScre
 // Protect middlewares
 import PrivateRoute from './routes/PrivateRoute';
 import PagePrivateRoute from './routes/PagePrivateRoute';
-
+import AdminAllCreatorsScreen from './screens/admin/AdminAllCreatorsScreen';
+import AdminAllPostsScreen from './screens/admin/AdminAllPostsScreen';
+import AdminAllSubscriptionsScreen from './screens/admin/AdminAllSubscriptionsScreen';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -84,6 +86,9 @@ const router = createBrowserRouter(
       {/* </Route> */}
       {/* Admin User protect middleware */}
       <Route path="/admin-dashboard" element={<AdminDashboardScreen />}></Route>
+      <Route path="/all-creators" element={<AdminAllCreatorsScreen />}></Route>
+      <Route path="/all-posts" element={<AdminAllPostsScreen />}></Route>
+      <Route path="/all-subscriptions" element={<AdminAllSubscriptionsScreen />}></Route>
       <Route path="/page/:id" element={<PageProfileScreen />}></Route>
 
       <Route
