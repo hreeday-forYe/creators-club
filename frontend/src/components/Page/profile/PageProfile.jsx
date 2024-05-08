@@ -27,7 +27,7 @@ const PageProfile = ({ user, isCreator }) => {
   const { data, refetch } = useGetPageInfoQuery(pageId);
   // console.log(data);
   const creator = data?.creator;
-  // console.log(creator);
+  console.log(creator);
   // console.log(user);
   // Using the follow unfollow query
   const [following, setFollowing] = useState(
@@ -103,6 +103,10 @@ const PageProfile = ({ user, isCreator }) => {
   //   setOpenPay(true);
   // };
 
+  const handleFeature = () => {
+    alert('log');
+  };
+
   return (
     <div className="w-[100%]">
       <div className="px-3 py-2">
@@ -170,13 +174,16 @@ const PageProfile = ({ user, isCreator }) => {
         ) : user?.role === 'Admin' ? (
           // Render specific logic for admin
           <div className="flex justify-center gap-4 mt-6 mb-5">
-            {/* <Link
-              className="bg-white text-blue-500 hover:shadow-lg shadow-md font-Roboto border-2 border-blue-500 px-10 py-2 rounded-2xl font-semibold"
-              to={'/admin-page-settings'}
-            >
-              Edit Profile
-            </Link> */}
-            
+            {creator?.isFeatured ? (
+              <button onClick={handleFeature}>Un feature</button>
+            ) : (
+              <button
+                className="border-blue-500 p-2 border-2 text-blue-500"
+                onClick={handleFeature}
+              >
+                Feature this Creator
+              </button>
+            )}
           </div>
         ) : (
           <div className="flex justify-center gap-4 mt-6 mb-5">

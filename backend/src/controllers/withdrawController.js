@@ -83,7 +83,7 @@ export const createWithdrawRequest = asyncHandler(async (req, res, next) => {
 export const getAllWithdrawRequest = asyncHandler(async (req, res, next) => {
   try {
     const withdraws = await Withdraw.find()
-      .populate('creator', 'name _id')
+      .populate('creator', 'name _id avatar')
       .sort({ createdAt: -1 });
     res.status(200).json({
       success: true,

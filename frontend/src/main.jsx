@@ -46,6 +46,9 @@ import PagePrivateRoute from './routes/PagePrivateRoute';
 import AdminAllCreatorsScreen from './screens/admin/AdminAllCreatorsScreen';
 import AdminAllPostsScreen from './screens/admin/AdminAllPostsScreen';
 import AdminAllSubscriptionsScreen from './screens/admin/AdminAllSubscriptionsScreen';
+import AdminPrivateRoute from './routes/AdminPrivateRoute';
+import NotFoundScreen from './screens/NotFoundScreen';
+import PageInboxScreen from './screens/page/PageInboxScreen';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -55,46 +58,58 @@ const router = createBrowserRouter(
       <Route path="/create-page" element={<CreatePageScreen />}></Route>
       <Route path="/verification" element={<VerificationScreen />}></Route>
       <Route path="/login" element={<LoginScreen />}></Route>
+      <Route path="*" element={<NotFoundScreen />}></Route>
 
       {/* registered users */}
-      {/* <Route path="" element={<PrivateRoute />}> */}
-      <Route path="/feed" element={<UserFeedScreen />}></Route>
-      <Route
-        path="/my-subscriptions"
-        element={<UserSubscriptionScreen />}
-      ></Route>
-      <Route path="/explore" element={<ExploreScreen />}></Route>
-      <Route path="/my-followings" element={<UserFollowingsScreen />}></Route>
-      <Route path="/profile" element={<UserProfileScreen />}></Route>
-      {/* </Route> */}
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/feed" element={<UserFeedScreen />}></Route>
+        <Route
+          path="/my-subscriptions"
+          element={<UserSubscriptionScreen />}
+        ></Route>
+        <Route path="/explore" element={<ExploreScreen />}></Route>
+        <Route path="/my-followings" element={<UserFollowingsScreen />}></Route>
+        <Route path="/profile" element={<UserProfileScreen />}></Route>
+        <Route path="/page/:id" element={<PageProfileScreen />}></Route>
+      </Route>
 
       {/* Registered Creators */}
-      {/* <Route path="" element={<PagePrivateRoute />}> */}
-      <Route path="/page-dashboard" element={<PageDashboardScreen />}></Route>
-      <Route path="/create-post" element={<CreatePostScreen />}></Route>
-      <Route path="/page-posts" element={<GetAllPostsScreen />}></Route>
-      <Route
-        path="/page-subscribers"
-        element={<PageAllSubscribersScreen />}
-      ></Route>
-      <Route path="/page-settings" element={<PageSettingsScreen />}></Route>
-      <Route path="/page-messages" element={<ExploreScreen />}></Route>
-      <Route
-        path="/page-withdraw-money"
-        element={<PageWithdrawMoneyScreen />}
-      ></Route>
-      {/* </Route> */}
-      {/* Admin User protect middleware */}
-      <Route path="/admin-dashboard" element={<AdminDashboardScreen />}></Route>
-      <Route path="/all-creators" element={<AdminAllCreatorsScreen />}></Route>
-      <Route path="/all-posts" element={<AdminAllPostsScreen />}></Route>
-      <Route path="/all-subscriptions" element={<AdminAllSubscriptionsScreen />}></Route>
-      <Route path="/page/:id" element={<PageProfileScreen />}></Route>
+      <Route path="" element={<PagePrivateRoute />}>
+        <Route path="/page-dashboard" element={<PageDashboardScreen />}></Route>
+        <Route path="/create-post" element={<CreatePostScreen />}></Route>
+        <Route path="/page-posts" element={<GetAllPostsScreen />}></Route>
+        <Route
+          path="/page-subscribers"
+          element={<PageAllSubscribersScreen />}
+        ></Route>
+        <Route path="/page-settings" element={<PageSettingsScreen />}></Route>
+        <Route path="/page-messages" element={<PageInboxScreen />}></Route>
+        <Route
+          path="/page-withdraw-money"
+          element={<PageWithdrawMoneyScreen />}
+        ></Route>
+      </Route>
 
-      <Route
-        path="/admin-withdraw-request"
-        element={<AdminWithdrawRequestScreen />}
-      ></Route>
+      {/* Admin User protect middleware */}
+      <Route path="" element={<AdminPrivateRoute />}>
+        <Route
+          path="/admin-dashboard"
+          element={<AdminDashboardScreen />}
+        ></Route>
+        <Route
+          path="/all-creators"
+          element={<AdminAllCreatorsScreen />}
+        ></Route>
+        <Route path="/all-posts" element={<AdminAllPostsScreen />}></Route>
+        <Route
+          path="/all-subscriptions"
+          element={<AdminAllSubscriptionsScreen />}
+        ></Route>
+        <Route
+          path="/admin-withdraw-request"
+          element={<AdminWithdrawRequestScreen />}
+        ></Route>
+      </Route>
     </Route>
   )
 );

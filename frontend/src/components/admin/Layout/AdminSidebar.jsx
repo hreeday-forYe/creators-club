@@ -10,6 +10,7 @@ import { CiMoneyBill } from 'react-icons/ci';
 import { BsFillFileEarmarkPostFill } from 'react-icons/bs';
 import { Button } from '@mui/base';
 import { CiLogout } from 'react-icons/ci';
+import { RxAvatar } from 'react-icons/rx';
 import { page_url } from '../../../constants';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -129,17 +130,14 @@ const AdminSidebar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
-        <Link to="/page-profile" className="w-full flex items-center">
-          <CiSettings
-            size={30}
-            color={`${active === 11 ? 'crimson' : '#555'}`}
-          />
+        <Link to="/admin-profile" className="w-full flex items-center">
+          <RxAvatar size={30} color={`${active === 11 ? 'crimson' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
               active === 11 ? 'text-[crimson]' : 'text-[#555]'
             }`}
           >
-            Settings
+            Admin Profile
           </h5>
         </Link>
       </div>

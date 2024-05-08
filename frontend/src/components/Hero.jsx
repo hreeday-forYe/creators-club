@@ -8,7 +8,7 @@ import svg1 from '../assets/svg1.png'
 import svg2 from '../assets/svg2.png'
 import svg3 from '../assets/svg3.png'
 const Hero = () => {
-  const notify = () => toast.success('Here is your toast.');
+  // const notify = () => toast.success('Here is your toast.');
   return (
     <section className="bg-[#E8EDFB]">
       <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
@@ -45,7 +45,7 @@ const Hero = () => {
             Explore Creators
           </Link>
         </div>
-        <div className="sm:w-50% lg:mt-0 lg:col-span-5 lg:flex">
+        <div className="sm:w-50% hero-animation lg:mt-0 lg:col-span-5 lg:flex">
           <img src={hero} alt="hero" />
         </div>
       </div>

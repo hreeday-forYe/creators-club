@@ -6,8 +6,11 @@ import Footer from '../components/Footer';
 import Whoisit from '../components/Whoisit';
 import Collabbrands from '../components/Collabbrands';
 import { Link } from 'react-router-dom';
-import followers from '../assets/followers.png'
-import signup from '../assets/signup.png'
+import followers from '../assets/followers.png';
+import signup from '../assets/signup.png';
+import call2 from '../assets/call2.png';
+import call3 from '../assets/call3.png';
+import call1 from '../assets/call1.png';
 // Child component
 const Followers = () => {
   return (
@@ -20,7 +23,8 @@ const Followers = () => {
             Build a Loyal Fanbase
           </h2>
           <p className="mb-6 font-light text-gray-500 md:text-lg">
-            Connect with people who actually care about your content and showcase your creativity among the loyal followers
+            Connect with people who actually care about your content and
+            showcase your creativity among the loyal followers
           </p>
           <Link
             to={'/create-page'}
@@ -46,15 +50,28 @@ const Followers = () => {
   );
 };
 
-
-const CalltoAction = () =>{
+const CalltoAction = () => {
   return (
-    <div>
-      
-
-    </div>
-  )
-}
+    <section
+      className="bg-white border-2 flex items-center pt-10 justify-center border-red-500"
+      id="calltoaction"
+    >
+      <div className="container flex justify-around w-[80%] items-center mb-2">
+        <div className='flex flex-col space-y-4'>
+          <img src={call3} className='' alt="" />
+          <h4 className='font-medium text-2xl text-center'>Sign Up</h4>
+          <p className='text-center text-xl'>Register with us and set up your personal Page for free</p>
+        </div>
+        <div>
+          <img src={call2} alt="" />
+        </div>
+        <div>
+          <img src={call1} alt="" />
+        </div>
+      </div>
+    </section>
+  );
+};
 const HomeScreen = () => {
   return (
     <>
@@ -65,7 +82,7 @@ const HomeScreen = () => {
       <Whoisit />
       <Collabbrands />
       <Followers />
-      <CalltoAction/>
+      <CalltoAction />
       <Footer />
     </>
   );

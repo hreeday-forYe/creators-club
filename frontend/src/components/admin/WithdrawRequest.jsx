@@ -32,18 +32,37 @@ const WithdrawRequest = () => {
   // GET ALL withdraw Requests
 
   const columns = [
-    { field: 'id', headerName: 'Withdraw Id', minWidth: 150, flex: 1.4 },
+    { field: 'id', headerName: 'Withdraw Id', minWidth: 150, flex: 1 },
+    {
+      field: 'avatarUrl', // Field name for avatar URL
+      headerName: 'Avatar',
+      minWidth: 120,
+      flex: 0.5,
+      renderCell: (params) => (
+        <img
+          src={params.value}
+          alt="Avatar"
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: '50%',
+            objectFit: 'cover',
+          }}
+        />
+      ),
+    },
+
     {
       field: 'name',
       headerName: 'Page Name',
       minWidth: 180,
-      flex: 1,
+      flex: 0.5,
     },
     {
       field: 'pageId',
       headerName: 'Page Id',
       minWidth: 180,
-      flex: 1.4,
+      flex: 1,
     },
     {
       field: 'amount',
@@ -67,17 +86,21 @@ const WithdrawRequest = () => {
     },
     {
       field: ' ',
-      headerName: 'Update Status',
+      headerName: 'Actions',
       type: 'number',
       minWidth: 130,
       flex: 0.4,
       renderCell: (params) => {
         return (
-          <BsPencil
-            size={20}
-            className={`${params.row.status !== 'Processing' ? 'hidden' : ''} mr-5 cursor-pointer`}
-            onClick={() => setOpen(true) || setWithdrawData(params.row)}
-          />
+          params.row.status === 'Processing' ? (
+            <BsPencil
+              size={20}
+              className={`${params.row.status !== 'Processing' ? 'hidden' : ''} mr-5 cursor-pointer`}
+              onClick={() => setOpen(true) || setWithdrawData(params.row)}
+            />
+          ):(
+            <p className='text-green-700 border-green-100 border p-2'>Success</p>
+          )
         );
       },
     },
@@ -117,12 +140,15 @@ const WithdrawRequest = () => {
         amount: 'US $' + item.amount,
         status: item.status,
         createdAt: item.createdAt.slice(0, 10),
+        avatarUrl: item.creator.avatar.url, // Include avatar URL
       });
     });
 
   return (
     <div className="w-full pl-24 md:p-8">
-      <h1 className="text-2xl mb-4 font-normal text-center md:text-left">All Withdraw Requests</h1>
+      <h1 className="text-2xl mb-4 font-normal text-center md:text-left">
+        All Withdraw Requests
+      </h1>
       <div className="w-full flex items-center pt-5 justify-center">
         <div className="w-[95%] bg-white">
           <DataGrid

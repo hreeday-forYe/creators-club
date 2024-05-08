@@ -151,16 +151,16 @@ const AllCreators = () => {
               </h3>
               <div className="w-full flex items-center justify-center">
                 <div
-                  className={`${styles.button} text-white text-[18px] !h-[42px] mr-4`}
+                  className={`${styles.button} bg-gray-500  hover:bg-gray-300 hover:text-black hover:shadow-md transition-all duration-100  text-white border text-[18px] !h-[42px] mr-4`}
                   onClick={() => setOpen(false)}
                 >
-                  cancel
+                  Cancel
                 </div>
                 <div
-                  className={`${styles.button} text-white text-[18px] !h-[42px] ml-4`}
+                  className={`${styles.button} text-white hover:bg-blue-500 text-[18px] !h-[42px] ml-4`}
                   onClick={() => setOpen(false) || handleBan(creatorId)}
                 >
-                  confirm
+                  Confirm
                 </div>
               </div>
             </div>

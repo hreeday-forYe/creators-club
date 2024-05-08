@@ -25,8 +25,14 @@ const PageProfileData = () => {
             );
           })}
         </div>
+      ) : user?.role === 'Admin' ? (
+        <p className="font-medium text-gray-500 text-lg">
+          Creator has no posts
+        </p>
       ) : (
-        <p className="font-medium text-gray-500 text-lg">Creator has no Public posts</p>
+        <p className="font-medium text-gray-500 text-lg">
+          Creator has no Public posts
+        </p>
       )}
     </div>
   );

@@ -12,7 +12,6 @@ import {
   useUpdateUserPasswordMutation,
 } from '../../redux/slices/usersApiSlice';
 import { setCredentials } from '../../redux/slices/authSlice';
-
 import Loader from '../Loader';
 const UserProfile = () => {
   const { data, isLoading, refetch } = useProfileQuery();

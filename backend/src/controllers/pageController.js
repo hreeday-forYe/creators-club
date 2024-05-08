@@ -241,8 +241,14 @@ const getPageInfo = asyncHandler(async (req, res, next) => {
 // Update Page Info for creators only- PUT REQUEST
 const updatePageInfo = asyncHandler(async (req, res, next) => {
   try {
-    const { name, description, phoneNumber, address, subscriptionCharge } =
-      req.body;
+    const {
+      name,
+      description,
+      phoneNumber,
+      address,
+      subscriptionCharge,
+      password,
+    } = req.body;
 
     const creator = await Page.findOne(req.creator?._id);
 
