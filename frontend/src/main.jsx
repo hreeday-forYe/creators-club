@@ -39,6 +39,7 @@ import store from './redux/store';
 // ADMIN SCREENS
 import AdminDashboardScreen from './screens/admin/AdminDashboardScreen';
 import AdminWithdrawRequestScreen from './screens/admin/AdminWithdrawRequestScreen';
+import AdminSiteAnalyticsScreen from './screens/admin/AdminSiteAnalyticsScreen';
 
 // Protect middlewares
 import PrivateRoute from './routes/PrivateRoute';
@@ -49,6 +50,8 @@ import AdminAllSubscriptionsScreen from './screens/admin/AdminAllSubscriptionsSc
 import AdminPrivateRoute from './routes/AdminPrivateRoute';
 import NotFoundScreen from './screens/NotFoundScreen';
 import PageInboxScreen from './screens/page/PageInboxScreen';
+import AdminAllUsersScreen from './screens/admin/AdminAllUsersScreen';
+import AdminProfileScreen from './screens/admin/AdminProfileScreen';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -70,7 +73,7 @@ const router = createBrowserRouter(
         <Route path="/explore" element={<ExploreScreen />}></Route>
         <Route path="/my-followings" element={<UserFollowingsScreen />}></Route>
         <Route path="/profile" element={<UserProfileScreen />}></Route>
-        <Route path="/page/:id" element={<PageProfileScreen />}></Route>
+      <Route path="/page/:id" element={<PageProfileScreen />}></Route>
       </Route>
 
       {/* Registered Creators */}
@@ -101,6 +104,8 @@ const router = createBrowserRouter(
           element={<AdminAllCreatorsScreen />}
         ></Route>
         <Route path="/all-posts" element={<AdminAllPostsScreen />}></Route>
+        <Route path="/all-users" element={<AdminAllUsersScreen />}></Route>
+        <Route path="/admin-profile" element={<AdminProfileScreen />}></Route>
         <Route
           path="/all-subscriptions"
           element={<AdminAllSubscriptionsScreen />}
@@ -108,6 +113,11 @@ const router = createBrowserRouter(
         <Route
           path="/admin-withdraw-request"
           element={<AdminWithdrawRequestScreen />}
+        ></Route>
+
+        <Route
+          path="/site-analytics"
+          element={<AdminSiteAnalyticsScreen />}
         ></Route>
       </Route>
     </Route>

@@ -10,10 +10,12 @@ import {
   updateCoverImage,
   pageSocialAuth,
   getAllPages,
-  deletePageById,
+  banPageById,
   deleteMyPage,
   updateWithdrawMethod,
   deleteWithdrawMethod,
+  featureCreator,
+  getfeaturedCreators,
 } from '../controllers/pageController.js';
 
 import express from 'express';
@@ -34,6 +36,12 @@ pageRouter.put('/update-page-avatar', isCreator, updatePageAvatar);
 pageRouter.put('/update-page-info', isCreator, updatePageInfo);
 pageRouter.put('/update-cover-image', isCreator, updateCoverImage);
 pageRouter.post('page-social-auth', pageSocialAuth);
+pageRouter.put(
+  '/feature-creator',
+  isAuthenticated,
+  authorizeRoles('Admin'),
+  featureCreator
+);
 pageRouter.delete('/delete-page', isCreator, deleteMyPage);
 pageRouter.put('/update-payment-methods', isCreator, updateWithdrawMethod);
 pageRouter.delete('/delete-withdraw-method', isCreator, deleteWithdrawMethod);
@@ -44,13 +52,13 @@ pageRouter.get(
   authorizeRoles('Admin'),
   getAllPages
 );
-
+pageRouter.get('/get-featured-creators', getfeaturedCreators);
 pageRouter.get('/:id', getPageInfo);
 pageRouter.delete(
-  '/delete-page/:id',
-  isCreator,
+  '/ban-page/:id',
+  isAuthenticated,
   authorizeRoles('Admin'),
-  deletePageById
+  banPageById
 );
 
 export default pageRouter;

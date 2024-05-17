@@ -57,7 +57,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
       });
       await post.save();
     } else if (title && video) {
-      console.log('video file path');
+      // console.log('video file path');
       // upload video to the cloudinary
       const result = await cloudinary.v2.uploader.upload(video, {
         resource_type: 'video',
@@ -439,6 +439,9 @@ export const getPostsOfPage = asyncHandler(async (req, res, next) => {
         isSubscribed =
           user.subscriptions && user.subscriptions.includes(pageId);
       }
+      if (user.role === 'Admin') {
+        isSubscribed = true;
+      }
     }
 
     const posts = await Post.find({
@@ -544,4 +547,3 @@ export const adminDeletePost = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 500));
   }
 });
-

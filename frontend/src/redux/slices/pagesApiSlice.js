@@ -116,6 +116,13 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    adminDeleteWithdraw: builder.mutation({
+      query: (data) => ({
+        url: `${backend_url}/withdraw/delete-withdraw-request`,
+        method: 'DELETE',
+        body: data,
+      }),
+    }),
     getCreatorsNotifications: builder.query({
       query: () => ({
         url: `${backend_url}/notification/get-creator-notifications`,
@@ -136,6 +143,22 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
         url: `${page_url}/get-all-pages`,
         method: 'GET',
       }),
+    }),
+
+    adminFeatureCreator: builder.mutation({
+      query: (pageId) => ({
+        url: `${page_url}/feature-creator`,
+        method: 'PUT',
+        body: { pageId: pageId },
+      }),
+    }),
+
+    getFeaturedCreators: builder.query({
+      query: () => ({
+        url: `${page_url}/get-featured-creators`,
+        method: 'GET',
+      }),
+      keepUnusedDataFor: 5,
     }),
 
     deletePage: builder.mutation({
@@ -163,7 +186,10 @@ export const {
   useCreateWithdrawRequestMutation,
   useGetAllWithdrawRequestQuery,
   useUpdateWithdrawRequestMutation,
+  useAdminDeleteWithdrawMutation,
   useGetCreatorsNotificationsQuery,
   useUpdateCreatorsNotificationsMutation,
+  useAdminFeatureCreatorMutation,
   useGetAllCreatorsQuery,
+  useGetFeaturedCreatorsQuery
 } = pagesApiSlice;

@@ -3,12 +3,8 @@ import { useGetCreatorSubcriptionsQuery } from '../../redux/slices/subscriptionA
 import { DataGrid } from '@mui/x-data-grid';
 
 const GetPageSubscribers = () => {
-  const {
-    data,
-    isLoading,
-    refetch,
-  } = useGetCreatorSubcriptionsQuery();
-  const subscriptions = data?.subscriptions
+  const { data, isLoading, refetch } = useGetCreatorSubcriptionsQuery();
+  const subscriptions = data?.subscriptions;
   const columns = [
     { field: 'id', headerName: 'Subscription ID', minWidth: 150, flex: 0.6 },
 
@@ -41,7 +37,6 @@ const GetPageSubscribers = () => {
       minWidth: 130,
       flex: 0.6,
     },
-
   ];
 
   const row = [];
@@ -92,10 +87,11 @@ const GetPageSubscribers = () => {
       <div className="w-full min-h-[45vh] bg-white rounded">
         <DataGrid
           rows={row ? row : 'No Subscriptions'}
-          className='text-center'
+          className="text-center"
           columns={columns}
           pageSize={10}
           disableSelectionOnClick
+          checkboxSelection
           autoHeight
           slots={{
             noRowsOverlay: CustomNoRowsOverlay,

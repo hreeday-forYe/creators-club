@@ -1,4 +1,3 @@
-import { post_url } from '../../constants';
 import { apiSlice } from './apiSlice';
 import { subscribe_url } from '../../constants';
 export const subscriptionApiSlice = apiSlice.injectEndpoints({
@@ -52,6 +51,13 @@ export const subscriptionApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    adminAllSubscriptions: builder.query({
+      query: () => ({
+        url: `${subscribe_url}/admin-all-subscriptions`,
+        method: 'GET',
+      }),
+      keepUnusedDataFor: 5,
+    }),
   }),
 });
 
@@ -62,4 +68,5 @@ export const {
   useGetUserSubscriptionsQuery,
   useGetCreatorSubcriptionsQuery,
   useCancelSubcriptionsMutation,
+  useAdminAllSubscriptionsQuery
 } = subscriptionApiSlice;

@@ -167,3 +167,20 @@ export const updateWithdrawRequest = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 500));
   }
 });
+
+
+export const deleteWithdrawRequest = asyncHandler(async(req,res,next)=>{
+  try {
+    const id = req.body.id
+    const withdraw = await Withdraw.findByIdAndDelete(id);
+    if(!withdraw){
+      return next(new ErrorHandler(error.message, 500)); 
+    }
+    res.status(201).json({
+      success:true,
+      withdraw
+    })
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500))
+  }
+})

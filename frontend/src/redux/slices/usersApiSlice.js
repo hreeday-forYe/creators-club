@@ -94,6 +94,26 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: 'GET',
       }),
     }),
+    adminGetAllUsers: builder.query({
+      query: () => ({
+        url: `${user_url}/admin-all-users`,
+        method: 'GET',
+      }),
+    }),
+    adminAddUser: builder.mutation({
+      query: (data) => ({
+        url: `${user_url}/admin-add-user`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    adminDeleteUser: builder.mutation({
+      query:(data) =>({
+        url: `${user_url}/admin-delete-user`,
+        method: 'DELETE',
+        body: data
+      })
+    })
   }),
 });
 
@@ -111,4 +131,7 @@ export const {
   useGetSuggestedPagesQuery,
   useFollowUnfollowPageMutation,
   useGetUserFollowingsQuery,
+  useAdminGetAllUsersQuery,
+  useAdminAddUserMutation,
+  useAdminDeleteUserMutation
 } = usersApiSlice;

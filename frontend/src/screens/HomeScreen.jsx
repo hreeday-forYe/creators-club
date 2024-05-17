@@ -11,6 +11,8 @@ import signup from '../assets/signup.png';
 import call2 from '../assets/call2.png';
 import call3 from '../assets/call3.png';
 import call1 from '../assets/call1.png';
+import { useGetFeaturedCreatorsQuery } from '../redux/slices/pagesApiSlice';
+import SuggestedPages from '../components/User/SuggestedPages';
 // Child component
 const Followers = () => {
   return (
@@ -51,23 +53,17 @@ const Followers = () => {
 };
 
 const CalltoAction = () => {
+  const { data, isLoading } = useGetFeaturedCreatorsQuery();
+  const creators = data?.data;
   return (
-    <section
-      className="bg-white border-2 flex items-center pt-10 justify-center border-red-500"
-      id="calltoaction"
-    >
-      <div className="container flex justify-around w-[80%] items-center mb-2">
-        <div className='flex flex-col space-y-4'>
-          <img src={call3} className='' alt="" />
-          <h4 className='font-medium text-2xl text-center'>Sign Up</h4>
-          <p className='text-center text-xl'>Register with us and set up your personal Page for free</p>
-        </div>
-        <div>
-          <img src={call2} alt="" />
-        </div>
-        <div>
-          <img src={call1} alt="" />
-        </div>
+    <section id="creators" className="p-12 mb-4">
+      <h2 className="mb-1 text-center text-4xl tracking-tight font-normal text-gray-900 ">
+        Featured Creators
+      </h2>
+      <div className="flex items-center justify-around">
+        {creators?.map((creator, index) => (
+          <SuggestedPages creator={creator} index={index} />
+        ))}
       </div>
     </section>
   );

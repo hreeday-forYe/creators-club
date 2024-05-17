@@ -80,7 +80,7 @@ const Sidebar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
+      {/* <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Link to="/explore" className="w-full flex items-center">
           <MdExplore size={30} color={`${active === 4 ? 'blue' : '#555'}`} />
           <h5
@@ -91,7 +91,7 @@ const Sidebar = ({ active }) => {
             Explore
           </h5>
         </Link>
-      </div>
+      </div> */}
 
       <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Link to="/inbox" className="w-full flex items-center">

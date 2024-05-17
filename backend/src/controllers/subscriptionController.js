@@ -329,9 +329,19 @@ export const cancelSubscriptions = asyncHandler(async (req, res, next) => {
 // GET ALL SUBSCRIPTIONS ADMIN ROUTE: /admin-all-subscriptions
 export const adminAllSubscriptions = asyncHandler(async (req, res, next) => {
   try {
-    const subscriptions = await Subscription.find().sort({
-      createdAt: -1,
-    });
+    const subscriptions = await Subscription.find()
+      .sort({
+        createdAt: -1,
+      })
+      .populate({
+        path: 'subscriber', // Populate subscriber field with User model
+        select: 'name', // Select specific fields to populate
+      })
+      .populate({
+        path: 'creator', // Populate creator field with Page model
+        select: 'name avatar', // Select specific fields to populate
+      });
+
     res.status(201).json({
       success: true,
       subscriptions,

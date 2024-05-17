@@ -12,9 +12,13 @@ import {
   updateProfilePicture,
   updateUserInfo,
   updateUserPassword,
-  getUserFollowings
+  getUserFollowings,
+  getAllUsers,
+  adminAddUser,
+  adminDeleteUser
 } from '../controllers/userControllers.js';
-import { isAuthenticated } from '../middlewares/auth.js';
+import { authorizeRoles, isAuthenticated } from '../middlewares/auth.js';
+import { getUserAnalytics } from '../controllers/analyticsController.js';
 
 const userRouter = express.Router();
 
@@ -28,7 +32,31 @@ userRouter.put('/update-user-info', isAuthenticated, updateUserInfo);
 userRouter.put('/update-password', isAuthenticated, updateUserPassword);
 userRouter.put('/update-avatar', isAuthenticated, updateProfilePicture);
 userRouter.get('/suggested-pages', isAuthenticated, getSuggestedPage);
-userRouter.get('/my-followings', isAuthenticated, getUserFollowings)
+userRouter.get('/my-followings', isAuthenticated, getUserFollowings);
+userRouter.get(
+  '/get-users-analytics',
+  isAuthenticated,
+  authorizeRoles('Admin'),
+  getUserAnalytics
+);
+userRouter.post(
+  '/admin-add-user',
+  isAuthenticated,
+  authorizeRoles('Admin'),
+  adminAddUser
+);
+userRouter.delete(
+  '/admin-delete-user',
+  isAuthenticated,
+  authorizeRoles('Admin'),
+  adminDeleteUser
+);
+userRouter.get(
+  '/admin-all-users',
+  isAuthenticated,
+  authorizeRoles('Admin'),
+  getAllUsers
+);
 userRouter.get('/:id', isAuthenticated, getUser);
 userRouter.put('/follow/:id', isAuthenticated, followUnfollowPage);
 export default userRouter;

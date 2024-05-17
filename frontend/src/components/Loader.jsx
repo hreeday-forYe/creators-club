@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactLoading from 'react-loading';
+// import ReactLoading from 'react-loading';
 const Loader = () => {
   return (
     // <div className="flex items-center justify-center top-16">

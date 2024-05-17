@@ -16,6 +16,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { MdBarChart } from "react-icons/md";
 import { IoPeopleSharp } from 'react-icons/io5';
 import { GrWorkshop } from 'react-icons/gr';
 import { logout } from '../../../redux/slices/authSlice';
@@ -130,11 +131,24 @@ const AdminSidebar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
-        <Link to="/admin-profile" className="w-full flex items-center">
-          <RxAvatar size={30} color={`${active === 11 ? 'crimson' : '#555'}`} />
+        <Link to="/site-analytics" className="w-full flex items-center">
+          <MdBarChart size={30} color={`${active === 7 ? 'blue' : '#555'}`} />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 11 ? 'text-[crimson]' : 'text-[#555]'
+              active === 7 ? 'text-blue-700' : 'text-[#555]'
+            }`}
+          >
+            Site Analytics
+          </h5>
+        </Link>
+      </div>
+
+      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+        <Link to="/admin-profile" className="w-full flex items-center">
+          <RxAvatar size={30} color={`${active === 8 ? 'blue' : '#555'}`} />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 8 ? 'text-[blue]' : 'text-[#555]'
             }`}
           >
             Admin Profile

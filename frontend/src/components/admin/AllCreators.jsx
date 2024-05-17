@@ -8,6 +8,8 @@ import { RxCross1 } from 'react-icons/rx';
 import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { useGetAllCreatorsQuery } from '../../redux/slices/pagesApiSlice';
+import { FaBan } from 'react-icons/fa';
+import { CiMail } from "react-icons/ci";
 
 const AllCreators = () => {
   const { data, isLoading } = useGetAllCreatorsQuery();
@@ -23,94 +25,49 @@ const AllCreators = () => {
     setCreators(data?.creators);
   }, [data, setCreators]);
 
-  const headerCellStyle = 'font-bold text-sm text-gray-800 bg-gray-200';
+  // const headerCellStyle = 'font-bold text-sm text-gray-800 bg-gray-200';
+
   const columns = [
-    { field: 'id', headerName: 'Creator ID', minWidth: 150, flex: 0.7 },
-
+    { field: 'id', headerName: 'Creator ID', flex: 1 },
+    { field: 'name', headerName: 'Name', flex: 1 },
+    { field: 'email', headerName: 'Email', flex: 1 },
+    { field: 'address', headerName: 'Address', flex: 1 },
+    { field: 'charge', headerName: 'Subscription', flex: 1 },
+    { field: 'joinedAt', headerName: 'Joined At', flex: 1 },
     {
-      field: 'name',
-      headerName: 'name',
-      minWidth: 130,
-      flex: 0.7,
-    },
-    {
-      field: 'email',
-      headerName: 'Email',
-      type: 'text',
-      minWidth: 130,
-      flex: 1.3,
-    },
-    {
-      field: 'address',
-      headerName: 'Creator Address',
-      type: 'text',
-      minWidth: 130,
-      flex: 0.7,
-    },
-    {
-      field: 'charge',
-      headerName: 'Subscription',
-      type: 'text',
-      minWidth: 130,
-      flex: 1,
-    },
-
-    {
-      field: 'joinedAt',
-      headerName: 'Joined At',
-      type: 'text',
-      minWidth: 130,
-      flex: 0.8,
-    },
-    {
-      field: '  ',
-      flex: 1,
-      minWidth: 150,
-      headerName: 'Preview Page',
-      type: 'number',
+      field: 'preview',
+      headerName: 'Preview',
       sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/page/${params.id}`}>
-              <Button>
-                <AiOutlineEye size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
+      flex: 0.6,
+      renderCell: (params) => (
+        <Link to={`/page/${params.id}`}>
+          <Button startIcon={<AiOutlineEye size={20} />}></Button>
+        </Link>
+      ),
     },
     {
-      field: ' ',
-      flex: 1,
-      minWidth: 150,
-      headerName: 'Ban Page',
-      type: 'number',
+      field: 'mail',
+      headerName: 'Mail',
       sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Button onClick={() => setCreatorId(params.id) || setOpen(true)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-red-500"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </Button>
-          </>
-        );
-      },
+      flex: 0.4,
+      renderCell: (params) => (
+        <a href={`mailto:${params.row.email}`}>
+          <Button startIcon={<CiMail size={23} className='text-blue-700' />}></Button>
+        </a>
+      ),
+    },
+    {
+      field: 'ban',
+      headerName: 'Ban',
+      sortable: false,
+      flex: 0.5,
+      renderCell: (params) => (
+        <Button onClick={() => setCreatorId(params.id) || setOpen(true)}>
+          <FaBan size={20} className="text-red-500" />
+        </Button>
+      ),
     },
   ];
-
   const row = [];
   creators &&
     creators.forEach((item) => {
@@ -135,8 +92,7 @@ const AllCreators = () => {
             rows={row}
             columns={columns}
             pageSize={10}
-            checkboxSelection
-            className="w-full h-auto font-Poppins bg-gray-100"
+            className="w-full h-auto font-Poppins"
             autoHeight
           />
         </div>

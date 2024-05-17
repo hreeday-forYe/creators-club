@@ -7,3 +7,4 @@ export const user_url = 'http://localhost:5000/api/v1/user';
 export const page_url = 'http://localhost:5000/api/v1/page';
 export const post_url = 'http://localhost:5000/api/v1/post';
 export const subscribe_url = 'http://localhost:5000/api/v1/subscribe';
+export const analytics_url = 'http://localhost:5000/api/v1/analytics';

@@ -32,7 +32,7 @@ const PageProfileScreen = () => {
             <PageProfile isCreator={isCreator} user={authInfo.creator} />
           </div>
         </>
-      ) : authInfo?.user && authInfo.user.role === 'Admin' ? ( // Check if authInfo has a user with role 'ADMIN'
+      ) : authInfo?.user && authInfo?.user?.role === 'Admin' ? ( // Check if authInfo has a user with role 'ADMIN'
         <>
           <AdminHeader />
           <div className="flex w-full">

@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Avatar } from '@mui/material';
 import logo from '../../../assets/logo.png';
+import { IoNotificationsOutline } from 'react-icons/io5';
 
 const AdminHeader = () => {
   const { authInfo } = useSelector((state) => state.auth);
   const admin = authInfo.user;
+  const [notifications, setNotifications] = useState([]);
 
   return (
     <div className="w-full h-[65px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
@@ -16,6 +18,7 @@ const AdminHeader = () => {
         </Link>
       </div>
       <div className="flex items-center">
+        
         <div className="flex items-center mr-4">
           <Avatar alt="Cindy Baker" src={`${admin?.avatar?.url}`}>
             {!admin?.avatar && 'A'}

@@ -15,6 +15,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckOutForm from '../../utils/CheckOutForm';
 import { TbMessage } from 'react-icons/tb';
+import { useAdminFeatureCreatorMutation } from '../../../redux/slices/pagesApiSlice';
 import socketIO from 'socket.io-client';
 import { server } from '../../../constants';
 const socketId = socketIO(server, { transports: ['websocket'] });
@@ -27,7 +28,7 @@ const PageProfile = ({ user, isCreator }) => {
   const { data, refetch } = useGetPageInfoQuery(pageId);
   // console.log(data);
   const creator = data?.creator;
-  console.log(creator);
+  // console.log(creator);
   // console.log(user);
   // Using the follow unfollow query
   const [following, setFollowing] = useState(
@@ -78,6 +79,8 @@ const PageProfile = ({ user, isCreator }) => {
     useCreatePaymentIntentMutation();
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState();
+  const [adminFeatureCreator, { isLoading: featureLoading }] =
+    useAdminFeatureCreatorMutation();
   // console.log(config);
   // console.log(paymentIntentData);
   useEffect(() => {
@@ -103,8 +106,11 @@ const PageProfile = ({ user, isCreator }) => {
   //   setOpenPay(true);
   // };
 
-  const handleFeature = () => {
-    alert('log');
+  const handleFeature = async () => {
+    const response = await adminFeatureCreator(pageId).unwrap();
+    refetch()
+    // console.log(response)
+    toast.success(response.message)
   };
 
   return (
@@ -175,10 +181,10 @@ const PageProfile = ({ user, isCreator }) => {
           // Render specific logic for admin
           <div className="flex justify-center gap-4 mt-6 mb-5">
             {creator?.isFeatured ? (
-              <button onClick={handleFeature}>Un feature</button>
+              <button onClick={handleFeature} className='border-red-500 p-2 border-2 font-semibold hover:scale-105 text-red-500 transition duration-100 shadow-md capitalize'>Remove from feature</button>
             ) : (
               <button
-                className="border-blue-500 p-2 border-2 text-blue-500"
+                className="border-blue-500 p-2 border-2 rounded-md font-semibold hover:scale-105 text-blue-500 transition duration-100 shadow-md"
                 onClick={handleFeature}
               >
                 Feature this Creator

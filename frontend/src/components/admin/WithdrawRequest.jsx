@@ -10,7 +10,9 @@ import { toast } from 'react-hot-toast';
 import {
   useGetAllWithdrawRequestQuery,
   useUpdateWithdrawRequestMutation,
+  useAdminDeleteWithdrawMutation,
 } from '../../redux/slices/pagesApiSlice';
+import { FaRegTrashAlt } from 'react-icons/fa';
 import Loader from '../Loader';
 const WithdrawRequest = () => {
   const [data, setData] = useState([]);
@@ -22,15 +24,25 @@ const WithdrawRequest = () => {
     isLoading,
     refetch,
   } = useGetAllWithdrawRequestQuery();
-  console.log(allWithdraws);
+  // console.log(allWithdraws);
   const withdraws = allWithdraws?.withdraws;
-  console.log(withdraws);
+  // console.log(withdraws);
 
   const [updateWithdrawRequest, { isLoading: updateLoading }] =
     useUpdateWithdrawRequestMutation();
-
+  const [deleteWithdrawRequest] = useAdminDeleteWithdrawMutation();
   // GET ALL withdraw Requests
-
+  const deleteWithdraw = async (id) => {
+    if (window.confirm('Are you sure? ')) {
+      try {
+        await deleteWithdrawRequest({ id }).unwrap();
+        toast.success('Removed');
+        refetch();
+      } catch (error) {
+        toast.error(error.error);
+      }
+    }
+  };
   const columns = [
     { field: 'id', headerName: 'Withdraw Id', minWidth: 150, flex: 1 },
     {
@@ -72,10 +84,21 @@ const WithdrawRequest = () => {
     },
     {
       field: 'status',
-      headerName: 'status',
+      headerName: 'Status',
       type: 'text',
       minWidth: 80,
       flex: 0.7,
+      renderCell: (params) => (
+        <span
+          style={{
+            color: params.row.status === 'Processing' ? 'blue' : '#72D387',
+            fontWeight: 'medium',
+            textTransform: 'capitalize',
+          }}
+        >
+          {params.value}
+        </span>
+      ),
     },
     {
       field: 'createdAt',
@@ -91,16 +114,18 @@ const WithdrawRequest = () => {
       minWidth: 130,
       flex: 0.4,
       renderCell: (params) => {
-        return (
-          params.row.status === 'Processing' ? (
-            <BsPencil
-              size={20}
-              className={`${params.row.status !== 'Processing' ? 'hidden' : ''} mr-5 cursor-pointer`}
-              onClick={() => setOpen(true) || setWithdrawData(params.row)}
-            />
-          ):(
-            <p className='text-green-700 border-green-100 border p-2'>Success</p>
-          )
+        return params.row.status === 'Processing' ? (
+          <BsPencil
+            size={20}
+            className={`${params.row.status !== 'Processing' ? 'hidden' : ''} mr-5 cursor-pointer`}
+            onClick={() => setOpen(true) || setWithdrawData(params.row)}
+          />
+        ) : (
+          <FaRegTrashAlt
+            className="text-red-500 text-center cursor-pointer"
+            onClick={() => deleteWithdraw(params.id)}
+            size={20}
+          />
         );
       },
     },

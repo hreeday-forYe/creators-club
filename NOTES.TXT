@@ -8,3 +8,15 @@ Goals for starting and managing the file structure
 5. Login TOken Generation 
 6. Acccess Token in the Schema and refresh token update generation 
 7. Admin, user and creator authorization and authentication.
+
+
+ADMIN DASHBOARD FEATURES: 
+(APPROVE POST DELETE POST)  -- DONE
+(VIEW PROFILE) -- DONE
+(VIEW SUBSCRIPTIONS) 
+(VIEW USERS, CREATE USERS, DELETE USERS, UPDATE USERS) 
+(VIEW CREATORS, DELETE CREATORS, BAN CREATORS, FEATURE CREATORS) 
+(SOME CHARTS FOR INSIGHTS)
+(WITHDRAW REQUEST ACCEPT) -- DONE
+(SEND MAIL TO CREATORS)-- OPTIONAL
+==>TIME I HAVE: 2 DAYS

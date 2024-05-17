@@ -428,8 +428,84 @@ const getAllPages = asyncHandler(async (req, res, next) => {
   }
 });
 
-// Delete Creator Page for admin
-const deletePageById = asyncHandler(async (req, res, next) => {
+// Feature creator page for admin
+export const featureCreator = asyncHandler(async (req, res, next) => {
+  try {
+    const pageId = req.body.pageId;
+    const page = await Page.findById(pageId);
+    if (page.isFeatured) {
+      page.isFeatured = false;
+      await page.save();
+      res.status(201).json({
+        success: true,
+        message: 'UnFeatured Successfully',
+      });
+    } else {
+      page.isFeatured = true;
+      await page.save();
+      res.status(201).json({
+        success: true,
+        message: 'Featured Successfully',
+      });
+    }
+  } catch (error) {
+    return next(new ErrorHandler(error.message), 500);
+  }
+});
+
+// export const getfeaturedCreators = asyncHandler(async (req, res, next) => {
+//   try {
+//     // Find up to two featured creators
+//     const featuredCreators = await Page.find({ isFeatured: true }).limit(2);
+
+//     // If less than two featured creators are found, find any creator
+//     if (featuredCreators.length < 2) {
+//       const remainingCreatorsCount = 2 - featuredCreators.length;
+//       const additionalCreators = await Page.find().limit(
+//         remainingCreatorsCount
+//       );
+
+//       // Concatenate the additional creators to the featured creators array
+//       featuredCreators.push(...additionalCreators);
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       data: featuredCreators,
+//     });
+//   } catch (error) {
+//     return next(new ErrorHandler(error.message), 500);
+//   }
+// });
+
+export const getfeaturedCreators = asyncHandler(async (req, res, next) => {
+  try {
+    // Projecting only the required fields
+    const featuredPages = await Page.find({ isFeatured: true })
+      .limit(3)
+      .select('name coverImage avatar description');
+
+    // If less than two featured pages are found, find any page
+    if (featuredPages.length < 3) {
+      const remainingPagesCount = 3 - featuredPages.length;
+      const additionalPages = await Page.find()
+        .limit(remainingPagesCount)
+        .select('name coverImage avatar description');
+
+      // Concatenate the additional pages to the featured pages array
+      featuredPages.push(...additionalPages);
+    }
+
+    res.status(200).json({
+      success: true,
+      data: featuredPages,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+// Ban Creator Page for admin
+const banPageById = asyncHandler(async (req, res, next) => {
   try {
     const page = await Page.findById(req.params.id);
 
@@ -465,5 +541,5 @@ export {
 
   // for admin
   getAllPages,
-  deletePageById,
+  banPageById,
 };

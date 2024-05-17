@@ -445,10 +445,69 @@ export const getUser = asyncHandler(async (req, res, next) => {
   try {
     getUserById(req.params.id, res, next);
   } catch (error) {
-    return next(new ErrorHandler(error.message, 400));
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+// Admin get all users
+export const getAllUsers = asyncHandler(async (req, res, next) => {
+  try {
+    const users = await User.find().sort({
+      createdAt: -1,
+    });
+    res.status(201).json({
+      success: true,
+      message: 'users are found',
+      users,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
   }
 });
 
+export const adminAddUser = asyncHandler(async (req, res, next) => {
+  try {
+    const { name, email, password, isAdmin } = req.body;
+    console.log('role is here ', isAdmin);
+    const user = await User.findOne({ email });
+    const page = await User.findOne({ email });
+    if (user || page) {
+      return next(new ErrorHandler('Email already exists', 500));
+    }
+    const role = isAdmin ? 'Admin' : 'user';
+    await User.create({
+      name,
+      email,
+      password,
+      role,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'User has been successfully Added',
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+export const adminDeleteUser = asyncHandler(async (req, res, next) => {
+  try {
+    const { id } = req.body;
+
+    const user = await User.findByIdAndDelete(id);
+
+    if (!user) {
+      return next(new ErrorHandler('User not found', 500));
+    }
+
+    res.status(201).json({
+      success: true,
+      message: 'User has been deleted successfully',
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
 export {
   registerUser,
   activateUser,
