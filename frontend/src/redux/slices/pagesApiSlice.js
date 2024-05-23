@@ -161,6 +161,12 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
     }),
 
+    adminBanCreator: builder.mutation({
+      query: (pageid) => ({
+        url: `${page_url}/ban-page/${pageid}`,
+        method: 'PUT',
+      }),
+    }),
     deletePage: builder.mutation({
       query: () => ({
         url: `${page_url}/delete-page`,
@@ -191,5 +197,6 @@ export const {
   useUpdateCreatorsNotificationsMutation,
   useAdminFeatureCreatorMutation,
   useGetAllCreatorsQuery,
-  useGetFeaturedCreatorsQuery
+  useGetFeaturedCreatorsQuery,
+  useAdminBanCreatorMutation
 } = pagesApiSlice;

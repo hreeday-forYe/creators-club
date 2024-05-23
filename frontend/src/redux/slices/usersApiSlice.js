@@ -94,6 +94,22 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: 'GET',
       }),
     }),
+
+    getUserNotifications: builder.query({
+      query: () => ({
+        url: `${backend_url}/notification/get-user-notifications`,
+        method: 'GET',
+      }),
+      keepUnusedDataFor: 5,
+    }),
+
+    updateUserNotifications: builder.mutation({
+      query: ({ id }) => ({
+        url: `${backend_url}/notification/update-user-notifications/${id}`,
+        method: 'PUT',
+      }),
+    }),
+
     adminGetAllUsers: builder.query({
       query: () => ({
         url: `${user_url}/admin-all-users`,
@@ -131,6 +147,8 @@ export const {
   useGetSuggestedPagesQuery,
   useFollowUnfollowPageMutation,
   useGetUserFollowingsQuery,
+  useGetUserNotificationsQuery,
+  useUpdateUserNotificationsMutation,
   useAdminGetAllUsersQuery,
   useAdminAddUserMutation,
   useAdminDeleteUserMutation

@@ -167,7 +167,9 @@ export const getUserSubscriptions = asyncHandler(async (req, res, next) => {
     const subscriptions = await Subscription.find({ subscriber: userId })
       .populate({
         path: 'creator',
+        // match: { isBanned: false },
         select: 'name avatar description',
+        match: { isBanned: { $ne: true } },
       })
       .exec();
 

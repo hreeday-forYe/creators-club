@@ -60,7 +60,7 @@ const CalltoAction = () => {
       <h2 className="mb-1 text-center text-4xl tracking-tight font-normal text-gray-900 ">
         Featured Creators
       </h2>
-      <div className="flex items-center justify-around">
+      <div className="flex items-center md:space-x-2 sm:space-y-4 flex-col md:flex-row justify-around">
         {creators?.map((creator, index) => (
           <SuggestedPages creator={creator} index={index} />
         ))}
@@ -77,8 +77,8 @@ const HomeScreen = () => {
       </div>
       <Whoisit />
       <Collabbrands />
-      <Followers />
       <CalltoAction />
+      <Followers />
       <Footer />
     </>
   );

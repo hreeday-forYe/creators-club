@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 import { Box } from '@mui/material';
 const GetAllPosts = () => {
   const { data, isLoading, error, refetch } = useGetMyPostsQuery();
-  console.log(data);
+  // console.log(data);
   const posts = data?.posts;
 
   const { authInfo } = useSelector((state) => state.auth);

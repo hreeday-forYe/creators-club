@@ -5,6 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 const GetPageSubscribers = () => {
   const { data, isLoading, refetch } = useGetCreatorSubcriptionsQuery();
   const subscriptions = data?.subscriptions;
+  console.log(subscriptions)
   const columns = [
     { field: 'id', headerName: 'Subscription ID', minWidth: 150, flex: 0.6 },
 

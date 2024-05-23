@@ -11,7 +11,6 @@ import {
   pageSocialAuth,
   getAllPages,
   banPageById,
-  deleteMyPage,
   updateWithdrawMethod,
   deleteWithdrawMethod,
   featureCreator,
@@ -42,7 +41,6 @@ pageRouter.put(
   authorizeRoles('Admin'),
   featureCreator
 );
-pageRouter.delete('/delete-page', isCreator, deleteMyPage);
 pageRouter.put('/update-payment-methods', isCreator, updateWithdrawMethod);
 pageRouter.delete('/delete-withdraw-method', isCreator, deleteWithdrawMethod);
 // admin routes
@@ -54,7 +52,7 @@ pageRouter.get(
 );
 pageRouter.get('/get-featured-creators', getfeaturedCreators);
 pageRouter.get('/:id', getPageInfo);
-pageRouter.delete(
+pageRouter.put(
   '/ban-page/:id',
   isAuthenticated,
   authorizeRoles('Admin'),

@@ -73,7 +73,8 @@ const router = createBrowserRouter(
         <Route path="/explore" element={<ExploreScreen />}></Route>
         <Route path="/my-followings" element={<UserFollowingsScreen />}></Route>
         <Route path="/profile" element={<UserProfileScreen />}></Route>
-      <Route path="/page/:id" element={<PageProfileScreen />}></Route>
+        <Route path="/inbox" element={<ExploreScreen />}></Route>
+        <Route path="/page/:id" element={<PageProfileScreen />}></Route>
       </Route>
 
       {/* Registered Creators */}
@@ -91,6 +92,7 @@ const router = createBrowserRouter(
           path="/page-withdraw-money"
           element={<PageWithdrawMoneyScreen />}
         ></Route>
+        <Route path="/page-messages" element={<ExploreScreen />}></Route>
       </Route>
 
       {/* Admin User protect middleware */}

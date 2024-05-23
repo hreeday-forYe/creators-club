@@ -7,7 +7,7 @@ import { asyncHandler } from '../middlewares/asyncHandler.js';
 import ErrorHandler from '../utils/ErrorHandler.js';
 import User from '../models/usersModel.js';
 import Notification from '../models/notificationsModel.js';
-
+import mongoose from 'mongoose';
 // Create Post
 export const createPost = asyncHandler(async (req, res, next) => {
   try {
@@ -87,6 +87,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
     console.log('THe post I uploaded', post);
     page.posts.push(post._id);
     await page.save();
+
     res.status(201).json({
       success: true,
       post,
@@ -490,6 +491,38 @@ export const adminAllPosts = asyncHandler(async (req, res, next) => {
 });
 
 // Approve post for admin
+// export const approvePost = asyncHandler(async (req, res, next) => {
+//   try {
+//     const post = await Post.findById(req.params.id).populate('creator');
+//     // console.log(post);
+//     if (!post) {
+//       return next(new ErrorHandler('post not found with the id', 400));
+//     }
+//     post.isVerified = true;
+//     await post.save();
+//     // Notification for the creator of the post
+//     // console.log('notification portion1')
+//     await Notification.create({
+//       from: req.user._id,
+//       to: post?.creator,
+//       title: 'Post Approved',
+//       message: `Your post: ${post?.title} has been approved by Admin`,
+//       hold: post?._id,
+//     });
+//     // console.log('notification portion2')
+
+//     // Respond with success message
+//     res.status(201).json({
+//       success: true,
+//       message: 'Post approved successfully',
+//       post,
+//     });
+//   } catch (error) {
+//     return next(new ErrorHandler(error.message, 500));
+//   }
+// });
+
+// Approve post for admin
 export const approvePost = asyncHandler(async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -532,6 +565,12 @@ export const adminDeletePost = asyncHandler(async (req, res, next) => {
         .status(404)
         .json({ success: false, message: 'Post not found' });
     }
+
+    // Remove the post ID from the posts array in the Page (or Creator) schema
+    await Page.findByIdAndUpdate(deletedPost.creator, {
+      $pull: { posts: postId },
+    });
+
     // Make notification for the creator
     await Notification.create({
       from: req.user._id,

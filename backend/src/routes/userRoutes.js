@@ -15,7 +15,8 @@ import {
   getUserFollowings,
   getAllUsers,
   adminAddUser,
-  adminDeleteUser
+  adminDeleteUser,
+  adminUpdateUser
 } from '../controllers/userControllers.js';
 import { authorizeRoles, isAuthenticated } from '../middlewares/auth.js';
 import { getUserAnalytics } from '../controllers/analyticsController.js';
@@ -56,6 +57,12 @@ userRouter.get(
   isAuthenticated,
   authorizeRoles('Admin'),
   getAllUsers
+);
+userRouter.get(
+  '/admin-update-user',
+  isAuthenticated,
+  authorizeRoles('Admin'),
+  adminUpdateUser
 );
 userRouter.get('/:id', isAuthenticated, getUser);
 userRouter.put('/follow/:id', isAuthenticated, followUnfollowPage);

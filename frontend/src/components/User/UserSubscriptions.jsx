@@ -21,7 +21,7 @@ const UserSubscriptions = () => {
   } = useGetUserSubscriptionsQuery();
   // console.log(subscriptions);
   const userSubscriptions = subscriptions?.subscriptions;
-  // console.log(userSubscriptions);
+  console.log(userSubscriptions);
 
   const { data: user, isLoading: userLoading } = useProfileQuery();
   // console.log(user);
@@ -94,10 +94,10 @@ const UserSubscriptions = () => {
                   />
                   <div>
                     <p className="font-semibold text-gray-800">
-                      {subscription.creator.name}
+                      {subscription.creator?.name}
                     </p>
                     <p className="text-sm text-gray-600">
-                      {subscription.creator.description}
+                      {subscription.creator?.description}
                     </p>
                     <div className="mt-2 font-medium text-gray-600 flex items-center gap-4">
                       <p>Subscription Price: ${subscription.totalPrice}</p>
@@ -107,7 +107,7 @@ const UserSubscriptions = () => {
                 </div>
                 <div className="flex items-center gap-6 mx-3 mt-6">
                   <Link
-                    to={`/page/${subscription.creator._id}`}
+                    to={`/page/${subscription.creator?._id}`}
                     className=" border-2 p-2 rounded-md font-semibold bg-blue-500 text-white"
                   >
                     Profile

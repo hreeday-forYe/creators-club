@@ -93,7 +93,11 @@ const pageSchema = new mongoose.Schema(
     },
     isFeatured: {
       type: Boolean,
-      default: false
+      default: false,
+    },
+    isBanned: {
+      type: Boolean,
+      default: false,
     },
     subscribers: [
       {

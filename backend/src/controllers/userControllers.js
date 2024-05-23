@@ -392,10 +392,11 @@ export const getUserFollowings = asyncHandler(async (req, res, next) => {
     const userId = req.user._id;
 
     // Fetch the user's followings and populate additional information
-    const user = await User.findById(userId).populate(
-      'following',
-      'name avatar description followers'
-    );
+    const user = await User.findById(userId).populate({
+      path: 'following',
+      select: 'name avatar description followers',
+      match: { isBanned: { $ne: true } } 
+  });
 
     // Extract the followings from the user object
     const followings = user.following;
@@ -424,10 +425,11 @@ export const getSuggestedPage = asyncHandler(async (req, res, next) => {
       // Getting the followed and subscribed page id
       const followedPageIds = user.following.concat(user.subscriptions);
 
-      // getting the pages id whose id does not exist in followedPageIds
-      pages = await Page.find({ _id: { $nin: followedPageIds } });
-    } else {
-      pages = await Page.find();
+      // getting the pages id whose id does not exist in followedPageIds and they are not banned
+      pages = await Page.find({
+        _id: { $nin: followedPageIds },
+        isBanned: false,
+      });
     }
 
     // console.log(pages);
@@ -490,19 +492,67 @@ export const adminAddUser = asyncHandler(async (req, res, next) => {
   }
 });
 
+// export const adminDeleteUser = asyncHandler(async (req, res, next) => {
+//   try {
+//     const { id } = req.body;
+
+//     const user = await User.findByIdAndDelete(id);
+
+//     if (!user) {
+//       return next(new ErrorHandler('User not found', 500));
+//     }
+
+//     res.status(201).json({
+//       success: true,
+//       message: 'User has been deleted successfully',
+//     });
+//   } catch (error) {
+//     return next(new ErrorHandler(error.message, 500));
+//   }
+// });
+
 export const adminDeleteUser = asyncHandler(async (req, res, next) => {
   try {
     const { id } = req.body;
 
+    // Find the user and delete
     const user = await User.findByIdAndDelete(id);
 
     if (!user) {
       return next(new ErrorHandler('User not found', 500));
     }
 
+    // Remove the user from subscriptions and followers/subscribers lists
+    await Page.updateMany({ subscribers: id }, { $pull: { subscribers: id } });
+
+    await Page.updateMany({ followers: id }, { $pull: { followers: id } });
+
     res.status(201).json({
       success: true,
       message: 'User has been deleted successfully',
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+export const adminUpdateUser = asyncHandler(async (req, res, next) => {
+  try {
+    const { id, name, email } = req.body;
+    if (!id || !name || !email) {
+      return next(new ErrorHandler('All fields are required', 400));
+    }
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      return next(new ErrorHandler('User not found', 404));
+    }
+
+    (user.name = name), (user.email = email), await user.save();
+    res.status(201).json({
+      success: true,
+      message: 'User has been updated',
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));

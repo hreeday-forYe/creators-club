@@ -109,6 +109,25 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
     }
   };
 
+  // // Approve Post -----ADMIN ONLY
+  // const adminApprovePost = async () => {
+  //   if (window.confirm('Are you sure you want to approve this post? ')) {
+  //     try {
+  //       await approvePost(post._id).unwrap();
+  //       refetch();
+  //       socketId.emit('newNotification', {
+  //         title: 'Post Approved',
+  //         message: `your post was approved by admin`,
+  //         userId: user._id,
+  //       });
+
+  //       toast.success('Post Approved');
+  //     } catch (error) {
+  //       toast.error(error.error);
+  //     }
+  //   }
+  // };
+
   // Approve Post -----ADMIN ONLY
   const adminApprovePost = async () => {
     if (window.confirm('Are you sure you want to approve this post? ')) {
@@ -126,7 +145,6 @@ const Post = ({ post, isCreator, deletePost, refetch, user }) => {
       }
     }
   };
-
   const deleteCommentHandler = async (commentId) => {
     try {
       await deleteComment({ postId, commentId }).unwrap();

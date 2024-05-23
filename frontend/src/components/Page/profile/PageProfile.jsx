@@ -28,7 +28,7 @@ const PageProfile = ({ user, isCreator }) => {
   const { data, refetch } = useGetPageInfoQuery(pageId);
   // console.log(data);
   const creator = data?.creator;
-  // console.log(creator);
+  console.log(creator);
   // console.log(user);
   // Using the follow unfollow query
   const [following, setFollowing] = useState(
@@ -108,9 +108,9 @@ const PageProfile = ({ user, isCreator }) => {
 
   const handleFeature = async () => {
     const response = await adminFeatureCreator(pageId).unwrap();
-    refetch()
+    refetch();
     // console.log(response)
-    toast.success(response.message)
+    toast.success(response.message);
   };
 
   return (
@@ -181,7 +181,12 @@ const PageProfile = ({ user, isCreator }) => {
           // Render specific logic for admin
           <div className="flex justify-center gap-4 mt-6 mb-5">
             {creator?.isFeatured ? (
-              <button onClick={handleFeature} className='border-red-500 p-2 border-2 font-semibold hover:scale-105 text-red-500 transition duration-100 shadow-md capitalize'>Remove from feature</button>
+              <button
+                onClick={handleFeature}
+                className="border-red-500 p-2 border-2 font-semibold hover:scale-105 text-red-500 transition duration-100 shadow-md capitalize"
+              >
+                Remove from feature
+              </button>
             ) : (
               <button
                 className="border-blue-500 p-2 border-2 rounded-md font-semibold hover:scale-105 text-blue-500 transition duration-100 shadow-md"

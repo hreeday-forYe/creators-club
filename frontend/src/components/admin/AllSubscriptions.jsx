@@ -82,8 +82,8 @@ const AllSubscriptions = () => {
       row.push({
         id: item._id,
         avatarUrl: item.creator.avatar.url,
-        name: item.creator.name,
-        user: item.subscriber.name,
+        name: item.creator?.name,
+        user: item.subscriber?.name,
         amount: 'US $' + item.totalPrice,
         expiry: item.expiryDate.slice(0, 10),
         status: item.paymentInfo.status,

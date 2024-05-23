@@ -13,7 +13,7 @@ const UserFollowings = () => {
     refetch,
   } = useGetUserFollowingsQuery();
   const followings = usersFollowing?.followings;
-  // console.log(followings);
+  console.log(followings);
 
   const [followUnfollow, { isLoading: followLoading }] =
     useFollowUnfollowPageMutation();

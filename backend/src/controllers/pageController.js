@@ -141,7 +141,9 @@ const loginCreator = asyncHandler(async (req, res, next) => {
     if (!creator) {
       return next(new ErrorHandler('Invalid Email or Password', 400));
     }
-
+    if (creator.isBanned) {
+      return next(new ErrorHandler('Your Account is Currently Banned', 403));
+    }
     const isPasswordMatch = await creator.comparePassword(password);
     if (!isPasswordMatch) {
       return next(new ErrorHandler('Invalid Email or Password', 400));
@@ -344,35 +346,6 @@ const updateCoverImage = asyncHandler(async (req, res, next) => {
   }
 });
 
-// delete your page --DELETE Request
-const deleteMyPage = asyncHandler(async (req, res, next) => {
-  const page = Page.findById(req.creator._id);
-  // get posts of the page
-  const pagePosts = page.posts;
-  const followers = page.followers;
-  await page.remove();
-
-  // after deleting the page logout the creator
-  res.cookie('creator_jwt', '', {
-    httpOnly: true,
-    expires: new Date(0),
-  });
-
-  //  TODO: removing Page from  all users following lists
-  for (let i = 0; i < followers.length; i++) {
-    const follower = await User.findById(followers[i]);
-  }
-
-  // Removing the associated posts form the post schema
-  for (let i = 0; i < pagePosts.length; i++) {
-    await Post.findByIdAndDelete(pagePosts[i]);
-  }
-  res.status(201).json({
-    success: true,
-    message: 'Page deleted Successfully',
-  });
-});
-
 /* TODO: Creator WithDraw method and update withdraw method function */
 export const updateWithdrawMethod = asyncHandler(async (req, res, next) => {
   try {
@@ -481,7 +454,7 @@ export const featureCreator = asyncHandler(async (req, res, next) => {
 export const getfeaturedCreators = asyncHandler(async (req, res, next) => {
   try {
     // Projecting only the required fields
-    const featuredPages = await Page.find({ isFeatured: true })
+    const featuredPages = await Page.find({ isFeatured: true, isBanned: false })
       .limit(3)
       .select('name coverImage avatar description');
 
@@ -513,13 +486,22 @@ const banPageById = asyncHandler(async (req, res, next) => {
       return next(new ErrorHandler('Page is not available with this id', 400));
     }
 
-    // delete the page
-    await Page.findByIdAndDelete(req.params.id);
+    // ban the page
+    page.isBanned = !page.isBanned;
+
+    // Update all posts of the page to set isVerified to either false or true based on the previous value
+    const newVerificationStatus = !page.isBanned;
+    await Post.updateMany(
+      { creator: page._id },
+      { isVerified: newVerificationStatus}
+    );
+
+    await page.save();
 
     // message to the frontend
     res.status(201).json({
       success: true,
-      message: 'Page deleted Successfully',
+      message: 'Page banned Successfully',
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
@@ -537,7 +519,6 @@ export {
   updatePageAvatar,
   updateCoverImage,
   pageSocialAuth,
-  deleteMyPage,
 
   // for admin
   getAllPages,

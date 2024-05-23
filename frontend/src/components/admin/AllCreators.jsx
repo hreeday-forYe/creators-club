@@ -7,19 +7,28 @@ import styles from '../../styles/styles';
 import { RxCross1 } from 'react-icons/rx';
 import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
-import { useGetAllCreatorsQuery } from '../../redux/slices/pagesApiSlice';
+import {
+  useGetAllCreatorsQuery,
+  useAdminBanCreatorMutation,
+} from '../../redux/slices/pagesApiSlice';
 import { FaBan } from 'react-icons/fa';
-import { CiMail } from "react-icons/ci";
+import { CiMail } from 'react-icons/ci';
+import Loader from '../Loader';
 
 const AllCreators = () => {
-  const { data, isLoading } = useGetAllCreatorsQuery();
+  const { data, isLoading, refetch } = useGetAllCreatorsQuery();
   // console.log(data);
   const [open, setOpen] = useState(false);
   const [creatorId, setCreatorId] = useState('');
 
   const [creators, setCreators] = useState([]);
+  const [adminBanCreator, { isLoading: banLoading }] =
+    useAdminBanCreatorMutation();
 
-  const handleBan = async () => {};
+  const handleBan = async (creatorId) => {
+    await adminBanCreator(creatorId);
+    refetch();
+  };
 
   useEffect(() => {
     setCreators(data?.creators);
@@ -34,6 +43,7 @@ const AllCreators = () => {
     { field: 'address', headerName: 'Address', flex: 1 },
     { field: 'charge', headerName: 'Subscription', flex: 1 },
     { field: 'joinedAt', headerName: 'Joined At', flex: 1 },
+    { field: 'isbanned', headerName: 'Is Banned', flex: 0.6 },
     {
       field: 'preview',
       headerName: 'Preview',
@@ -52,18 +62,26 @@ const AllCreators = () => {
       flex: 0.4,
       renderCell: (params) => (
         <a href={`mailto:${params.row.email}`}>
-          <Button startIcon={<CiMail size={23} className='text-blue-700' />}></Button>
+          <Button
+            startIcon={<CiMail size={23} className="text-blue-700" />}
+          ></Button>
         </a>
       ),
     },
     {
       field: 'ban',
-      headerName: 'Ban',
+      headerName: 'Ban/ unban ',
       sortable: false,
       flex: 0.5,
       renderCell: (params) => (
         <Button onClick={() => setCreatorId(params.id) || setOpen(true)}>
-          <FaBan size={20} className="text-red-500" />
+          {params.row.isbanned ? (
+            <button
+              className='p-1 font-bold border-blue-500 border-2'
+            >Unban</button>
+          ) : (
+            <FaBan size={20} className="text-red-500" />
+          )}
         </Button>
       ),
     },
@@ -77,6 +95,7 @@ const AllCreators = () => {
         email: item?.email,
         joinedAt: item.createdAt.slice(0, 10),
         address: item.address,
+        isbanned: item?.isBanned || false,
         charge: `$ ${item.subscriptionCharge}`,
       });
     });
@@ -87,6 +106,7 @@ const AllCreators = () => {
         <h3 className="text-[22px] font-Poppins text-center md:text-left pb-2">
           All Creators
         </h3>
+        {isLoading || (banLoading && <Loader />)}
         <div className="w-full min-h-[45vh] bg-white rounded">
           <DataGrid
             rows={row}
@@ -103,7 +123,7 @@ const AllCreators = () => {
                 <RxCross1 size={25} onClick={() => setOpen(false)} />
               </div>
               <h3 className="text-[25px] text-center py-5 font-Poppins text-[#000000cb]">
-                Are you sure you want to ban this Page?
+                Are you sure you want to ban or unban this Page?
               </h3>
               <div className="w-full flex items-center justify-center">
                 <div

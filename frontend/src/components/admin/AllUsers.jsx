@@ -14,6 +14,7 @@ import styles from '../../styles/styles';
 import toast from 'react-hot-toast';
 const AllUsers = () => {
   const [open, setOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false)
   const { data, isLoading, refetch } = useAdminGetAllUsersQuery();
   // console.log(data);
   const users = data?.users;
@@ -25,23 +26,12 @@ const AllUsers = () => {
     { field: 'email', headerName: 'Email', flex: 1 },
     { field: 'role', headerName: 'Role', flex: 1 },
     {
-      field: 'edit',
-      headerName: 'Edit',
-      sortable: false,
-      flex: 0.4,
-      renderCell: (params) => (
-          <Button
-            startIcon={<FaRegEdit size={23} className="text-blue-700" />}
-          ></Button>
-      ),
-    },
-    {
       field: 'mail',
       headerName: 'Mail',
       sortable: false,
       flex: 0.4,
       renderCell: (params) => (
-        <a href={``}>
+        <a href={`mailto:${params.row.email}`}>
           <Button
             startIcon={<CiMail size={23} className="text-blue-700" />}
           ></Button>
@@ -112,9 +102,7 @@ const AllUsers = () => {
     }
   };
 
-  const handleUpdateUser = async(id)=>{
-    console.log('gpt handle the logic of edit user');
-  }
+  
 
   return (
     <div className="w-full sm:p-4 md:p-8">
@@ -138,97 +126,104 @@ const AllUsers = () => {
           />
         </div>
       </div>
-      <Dialog open={open} onClose={() => setOpen(!open)} sx={{ p: '20px' }}>
-        <h3 className="text-center text-2xl mt-2">Add a New User</h3>
-        <div className="p-10">
-          <form className="space-y-6 w-full" onSubmit={handleAddUser}>
-            <div className="w-full">
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Full Name
-              </label>
-              <div className="mt-1">
-                <input
-                  type="text"
-                  name="name"
-                  autoComplete="name"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div className="w-full">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div className="w-full">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <div className="mt-1 relative">
-                <input
-                  type="text"
-                  name="password"
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-            </div>
-            <div className="w-full">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="isAdmin"
-                  name="isAdmin"
-                  checked={isAdmin}
-                  onChange={(e) => setIsAdmin(e.target.checked)}
-                  className="text-blue-500 h-4 w-4 mr-2 focus:ring-blue-500"
-                />
+    
+      <Dialog
+        open={open}
+        onClose={() => setOpen(!open)}
+        sx={{ p: '20px', width: '80%', margin: 'auto' }}
+      >
+        <div className=" min-w-[300px] 800px:min-w-[450px]">
+          <h3 className="text-center text-2xl mt-2">Add a New User</h3>
+          <div className="p-10">
+            <form className="space-y-6 w-full" onSubmit={handleAddUser}>
+              <div className="w-full">
                 <label
-                  htmlFor="isAdmin"
-                  className="text-sm font-medium text-gray-700"
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
                 >
-                  Assign Admin Role
+                  Full Name
                 </label>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    name="name"
+                    autoComplete="name"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div>
-              <button
-                type="submit"
-                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
+              <div className="w-full">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email address
+                </label>
+                <div className="mt-1">
+                  <input
+                    type="email"
+                    name="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="w-full">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
+                <div className="mt-1 relative">
+                  <input
+                    type="text"
+                    name="password"
+                    autoComplete="current-password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+              <div className="w-full">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="isAdmin"
+                    name="isAdmin"
+                    checked={isAdmin}
+                    onChange={(e) => setIsAdmin(e.target.checked)}
+                    className="text-blue-500 h-4 w-4 mr-2 focus:ring-blue-500"
+                  />
+                  <label
+                    htmlFor="isAdmin"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Assign Admin Role
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </Dialog>
     </div>
