@@ -93,7 +93,7 @@ const Sidebar = ({ active }) => {
         </Link>
       </div> */}
 
-      <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
+      {/* <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Link to="/inbox" className="w-full flex items-center">
           <BiMessageSquareDetail
             size={30}
@@ -107,7 +107,7 @@ const Sidebar = ({ active }) => {
             Inbox
           </h5>
         </Link>
-      </div>
+      </div> */}
 
       <div className="w-full flex items-center p-4 hover:shadow-md  hover:translate-y-1 transition duration-100">
         <Link to="/profile" className="w-full flex items-center">

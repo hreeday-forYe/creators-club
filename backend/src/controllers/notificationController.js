@@ -44,6 +44,7 @@ export const updateCreatorNotification = asyncHandler(
   }
 );
 
+
 export const getUserNotifications = asyncHandler(async (req, res, next) => {
   try {
     const notifications = await Notification.find({ to: req.user._id }).sort(

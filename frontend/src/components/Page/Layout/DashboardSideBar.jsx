@@ -114,7 +114,7 @@ const DashboardSideBar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
+      {/* <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">
         <Link to="/page-messages" className="w-full flex items-center">
           <BiMessageSquareDetail
             size={30}
@@ -128,7 +128,7 @@ const DashboardSideBar = ({ active }) => {
             Page Inbox
           </h5>
         </Link>
-      </div>
+      </div> */}
 
 
       <div className="w-full flex items-center p-4 hover:shadow-md hover:translate-y-1 transition duration-100">

@@ -47,7 +47,7 @@ pageRouter.delete('/delete-withdraw-method', isCreator, deleteWithdrawMethod);
 pageRouter.get(
   '/get-all-pages',
   isAuthenticated,
-  authorizeRoles('Admin'),
+  // authorizeRoles('Admin'),
   getAllPages
 );
 pageRouter.get('/get-featured-creators', getfeaturedCreators);
